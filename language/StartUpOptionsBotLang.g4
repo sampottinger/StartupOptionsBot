@@ -60,4 +60,4 @@ cases: START_CASES_ case (OR_ case)* END_CASES_;
 
 var: name=(NAME_) EQ_ number;
 
-vars: START_VARS_ var* END_VARS_
+vars: START_VARS_ var* END_VARS_;
