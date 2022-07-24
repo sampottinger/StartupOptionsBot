@@ -54,7 +54,7 @@ ipo: IPO_ START_PARAMS_ low=number COMMA_ high=number END_PARAMS_;
 
 sell: SELL_ START_PARAMS_ low=number COMMA_ high=number END_PARAMS_;
 
-raise: RAISE_ START_PARAMS_ vlow=number COMMA_ vhigh=number COMMA dilutelow=number COMMA_ dilutehigh=number COMMA_ next=branches END_PARAMS_;
+raise: RAISE_ START_PARAMS_ vlow=number COMMA_ vhigh=number COMMA dilutelow=number COMMA_ dilutehigh=number COMMA_ delaylow=number COMMA_ delayhigh=number COMMA_ next=branches END_PARAMS_;
 
 quit: QUIT_ START_PARAMS_ END_PARAMS_;
 
@@ -72,8 +72,10 @@ branch: chance=probability COLON_ target=event;
 
 branches: START_CASES_ branch (OR_ branch)* END_CASES_;
 
-assignment: NAME_ EQ_ value=number;
+name: NAME_;
+
+assignment: target=name EQ_ value=number;
 
 assignments: START_VARS_ assignment* END_VARS_;
 
-program: assignments branches;
+program: header=assignments body=branches;
