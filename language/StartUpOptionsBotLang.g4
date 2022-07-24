@@ -30,6 +30,8 @@ SELL_: 's' 'e' 'l' 'l';
 
 RAISE_: 'r' 'a' 'i' 's' 'e';
 
+QUIT_: 'q' 'u' 'i' 't';
+
 FLOAT_: [0-9]+ '.' [0-9]+;
 
 INTEGER_: [0-9]+;
@@ -42,13 +44,15 @@ number: (INTEGER_ | FLOAT_);
 
 fail: FAIL_ START_PARAMS_ END_PARAMS_;
 
+quit: QUIT_ START_PARAMS_ END_PARAMS_;
+
 ipo: IPO_ START_PARAMS_ low=number COMMA_ high=number END_PARAMS_;
 
 sell: SELL_ START_PARAMS_ low=number COMMA_ high=number END_PARAMS_;
 
 raise: RAISE_ START_PARAMS_ low=number COMMA_ high=number COMMA_ next=cases END_PARAMS_;
 
-event: (fail | ipo | sell | raise);
+event: (fail | ipo | sell | raise | quit);
 
 case: probability:(number | ELSE_) COLON_ target:event;
 
