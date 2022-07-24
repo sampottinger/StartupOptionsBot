@@ -1,5 +1,5 @@
 {
-    "name": "plant-lang",
+    "name": "startup-options-bot",
     "version": "1.0.0",
     "scripts": {
       "build": "webpack --mode=development"
