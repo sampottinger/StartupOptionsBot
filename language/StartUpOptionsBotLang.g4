@@ -54,7 +54,7 @@ ipo: IPO_ START_PARAMS_ low=number COMMA_ high=number END_PARAMS_;
 
 sell: SELL_ START_PARAMS_ low=number COMMA_ high=number END_PARAMS_;
 
-raise: RAISE_ START_PARAMS_ low=number COMMA_ high=number COMMA_ next=branches END_PARAMS_;
+raise: RAISE_ START_PARAMS_ vlow=number COMMA_ vhigh=number COMMA dilutelow=number COMMA_ dilutehigh=number COMMA_ next=branches END_PARAMS_;
 
 quit: QUIT_ START_PARAMS_ END_PARAMS_;
 
