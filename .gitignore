@@ -1,3 +1,13 @@
+# Intermediate
+StartUpOptionsBotLang.interp
+StartUpOptionsBotLang.tokens
+StartUpOptionsBotLangLexer.interp
+StartUpOptionsBotLangLexer.js
+StartUpOptionsBotLangLexer.tokens
+StartUpOptionsBotLangListener.js
+StartUpOptionsBotLangParser.js
+StartUpOptionsBotLangVisitor.js
+
 # Logs
 logs
 *.log

@@ -50,14 +50,18 @@ ipo: IPO_ START_PARAMS_ low=number COMMA_ high=number END_PARAMS_;
 
 sell: SELL_ START_PARAMS_ low=number COMMA_ high=number END_PARAMS_;
 
-raise: RAISE_ START_PARAMS_ low=number COMMA_ high=number COMMA_ next=cases END_PARAMS_;
+raise: RAISE_ START_PARAMS_ low=number COMMA_ high=number COMMA_ next=branches END_PARAMS_;
 
 event: (fail | ipo | sell | raise | quit);
 
-case: probability:(number | ELSE_) COLON_ target:event;
+probability: (number | ELSE_);
 
-cases: START_CASES_ case (OR_ case)* END_CASES_;
+branch: chance=probability COLON_ target=event;
 
-var: name=(NAME_) EQ_ number;
+branches: START_CASES_ branch (OR_ branch)* END_CASES_;
 
-vars: START_VARS_ var* END_VARS_;
+assignment: NAME_ EQ_ value=number;
+
+assignments: START_VARS_ assignment* END_VARS_;
+
+program: assignments branches;
