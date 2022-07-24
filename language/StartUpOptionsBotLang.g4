@@ -38,6 +38,10 @@ INTEGER_: [0-9]+;
 
 ELSE_: 'e' 'l' 's' 'e';
 
+COMPANY_: 'c' '.';
+
+EMPLOYEE_: 'e' '.';
+
 NAME_: [a-z]+;
 
 number: (INTEGER_ | FLOAT_);
@@ -54,7 +58,11 @@ raise: RAISE_ START_PARAMS_ low=number COMMA_ high=number COMMA_ next=branches E
 
 event: (fail | ipo | sell | raise | quit);
 
-probability: (number | ELSE_);
+actor: (COMPANY_ | EMPLOYEE_);
+
+probval: (number | ELSE_);
+
+probability: target=actor value=probval;
 
 branch: chance=probability COLON_ target=event;
 
