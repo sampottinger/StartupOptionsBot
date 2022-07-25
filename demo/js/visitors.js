@@ -13,7 +13,7 @@ class CompileVisitor extends toolkit.StartUpOptionsBotLangVisitor {
 
         return (state) => {
             state.addEvent("Company failed.");
-            state.setCompanyValue(0);
+            state.setExitValue(0);
             return state;
         };
     }
@@ -33,8 +33,8 @@ class CompileVisitor extends toolkit.StartUpOptionsBotLangVisitor {
     visitRaise(ctx) {
         const self = this;
 
-        const valuationLow = ctx.vlow.accept(self);
-        const valuationHigh = ctx.vhigh.accept(self);
+        const fmvLow = ctx.vlow.accept(self);
+        const fmvHigh = ctx.vhigh.accept(self);
         const diluteLow = ctx.dilutelow.accept(self);
         const diluteHigh = ctx.dilutehigh.accept(self);
         const delayLow = ctx.delaylow.accept(self);
@@ -43,12 +43,12 @@ class CompileVisitor extends toolkit.StartUpOptionsBotLangVisitor {
         const nextBranches = ctx.next.accept(self);
 
         return (state) => {
-            const valuation = self._getNormVal(valuationLow, valuationHigh);
+            const fmv = self._getNormVal(fmvLow, fmvHigh);
             const dilution = self._getNormVal(diluteLow, diluteHigh);
             const delay = self._getNormVal(delayLow, delayHigh);
 
-            state.addEvent("Raised. Valued at " + valuation + " with dilution " + dilution);
-            state.setCompanyValue(valuation);
+            state.addEvent("Raised. FMV at " + valuation + " with dilution " + dilution);
+            state.setFairMarketValue(fmv);
             state.diluteOptions(dilution);
             state.delay(delay);
 
@@ -244,7 +244,7 @@ class CompileVisitor extends toolkit.StartUpOptionsBotLangVisitor {
             const numOptions = optionsAvailable * percentOptionsBuy;
 
             state.addEvent("Company " + label + "! New value: " + generatedValue);
-            state.setCompanyValue(generatedValue);
+            state.setExitValue(generatedValue);
 
             state.addEvent("Bought " + numOptions + " options.")
             state.buyOptions(numOptions);
