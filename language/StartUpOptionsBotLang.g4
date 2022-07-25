@@ -16,6 +16,18 @@ END_PARAMS_: ')';
 
 COMMA_: ',';
 
+DASH_: '-';
+
+PERCENT_: '%';
+
+MONTHS_: 'm' 'o' 'n' 't' 'h' 's';
+
+FMV_: 'f' 'm' 'v';
+
+SHARE_: 's' 'h' 'a' 'r' 'e';
+
+TOTAL_: 't' 'o' 't' 'a' 'l';
+
 OR_: '|';
 
 START_VARS_: '[';
@@ -50,11 +62,13 @@ number: (INTEGER_ | FLOAT_);
 
 fail: FAIL_ START_PARAMS_ END_PARAMS_;
 
-ipo: IPO_ START_PARAMS_ low=number COMMA_ high=number END_PARAMS_;
+units: (SHARE_ | TOTAL_);
 
-sell: SELL_ START_PARAMS_ low=number COMMA_ high=number END_PARAMS_;
+ipo: IPO_ START_PARAMS_ low=number DASH_ high=number unit=units END_PARAMS_;
 
-raise: RAISE_ START_PARAMS_ vlow=number COMMA_ vhigh=number COMMA dilutelow=number COMMA_ dilutehigh=number COMMA_ delaylow=number COMMA_ delayhigh=number COMMA_ next=branches END_PARAMS_;
+sell: SELL_ START_PARAMS_ low=number DASH_ high=number unit=units END_PARAMS_;
+
+raise: RAISE_ START_PARAMS_ vlow=number DASH_ vhigh=number FMV_ COMMA_ dilutelow=number DASH_ dilutehigh=number PERCENT_ COMMA_ delaylow=number DASH_ delayhigh=number MONTHS_ COMMA_ next=branches END_PARAMS_;
 
 quit: QUIT_ START_PARAMS_ END_PARAMS_;
 
