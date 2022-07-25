@@ -236,6 +236,7 @@ class CompileVisitor extends toolkit.StartUpOptionsBotLangVisitor {
 
         const low = ctx.low.accept(self);
         const high = ctx.low.accept(self);
+        const isValue = ctx.unit.getText().includes("total");
 
         return (state) => {
             const generatedValue = self._getNormVal(low, high);
@@ -244,7 +245,12 @@ class CompileVisitor extends toolkit.StartUpOptionsBotLangVisitor {
             const numOptions = optionsAvailable * percentOptionsBuy;
 
             state.addEvent("Company " + label + "! New value: " + generatedValue);
-            state.setExitValue(generatedValue);
+
+            if (isValue) {
+                state.setExitValue(generatedValue);
+            } else {
+                state.setExitShare(generatedValue);
+            }
 
             state.addEvent("Bought " + numOptions + " options.")
             state.buyOptions(numOptions);
