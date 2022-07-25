@@ -6,13 +6,13 @@ import StartUpOptionsBotLangVisitor from './StartUpOptionsBotLangVisitor.js';
 
 
 function getToolkit() {
-  return {
-    "antlr4": antlr4,
-    "StartUpOptionsBotLangLexer": StartUpOptionsBotLangLexer,
-    "StartUpOptionsBotLangParser": StartUpOptionsBotLangParser,
-    "StartUpOptionsBotLangListener": StartUpOptionsBotLangListener,
-    "StartUpOptionsBotLangVisitor": StartUpOptionsBotLangVisitor
-  };
+    return {
+        "antlr4": antlr4,
+        "StartUpOptionsBotLangLexer": StartUpOptionsBotLangLexer,
+        "StartUpOptionsBotLangParser": StartUpOptionsBotLangParser,
+        "StartUpOptionsBotLangListener": StartUpOptionsBotLangListener,
+        "StartUpOptionsBotLangVisitor": StartUpOptionsBotLangVisitor
+    };
 }
 
 

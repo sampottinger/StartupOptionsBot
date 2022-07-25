@@ -52,9 +52,9 @@ INTEGER_: [0-9]+;
 
 ELSE_: 'e' 'l' 's' 'e';
 
-COMPANY_: 'c' '.';
+COMPANY_: 'c' '_';
 
-EMPLOYEE_: 'e' '.';
+EMPLOYEE_: 'e' '_';
 
 NAME_: [a-z]+;
 
@@ -72,7 +72,7 @@ raise: RAISE_ START_PARAMS_ vlow=number DASH_ vhigh=number FMV_ COMMA_ dilutelow
 
 quit: QUIT_ START_PARAMS_ END_PARAMS_;
 
-buy: BUY_ START_PARAMS_ amount=number END_PARAMS_;
+buy: BUY_ START_PARAMS_ amount=number PERCENT_ END_PARAMS_;
 
 event: (fail | ipo | sell | raise | quit | buy);
 

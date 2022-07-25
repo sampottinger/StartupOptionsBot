@@ -1,6 +1,3 @@
-
-
-
 class CompileVisitor extends toolkit.StartUpOptionsBotLangVisitor {
 
     visitNumber(ctx) {
