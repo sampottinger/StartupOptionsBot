@@ -1,3 +1,16 @@
+google-chrome-stable_current_amd64.deb
+
+# Intermediate
+StartUpOptionsBotLang.interp
+StartUpOptionsBotLang.tokens
+StartUpOptionsBotLangLexer.interp
+StartUpOptionsBotLangLexer.js
+StartUpOptionsBotLangLexer.tokens
+StartUpOptionsBotLangListener.js
+StartUpOptionsBotLangParser.js
+StartUpOptionsBotLangVisitor.js
+startupoptionsbotlang.js
+
 # Logs
 logs
 *.log
