@@ -6,6 +6,9 @@ class SimulationState {
 
     finishSetup() {
         const self = this;
+        // ipoPercentBuy
+        // sellPercentBuy
+        // quitPercentBuy
     }
 
     addEvent(description) {

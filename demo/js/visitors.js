@@ -21,13 +21,13 @@ class CompileVisitor extends toolkit.StartUpOptionsBotLangVisitor {
     visitIpo(ctx) {
         const self = this;
 
-        return self._createSellEvent(ctx, "IPO", "ipoAmount");
+        return self._createSellEvent(ctx, "IPO", "ipoPercentBuy");
     }
 
     visitSell(ctx) {
         const self = this;
 
-        return self._createSellEvent(ctx, "sold", "sellAmount");
+        return self._createSellEvent(ctx, "sold", "sellPercentBuy");
     }
 
     visitRaise(ctx) {
