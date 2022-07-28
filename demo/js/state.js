@@ -23,17 +23,26 @@ class SimulationState {
 
     finishSetup() {
         const self = this;
-        // ipoPercentBuy
-        // sellPercentBuy
-        // quitPercentBuy
-        // optionTax
-        // regularIncomeTax
-        // longTermTax
-        // waitToSell
-        // strikePrice
-        // numOptionsAvailable
-        // startFMV
-        // startTotalShares
+
+        self._assureValuePresent("ipoPercentBuy");
+        self._assureValuePresent("sellPercentBuy");
+        self._assureValuePresent("quitPercentBuy");
+        self._assureValuePresent("optionTax");
+        self._assureValuePresent("regularIncomeTax");
+        self._assureValuePresent("longTermTax");
+        self._assureValuePresent("waitToSell");
+
+        self._assureValuePresent("strikePrice");
+        self._strikePrice = self.getValue("strikePrice");
+
+        self._assureValuePresent("numOptionsAvailable");
+        self._numOptionsAvailable = self.getValue("numOptionsAvailable");
+
+        self._assureValuePresent("startFMV");
+        self._fairMarketValue = self.getValue("startFMV");
+
+        self._assureValuePresent("startTotalShares");
+        self._numTotalShares = self.getValue("startTotalShares");
     }
 
     addEvent(description) {
@@ -120,6 +129,9 @@ class SimulationState {
     finalize() {
         const self = this;
 
+        if (self._finalized) {
+            throw "Already finalized.";
+        }
         self._finalized = true;
 
         // Check if noop
@@ -194,6 +206,14 @@ class SimulationState {
             const proceedsPerShare = self._exitShare - x["basis"];
             return x["count"] * proceedsPerShare;
         }).reduce((a, b) => a + b);
+    }
+
+    _assureValuePresent(name) {
+        const self = this;
+
+        if (!self._variables.has(name)) {
+            throw "Variable not provided " + name + ".";
+        }
     }
 
 }
