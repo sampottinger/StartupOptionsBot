@@ -19,10 +19,16 @@ class SimulationState {
 
         self._profit = 0;
         self._finalized = false;
+        self._setUp = false;
     }
 
     finishSetup() {
         const self = this;
+
+        if (self._setUp) {
+            throw "Already set up.";
+        }
+        self._setUp = true;
 
         self._assureValuePresent("ipoPercentBuy");
         self._assureValuePresent("sellPercentBuy");
@@ -176,7 +182,7 @@ class SimulationState {
         const strikePaid = self._numOptionsPurchased * self.getValue("strikePrice");
 
         // Determine profit
-        return totalProceeds - totalTaxes - strikePaid;
+        self._profit = totalProceeds - totalTaxes - strikePaid;
     }
 
     getProfit() {

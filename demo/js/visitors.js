@@ -228,6 +228,7 @@ class CompileVisitor extends toolkit.StartUpOptionsBotLangVisitor {
             state = headerFuture(state);
             state.finishSetup();
             state = bodyFuture(state);
+            state.finalize();
             return state;
         };
     }
