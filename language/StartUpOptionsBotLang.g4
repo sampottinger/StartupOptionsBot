@@ -56,7 +56,7 @@ COMPANY_: 'c' '_';
 
 EMPLOYEE_: 'e' '_';
 
-NAME_: [a-z]+;
+NAME_: [a-zA-Z]+;
 
 number: (INTEGER_ | FLOAT_);
 
