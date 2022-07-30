@@ -27,13 +27,13 @@ class CodeDeserializer {
         return variableStrs.join(" ");
     }
 
-    _statesToCode(states) {
+    _currentToCode(states) {
         const self = this;
-        const stateStrs = states.map((x) => self._stateToCode(x));
-        return stateStrs.join(",");
+        const componentStrs = states.map((x) => self._currentOptionToCode(x));
+        return "{" + componentStrs.join(",") + "}";
     }
 
-    _stateToCode(state) {
+    _currentOptionToCode(state) {
         const self = this;
 
         const isElse = state["isElse"];
