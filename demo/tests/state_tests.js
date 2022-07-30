@@ -102,11 +102,21 @@ QUnit.module("SimulationState", function() {
         assert.equal(newState._numOptionsAvailable, 0);
     });
 
-    /*QUnit.test("get proceeds pre-tax", function(assert) {
+    QUnit.test("get proceeds pre-tax", function(assert) {
+        const newState = makeSetUpState();
+        newState.setExitShare(12);
+        
+        const proceeds = newState._getProceedsPreTax([
+            {"count": 34, "basis": 5},
+            {"count": 67, "basis": 8}
+        ]);
 
+        const expected = 34 * (12 - 5) + 67 * (12 - 8);
+
+        assert.equal(proceeds, expected);
     });
 
-    QUnit.test("buy options", function(assert) {
+    /*QUnit.test("buy options", function(assert) {
 
     });
 
