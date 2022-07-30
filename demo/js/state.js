@@ -208,8 +208,13 @@ class SimulationState {
     _getProceedsPreTax(options) {
         const self = this;
 
+        if (options.length == 0) {
+            return 0;
+        }
+
+        const proceedsPerShare = self._exitShare - self._strikePrice;
+
         return options.map((x) => {
-            const proceedsPerShare = self._exitShare - x["basis"];
             return x["count"] * proceedsPerShare;
         }).reduce((a, b) => a + b);
     }

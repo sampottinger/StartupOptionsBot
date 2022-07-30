@@ -111,7 +111,7 @@ QUnit.module("SimulationState", function() {
             {"count": 67, "basis": 8}
         ]);
 
-        const expected = 34 * (12 - 5) + 67 * (12 - 8);
+        const expected = 34 * (12 - 1.1) + 67 * (12 - 1.1);
 
         assert.equal(proceeds, expected);
     });
@@ -152,8 +152,70 @@ QUnit.module("SimulationState", function() {
         assert.ok(Math.abs(history[1]["basis"] - (23 * 2.3)) < 0.001);
     });
 
-    /*QUnit.test("finalize and get profit", function(assert) {
+    QUnit.test("get profit none", function(assert) {
+        const newState = makeSetUpState();
+        newState.finalize();
+        assert.equal(newState.getProfit(), 0);
+    });
 
-    });*/
+    QUnit.test("get profit no short term", function(assert) {
+        const newState = makeSetUpState();
+
+        newState.setFairMarketValue(1.2);
+        newState.buyOptions(99.9);
+
+        newState.delay(23);
+        newState.setFairMarketValue(2.3);
+        newState.buyOptions(99.9);
+
+        newState.setExitShare(4.5);
+        newState.delay(6);
+
+        const spreadAmount = (1.2 - 1.1) * 100 + (2.3 - 1.1) * 23;
+        const spreadTax = spreadAmount * 0.22;
+
+        const strikePaid = 123 * 1.1;
+
+        const proceedsPreTax = 123 * 4.5 - 123 * 1.1;
+        const longTermTax = proceedsPreTax * 0.2;
+
+        const totalCosts = spreadTax + strikePaid + longTermTax;
+        const proceeds = proceedsPreTax - totalCosts;
+
+        newState.finalize();
+        assert.equal(newState.getProfit(), proceeds);
+    });
+
+    QUnit.test("get profit short term", function(assert) {
+        const newState = makeSetUpState();
+
+        newState.setFairMarketValue(1.2);
+        newState.buyOptions(99.9);
+
+        newState.delay(23);
+        newState.setFairMarketValue(2.3);
+        newState.buyOptions(99.9);
+
+        newState.setExitShare(4.5);
+        newState.delay(6);
+        newState.setValue("waitToSell", 0);
+
+        const spreadAmount = (1.2 - 1.1) * 100 + (2.3 - 1.1) * 23;
+        const spreadTax = spreadAmount * 0.22;
+
+        const strikePaid = 123 * 1.1;
+
+        const proceedsPreTax1 = 100 * (4.5 - 1.1);
+        const proceedsPreTax2 = 23 * (4.5 - 1.1);
+        const proceedsPreTax = proceedsPreTax1 + proceedsPreTax2;
+        const longTermTax = proceedsPreTax1 * 0.2;
+        const shortTermTax = proceedsPreTax2 * 0.33;
+
+        const totalCosts = spreadTax + strikePaid + longTermTax + shortTermTax;
+        const proceeds = proceedsPreTax - totalCosts;
+
+        newState.finalize();
+        assert.ok(Math.abs(newState.getProfit() - proceeds) < 0.01);
+    });
 
 });
