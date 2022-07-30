@@ -103,7 +103,7 @@ class SerializationVisitor extends toolkit.StartUpOptionsBotLangVisitor {
             let curChild = ctx.getChild(i);
             
             let parsedBranch = curChild.accept(self);
-            let branchTarget = parsedBranch["target"];
+            let branchTarget = parsedBranch["target"][0];
             if (branchTarget["action"] === "raise") {
                 let newNext = branchTarget["nextBranches"];
                 next = next.concat(newNext);
@@ -149,12 +149,12 @@ class SerializationVisitor extends toolkit.StartUpOptionsBotLangVisitor {
     visitProgram(ctx) {
         const self = this;
 
-        const headerFuture = ctx.header.accept(self);
-        const bodyFuture = ctx.body.accept(self);
+        const variables = ctx.header.accept(self);
+        const states = ctx.body.accept(self);
 
         return {
-            "variables": headerFuture,
-            "states": bodyFuture
+            "variables": variables,
+            "states": states
         };
     }
 
