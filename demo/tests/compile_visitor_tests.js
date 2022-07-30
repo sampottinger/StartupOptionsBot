@@ -12,17 +12,23 @@ QUnit.module("CompileVisitor", function() {
         assert.ok(visitor !== null);
     });
 
+    QUnit.test("compilation runs", function(assert) {
+        const result = compileTest();
+        assert.ok(result["result"] !== null);
+        assert.ok(result["result"] !== undefined);
+    });
+
+    QUnit.test("compilation with errors", function(assert) {
+        const result = getCompiled("test");
+        assert.ok(result["errors"].length > 0);
+    });
+
     QUnit.test("compilation without errors", function(assert) {
         const result = compileTest();
         if (result["errors"].length > 0) {
             assert.equal(result["errors"][0], "");
         }
         assert.equal(result["errors"].length, 0);
-    });
-
-    QUnit.test("compilation runs", function(assert) {
-        const result = compileTest();
-        assert.ok(result["program"] !== null);
     });
 
 });

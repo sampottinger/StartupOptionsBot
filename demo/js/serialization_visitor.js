@@ -80,7 +80,7 @@ class SerializationVisitor extends toolkit.StartUpOptionsBotLangVisitor {
         const self = this;
 
         const retObj = ctx.value.accept(self);
-        retObj["isCompany"] = ctx.actor.getText().includes("c.");
+        retObj["isCompany"] = ctx.target.getText().includes("c.");
         return retObj;
     }
 
@@ -89,6 +89,7 @@ class SerializationVisitor extends toolkit.StartUpOptionsBotLangVisitor {
 
         const retObj = ctx.chance.accept(self);
         retObj["target"] = ctx.target.accept(self);
+        return retObj;
     }
 
     visitBranches(ctx) {
@@ -102,9 +103,11 @@ class SerializationVisitor extends toolkit.StartUpOptionsBotLangVisitor {
             let curChild = ctx.getChild(i);
             
             let parsedBranch = curChild.accept(self);
-            if (parsedBranch["action"] === "raise") {
-                let newNext = parsedBranch["nextBranches"];
+            let branchTarget = parsedBranch["target"];
+            if (branchTarget["action"] === "raise") {
+                let newNext = branchTarget["nextBranches"];
                 next = next.concat(newNext);
+                branchTarget["nextBranches"] = "accepted";
             }
 
             allBranches.push(parsedBranch);
