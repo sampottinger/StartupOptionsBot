@@ -38,6 +38,7 @@ QUnit.module("SimulationState", function() {
     QUnit.test("finish setup success", function(assert) {
         const newState = makeState();
         newState.finishSetup();
+        assert.ok(true);
     });
 
     QUnit.test("finish setup fail", function(assert) {
