@@ -2,9 +2,9 @@ QUnit.module("SimulationState", function() {
 
     function makeState() {
         const newState = new SimulationState();
-        newState.setValue("ipoPercentBuy", 1);
-        newState.setValue("sellPercentBuy", 0.9);
-        newState.setValue("quitPercentBuy", 0.5);
+        newState.setValue("ipoBuy", 1);
+        newState.setValue("sellBuy", 0.9);
+        newState.setValue("quitBuy", 0.5);
         newState.setValue("optionTax", 0.22);
         newState.setValue("regularIncomeTax", 0.33);
         newState.setValue("longTermTax", 0.2);

@@ -8,6 +8,12 @@ class CompileVisitor extends toolkit.StartUpOptionsBotLangVisitor {
         return isFloat ? parseFloat(targetStr) : parseInt(targetStr);
     }
 
+    visitPercent(ctx) {
+        const self = this;
+
+        return ctx.target.accept(self) / 100;
+    }
+
     visitFail(ctx) {
         const self = this;
 
@@ -21,13 +27,13 @@ class CompileVisitor extends toolkit.StartUpOptionsBotLangVisitor {
     visitIpo(ctx) {
         const self = this;
 
-        return self._createSellEvent(ctx, "IPO", "ipoPercentBuy");
+        return self._createSellEvent(ctx, "IPO", "ipoBuy");
     }
 
     visitSell(ctx) {
         const self = this;
 
-        return self._createSellEvent(ctx, "sold", "sellPercentBuy");
+        return self._createSellEvent(ctx, "sold", "sellBuy");
     }
 
     visitRaise(ctx) {
@@ -60,7 +66,7 @@ class CompileVisitor extends toolkit.StartUpOptionsBotLangVisitor {
         const self = this;
 
         return (state) => {
-            const percentOptionsBuy = state.getValue("quitPercentBuy");
+            const percentOptionsBuy = state.getValue("quitBuy");
             const optionsAvailable = state.getOptionsAvailable();
             const numOptions = percentOptionsBuy * optionsAvailable;
 
