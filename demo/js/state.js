@@ -109,8 +109,8 @@ class SimulationState {
     buyOptions(numOptionsRequested) {
         const self = this;
         
-        const numOptionsRequestedInt = round(numOptionsRequested);
-        const requestedAvailable = numOptionsRequestedInt > self._numOptionsAvailable;
+        const numOptionsRequestedInt = Math.round(numOptionsRequested);
+        const requestedAvailable = numOptionsRequestedInt < self._numOptionsAvailable;
         const numOptions = requestedAvailable ? numOptionsRequestedInt : self._numOptionsAvailable;
         
         const spreadPerOption = self._fairMarketValue - self._strikePrice;

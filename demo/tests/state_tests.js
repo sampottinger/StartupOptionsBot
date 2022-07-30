@@ -116,11 +116,43 @@ QUnit.module("SimulationState", function() {
         assert.equal(proceeds, expected);
     });
 
-    /*QUnit.test("buy options", function(assert) {
+    QUnit.test("decrement options", function(assert) {
+        const newState = makeSetUpState();
+        assert.equal(newState._numOptionsAvailable, 123);
+        assert.equal(newState._numOptionsPurchased, 0);
+        
+        newState.buyOptions(99.9);
+        assert.equal(newState._numOptionsAvailable, 23);
+        assert.equal(newState._numOptionsPurchased, 100);
 
+        newState.buyOptions(99.9);
+        assert.equal(newState._numOptionsAvailable, 0);
+        assert.equal(newState._numOptionsPurchased, 123);
     });
 
-    QUnit.test("finalize and get profit", function(assert) {
+    QUnit.test("buy options", function(assert) {
+        const newState = makeSetUpState();
+
+        newState.setFairMarketValue(1.2);
+        newState.buyOptions(99.9);
+
+        newState.delay(23);
+        newState.setFairMarketValue(2.3);
+        newState.buyOptions(99.9);
+
+        const history = newState._purchaseHistory;
+        assert.equal(history.length, 2);
+
+        assert.equal(history[0]["months"], 0);
+        assert.equal(history[0]["count"], 100);
+        assert.ok(Math.abs(history[0]["basis"] - (100 * 1.2)) < 0.001);
+
+        assert.equal(history[1]["months"], 23);
+        assert.equal(history[1]["count"], 23);
+        assert.ok(Math.abs(history[1]["basis"] - (23 * 2.3)) < 0.001);
+    });
+
+    /*QUnit.test("finalize and get profit", function(assert) {
 
     });*/
 
