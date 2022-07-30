@@ -1,3 +1,24 @@
+function getCompiled(input) {
+    return applyVisitor(input, new CompileVisitor());
+}
+
+
+function getSerialization(input) {
+    return applyVisitor(input, new SerializationVisitor());
+}
+
+
+function applyVisitor(input, visitor) {
+    const preVisitor = getProgram(input);
+    if (preVisitor["errors"].length > 0) {
+        return {"errors": preVisitor["errors"], "result": null};
+    }
+
+    const program = preVisitor["program"];
+    return {"errors": [], "result": program.accept(visitor)};
+}
+
+
 function getProgram(input) {
     const errors = [];
 

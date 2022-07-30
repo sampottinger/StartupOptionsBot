@@ -104,7 +104,7 @@ class CompileVisitor extends toolkit.StartUpOptionsBotLangVisitor {
         const self = this;
 
         const retObj = ctx.value.accept(self);
-        retObj["isCompany"] = ctx.actor.getText().includes("c.");
+        retObj["isCompany"] = ctx.target.getText().includes("c.");
         return retObj;
     }
 
@@ -113,13 +113,14 @@ class CompileVisitor extends toolkit.StartUpOptionsBotLangVisitor {
 
         const retObj = ctx.chance.accept(self);
         retObj["target"] = ctx.target.accept(self);
+        return retObj;
     }
 
     visitBranches(ctx) {
         const self = this;
 
         const allBranches = [];
-        const numChildren = ctx.getNumChildren();
+        const numChildren = ctx.getChildCount();
         for (let i = 1; i < numChildren; i += 2) {
             let curChild = ctx.getChild(i);
             let parsedBranch = curChild.accept(self);
@@ -137,7 +138,7 @@ class CompileVisitor extends toolkit.StartUpOptionsBotLangVisitor {
         };
 
         const checkSumProbabilities = (target) => {
-            const totalProba = target.map((x) => x["proba"]).reduce((a, b) => a + b);
+            const totalProba = target.map((x) => x["proba"]).reduce((a, b) => a + b, 0);
             if (totalProba > 1) {
                 throw "Probabilities add up to over 1.";
             }
@@ -203,7 +204,7 @@ class CompileVisitor extends toolkit.StartUpOptionsBotLangVisitor {
         const self = this;
 
         const assignmentFutures = [];
-        const numAssignments = ctx.getNumChildren() - 2;
+        const numAssignments = ctx.getChildCount() - 2;
         for (let i = 0; i < numAssignments; i++) {
             let child = ctx.getChild(i + 1);
             assignmentFutures.push(child.accept(self));
