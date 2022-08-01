@@ -30,9 +30,9 @@ class SimulationState {
         }
         self._setUp = true;
 
-        self._assureValuePresent("ipoPercentBuy");
-        self._assureValuePresent("sellPercentBuy");
-        self._assureValuePresent("quitPercentBuy");
+        self._assureValuePresent("ipoBuy");
+        self._assureValuePresent("sellBuy");
+        self._assureValuePresent("quitBuy");
         self._assureValuePresent("optionTax");
         self._assureValuePresent("regularIncomeTax");
         self._assureValuePresent("longTermTax");

@@ -2,9 +2,9 @@ QUnit.module("SimulationState", function() {
 
     function makeState() {
         const newState = new SimulationState();
-        newState.setValue("ipoPercentBuy", 1);
-        newState.setValue("sellPercentBuy", 0.9);
-        newState.setValue("quitPercentBuy", 0.5);
+        newState.setValue("ipoBuy", 1);
+        newState.setValue("sellBuy", 0.9);
+        newState.setValue("quitBuy", 0.5);
         newState.setValue("optionTax", 0.22);
         newState.setValue("regularIncomeTax", 0.33);
         newState.setValue("longTermTax", 0.2);
@@ -78,10 +78,10 @@ QUnit.module("SimulationState", function() {
         const newState = makeSetUpState();
         
         newState.setExitValue(1234567 * 2);
-        assert.ok(Math.abs(newState._exitShare - 2) < 0.0001);
+        assert.ok(Math.abs(newState._exitShare - 2) < 0.001);
 
         newState.setExitShare(3);
-        assert.ok(Math.abs(newState._exitShare - 3) < 0.0001);
+        assert.ok(Math.abs(newState._exitShare - 3) < 0.001);
     });
 
     QUnit.test("update options", function(assert) {
@@ -91,7 +91,7 @@ QUnit.module("SimulationState", function() {
         newState.setFairMarketValue(1.3);
         newState.diluteOptions(0.1);
 
-        assert.ok(Math.abs(newState._fairMarketValue - 1.3) < 0.0001);
+        assert.ok(Math.abs(newState._fairMarketValue - 1.3) < 0.001);
         assert.ok(Math.abs(newState._numTotalShares - expectNewShares) < 0.0001);
     });
 
@@ -215,7 +215,7 @@ QUnit.module("SimulationState", function() {
         const proceeds = proceedsPreTax - totalCosts;
 
         newState.finalize();
-        assert.ok(Math.abs(newState.getProfit() - proceeds) < 0.01);
+        assert.ok(Math.abs(newState.getProfit() - proceeds) < 0.001);
     });
 
 });

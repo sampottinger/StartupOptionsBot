@@ -68,11 +68,13 @@ ipo: IPO_ START_PARAMS_ low=number DASH_ high=number unit=units END_PARAMS_;
 
 sell: SELL_ START_PARAMS_ low=number DASH_ high=number unit=units END_PARAMS_;
 
-raise: RAISE_ START_PARAMS_ vlow=number DASH_ vhigh=number FMV_ COMMA_ dilutelow=number DASH_ dilutehigh=number PERCENT_ COMMA_ delaylow=number DASH_ delayhigh=number MONTHS_ COMMA_ next=branches END_PARAMS_;
+percent: target=number PERCENT_;
+
+raise: RAISE_ START_PARAMS_ vlow=number DASH_ vhigh=number FMV_ COMMA_ dilutelow=number DASH_ dilutehigh=percent COMMA_ delaylow=number DASH_ delayhigh=number MONTHS_ COMMA_ next=branches END_PARAMS_;
 
 quit: QUIT_ START_PARAMS_ END_PARAMS_;
 
-buy: BUY_ START_PARAMS_ amount=number PERCENT_ END_PARAMS_;
+buy: BUY_ START_PARAMS_ amount=percent END_PARAMS_;
 
 event: (fail | ipo | sell | raise | quit | buy);
 
