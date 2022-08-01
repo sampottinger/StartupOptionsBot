@@ -8,6 +8,7 @@ class CodeDeserializer {
             "sell": (target, next) => self._sellToCode(target, next),
             "quit": (target, next) => self._quitToCode(target, next),
             "buy": (target, next) => self._buyToCode(target, next),
+            "raise": (target, next) => self._raiseToCode(target, next)
         };
     }
 
@@ -17,7 +18,11 @@ class CodeDeserializer {
         const variables = serialization["variables"];
         const headerStr = "[" + self._variablesToCode(variables) + "]";
 
-        return headerStr;
+        const states = serialization["states"];
+        const firstTarget = states.shift();
+        const bodyStr = self._branchesToCode(firstTarget, states);
+
+        return headerStr + bodyStr;
     }
 
     _variablesToCode(variables) {
@@ -27,13 +32,19 @@ class CodeDeserializer {
         return variableStrs.join(" ");
     }
 
-    _currentToCode(states) {
+    _branchesToCode(target, next) {
+        const self =  this;
+
+        return self._currentToCode(target["current"], next);
+    }
+
+    _currentToCode(states, next) {
         const self = this;
-        const componentStrs = states.map((x) => self._currentOptionToCode(x));
+        const componentStrs = states.map((x) => self._currentOptionToCode(x, next));
         return "{" + componentStrs.join(",") + "}";
     }
 
-    _currentOptionToCode(state) {
+    _currentOptionToCode(state, next) {
         const self = this;
 
         const isElse = state["isElse"];
@@ -42,7 +53,7 @@ class CodeDeserializer {
         const actor = isCompany ? "c." : "e.";
         const target = state["target"];
         const action = target["action"];
-        const body = self._stateStrategies[action](target);
+        const body = self._stateStrategies[action](target, next);
 
         return actor + proba + ":" + body;
     }
@@ -83,6 +94,29 @@ class CodeDeserializer {
         const amount = target["percentAmount"];
         
         return "buy(" + amount + "%)";
+    }
+
+    _raiseToCode(target, next) {
+        const self = this;
+
+        const fmvLow = target["fmvLow"];
+        const fmvHigh = target["fmvHigh"];
+        const diluteLow = target["diluteLow"];
+        const diluteHigh = target["diluteHigh"];
+        const delayLow = target["delayLow"];
+        const delayHigh = target["delayHigh"];
+
+        const nextBranches = next.shift();
+        const nextBranchesStr = self._branchesToCode(nextBranches, next);
+
+        const fmvStr = fmvLow + "-" + fmvHigh + "fmv";
+        const diluteStr = diluteLow + "-" + diluteHigh + "%";
+        const delayStr = delayLow + "-" + delayHigh + "months";
+        
+        const components = [fmvStr, diluteStr, delayStr, nextBranchesStr];
+        const componentsStr = components.join(",");
+
+        return "raise(" + componentsStr + ")";
     }
 
 
