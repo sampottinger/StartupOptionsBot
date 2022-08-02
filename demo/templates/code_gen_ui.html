@@ -1,0 +1,35 @@
+<details>
+    <summary>Options</summary>
+    <p>
+        <div class="mb-3">
+            <label for="numOptions" class="form-label">Number of Options</label>
+            <input type="number" class="form-control" id="numOptions" aria-describedby="numOptionsHelp" value="{{ variables.numOptionsAvailable }}">
+            <div id="numOptionsHelp" class="form-text">Total number of options granted.</div>
+        </div>
+        <div class="mb-3">
+            <label for="strikePrice" class="form-label">Strike Price</label>
+            <input type="number" class="form-control" id="strikePrice" aria-describedby="strikePriceHelp" value="{{ variables.strikePrice }}">
+            <div id="strikePriceHelp" class="form-text">Strike price or cost to purchase per share.</div>
+        </div>
+        <div class="mb-3">
+            <label for="startFMV" class="form-label">Start FMV</label>
+            <input type="number" class="form-control" id="strikePrice" aria-describedby="startFMVHelp" value="{{ variables.startFMV }}">
+            <div id="startFMVHelp" class="form-text">Strike price or cost to purchase per share.</div>
+        </div>
+        <div class="mb-3">
+            <label for="startTotalShares" class="form-label">Start Total Shares</label>
+            <input type="number" class="form-control" id="startTotalShares" aria-describedby="startTotalSharesHelp" value="{{ variables.startTotalShares }}">
+            <div id="startTotalSharesHelp" class="form-text">Starting fully diluted shares: shares you have plus shares you don't. You can also <a id="calculateFromPercentOwnership" href="#calculateFromPercentOwnership">calculate this from your fully diluted percent ownership</a> in the company.</div>
+        </div>
+    </p>
+</details>
+
+<details>
+    <summary>Investment Strategy</summary>
+    <p></p>
+</details>
+
+<details>
+    <summary>Expectations</summary>
+    <p></p>
+</details>
