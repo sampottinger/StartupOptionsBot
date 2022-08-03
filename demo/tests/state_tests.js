@@ -2,12 +2,12 @@ QUnit.module("SimulationState", function() {
 
     function makeState() {
         const newState = new SimulationState();
-        newState.setValue("ipoBuy", 1);
-        newState.setValue("sellBuy", 0.9);
-        newState.setValue("quitBuy", 0.5);
-        newState.setValue("optionTax", 0.22);
-        newState.setValue("regularIncomeTax", 0.33);
-        newState.setValue("longTermTax", 0.2);
+        newState.setValue("ipoBuy", 100);
+        newState.setValue("sellBuy", 90);
+        newState.setValue("quitBuy", 50);
+        newState.setValue("optionTax", 22);
+        newState.setValue("regularIncomeTax", 33);
+        newState.setValue("longTermTax", 20);
         newState.setValue("waitToSell", 0.8);
         newState.setValue("strikePrice", 1.1);
         newState.setValue("numOptionsAvailable", 123);

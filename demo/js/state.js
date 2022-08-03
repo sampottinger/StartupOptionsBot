@@ -37,12 +37,13 @@ class SimulationState {
         self._assureValuePresent("regularIncomeTax");
         self._assureValuePresent("longTermTax");
         self._assureValuePresent("waitToSell");
+        self._assureValuePresent("rangeStd");
 
         self._assureValuePresent("strikePrice");
         self._strikePrice = self.getValue("strikePrice");
 
-        self._assureValuePresent("numOptionsAvailable");
-        self._numOptionsAvailable = self.getValue("numOptionsAvailable");
+        self._assureValuePresent("totalGrant");
+        self._numOptionsAvailable = self.getValue("totalGrant");
 
         self._assureValuePresent("startFMV");
         self._fairMarketValue = self.getValue("startFMV");
@@ -147,7 +148,7 @@ class SimulationState {
         }
 
         // FMV spread taxes
-        const spreadTax = self._totalSpread * self.getValue("optionTax");
+        const spreadTax = self._totalSpread * self.getValue("optionTax") / 100;
 
         // Determine if we need to wait (add event)
         const waitToSell = self.getValue("waitToSell") > 0.5;
@@ -174,8 +175,8 @@ class SimulationState {
         const totalProceeds = proceedsRegular + proceedsLongTerm;
 
         // Sum up taxes
-        const taxesRegular = proceedsRegular * self.getValue("regularIncomeTax");
-        const taxesLongTerm = proceedsLongTerm * self.getValue("longTermTax");
+        const taxesRegular = proceedsRegular * self.getValue("regularIncomeTax") / 100;
+        const taxesLongTerm = proceedsLongTerm * self.getValue("longTermTax") / 100;
         const totalTaxes = taxesRegular + taxesLongTerm + spreadTax;
 
         // Determine total spent on strike price
