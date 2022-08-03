@@ -38,6 +38,8 @@ class SimulationState {
         self._assureValuePresent("longTermTax");
         self._assureValuePresent("waitToSell");
         self._assureValuePresent("rangeStd");
+        self._assureValuePresent("startMonthLow");
+        self._assureValuePresent("startMonthHigh");
 
         self._assureValuePresent("strikePrice");
         self._strikePrice = self.getValue("strikePrice");

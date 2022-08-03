@@ -86,8 +86,12 @@
     <p>
         <div class="event">
             <div class="mb-3">
-                <label for="startingMonths" class="form-label">Delay till first event</label>
-                <input type="number" class="form-control" id="startingMonths" aria-describedby="startingMonthsHelp" value="{{ variables.startingMonths }}" step="1" pattern="\d+" min="0">
+                <label for="startMonthLow" class="form-label">Delay till first event</label>
+                <div class="input-group">
+                    <input type="number" class="form-control" id="startMonthLow" aria-describedby="startingMonthsHelp" value="{{ variables.startMonthLow }}" step="1" pattern="\d+" min="0">
+                    <span class="input-group-text">to</span>
+                    <input type="number" class="form-control" id="startMonthHigh" aria-describedby="startingMonthsHelp" value="{{ variables.startMonthHigh }}" step="1" pattern="\d+" min="0">
+                </div>
                 <div id="startingMonthsHelp" class="form-text">Number of months to delay before first event.</div>
             </div>
         </div>
@@ -124,16 +128,16 @@
         <div class="mb-3">
             <label for="waitToSell" class="form-label">Tax optimization</label>
             <select class="form-select" id="waitToSell" aria-describedby="waitToSellHelp">
-                <option value="0" {{#unless variables.longTerm}}selected{{/unless}}>Sell options as soon as possible.</option>
-                <option value="1" {{#if variables.longTerm}}selected{{/if}}>Sell after all options are long term capital gains.</option>
+                <option value="0" {{#unless derived.longTerm}}selected{{/unless}}>Sell options as soon as possible.</option>
+                <option value="1" {{#if derived.longTerm}}selected{{/if}}>Sell after all options are long term capital gains.</option>
             </select>
             <div id="waitToSellHelp" class="form-text">Strategy to use to reduce tax rate. Simulation supports either selling all options right away or waiting to sell after holding for 1 year.</div>
         </div>
         <div class="mb-3">
             <label for="rangeStd" class="form-label">Range confidence</label>
             <select class="form-select" id="rangeStd" aria-describedby="rangeStdHelp">
-                <option value="1" {{#unless variables.highConfidence}}selected{{/unless}}>Low confidence (ranges represent 68% of outcomes).</option>
-                <option value="2" {{#if variables.highConfidence}}selected{{/if}}>High confidence (ranges represent 95% of outcomes).</option>
+                <option value="1" {{#unless derived.highConfidence}}selected{{/unless}}>Low confidence (ranges represent 68% of outcomes).</option>
+                <option value="2" {{#if derived.highConfidence}}selected{{/if}}>High confidence (ranges represent 95% of outcomes).</option>
             </select>
             <div id="rangeStdHelp" class="form-text">Level of confidence you have in the ranges provided in the events section (like FMV, amount diluation, IPO share price etc). More <a href="#levelOfConfidence" id="levelOfConfidenceLink">info about level of confidence</a>.</div>
         </div>
