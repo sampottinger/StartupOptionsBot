@@ -10,9 +10,12 @@ QUnit.module("SimulationState", function() {
         newState.setValue("longTermTax", 20);
         newState.setValue("waitToSell", 0.8);
         newState.setValue("strikePrice", 1.1);
-        newState.setValue("numOptionsAvailable", 123);
+        newState.setValue("totalGrant", 123);
         newState.setValue("startFMV", 1.2);
         newState.setValue("startTotalShares", 1234567);
+        newState.setValue("rangeStd", 2);
+        newState.setValue("startMonthLow", 12);
+        newState.setValue("startMonthHigh", 24);
         return newState;
     }
 

@@ -15,6 +15,8 @@ const SIMPLE_VARIABLES = [
     "startTotalShares"
 ];
 
+const NUMBER_REGEX = /^\d+(\.\d+)?$/;
+
 
 class CodeGenUiUtil {
 
@@ -31,15 +33,16 @@ class CodeGenUiUtil {
 
         const outputVariables = {};
         SIMPLE_VARIABLES.forEach((varName) => {
-            outputVariables = self._checkAndGetVar(inputVariables, varName);
+            outputVariables[varName] = self._checkAndGetVar(inputVariables, varName);
         });
 
         const derived = {};
         derived["longTerm"] = outputVariables["waitToSell"] > 0.5;
         derived["highConfidence"] = outputVariables["rangeStd"] > 1.5;
 
-        self._getTemplate().then((template) => {
-            template({"derived": derived, "variables": variables});
+        return self._getTemplate().then((template) => {
+            const result = template({"derived": derived, "variables": variables});
+            document.getElementById(targetId).innerHTML = result;
         });
     }
 
@@ -65,7 +68,18 @@ class CodeGenUiUtil {
             throw "Missing " + name;
         }
 
-        return target[name];
+        const candidateValue = "" + target[name];
+
+        if (self._isNumber(candidateValue)) {
+            return candidateValue;
+        } else {
+            throw "Not a number for " + name;
+        }
+    }
+
+    _isNumber(target) {
+        const self = this;
+        return NUMBER_REGEX.test(target);
     }
 
 }
