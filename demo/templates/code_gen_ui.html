@@ -20,7 +20,7 @@
                 <span class="input-group-text">$</span>
                 <input type="number" class="form-control" id="strikePrice" aria-describedby="startFMVHelp" value="{{ variables.startFMV }}" pattern="(\d+|\d+\.\d+)" min="0">
             </div>
-            <div id="startFMVHelp" class="form-text">Starting <a href="#info409a" id="info409aLink">409A fair market value</a> per share. Note that this simulation will <a href="#simulateFMVChanges" id="simulateFMVChangesLink">simulate FMV changes</a> tied to new rounds.</div>
+            <div id="startFMVHelp" class="form-text">Starting <a href="#info409a" class="info-409a-link">409A fair market value</a> per share. Note that this simulation will <a href="#simulateFMVChanges" id="simulateFMVChangesLink">simulate FMV changes</a> tied to new rounds.</div>
         </div>
         <div class="mb-3">
             <label for="startTotalShares" class="form-label">Start total shares</label>
@@ -95,6 +95,121 @@
                 <div id="startingMonthsHelp" class="form-text">Number of months to delay before first event.</div>
             </div>
         </div>
+        {{#each events}}
+        <div class="event">
+            <div class="actor">
+                <div class="label">Your actions</div>
+                <div class="option">
+                    <div class="mb-3">
+                        <label for="quitPercent{{@index}}" class="form-label">Quit</label>
+                        <div class="input-group">
+                            <input type="number" class="form-control" id="quitPercent{{@index}}" aria-describedby="quitHelp{{@index}}" value="{{ .quit.percent }}" step="1" pattern="(100|\d{1,2})" min="0" max="100">
+                            <span class="input-group-text">%</span>
+                        </div>
+                        <div id="quitHelp{{@index}}" class="form-text">Percent chance of you quitting at this stage.</div>
+                    </div>
+                </div>
+                <div class="option">
+                    <div class="mb-3">
+                        <label for="buyPercent{{@index}}" class="form-label">Buy</label>
+                        <div class="input-group">
+                            <input type="number" class="form-control" id="buyPercent{{@index}}" aria-describedby="buyHelp{{@index}}" value="{{ .buy.percent }}" step="1" pattern="(100|\d{1,2})" min="0" max="100">
+                            <span class="input-group-text">% chance of buying</span>
+                            <input type="number" class="form-control" id="buyAmount{{@index}}" aria-describedby="buyHelp{{@index}}" value="{{ .buy.amount }}" step="1" pattern="(100|\d{1,2})" min="0" max="100">
+                            <span class="input-group-text">% of your available shares</span>
+                        </div>
+                        <div id="buyHelp{{@index}}" class="form-text">Percent chance of you buying the given percent of your vested shares at this stage.</div>
+                    </div>
+                </div>
+            </div>
+            <div class="actor">
+                <div class="label">Company actions</div>
+                <div class="option">
+                    <div class="mb-3">
+                        <label for="failPercent{{@index}}" class="form-label">Fail</label>
+                        <div class="input-group">
+                            <input type="number" class="form-control" id="failPercent{{@index}}" aria-describedby="failHelp{{@index}}" value="{{ .fail.percent }}" step="1" pattern="(100|\d{1,2})" min="0" max="100">
+                            <span class="input-group-text">%</span>
+                        </div>
+                        <div id="failHelp{{@index}}" class="form-text">Percent chance of company "failing" at this stage such that the value of shares is effectively zero.</div>
+                    </div>
+                </div>
+                <div class="option">
+                    <div class="mb-3">
+                        <label for="sellPercent{{@index}}" class="form-label">Sell</label>
+                        <div class="input-group">
+                            <input type="number" class="form-control" id="sellPercent{{@index}}" aria-describedby="sellHelp{{@index}}" value="{{ .sell.percent }}" step="1" pattern="(100|\d{1,2})" min="0" max="100">
+                            <span class="input-group-text">% chance of selling at</span>
+                            <input type="number" class="form-control" id="sellAmountLow{{@index}}" aria-describedby="sellHelp{{@index}}" value="{{ .sell.amount.low }}" pattern="(\d+|\d+\.\d+)" min="0">
+                            <span class="input-group-text">to</span>
+                            <input type="number" class="form-control" id="sellAmountHigh{{@index}}" aria-describedby="sellHelp{{@index}}" value="{{ .sell.amount.high }}" pattern="(\d+|\d+\.\d+)" min="0">
+                            <select aria-describedby="sellHelp{{@index}}" class="form-select" id="sellUnits{{@index}}">
+                                <option value="share" {{#if .sell.shares}}selected{{/if}}>USD per share</option>
+                                <option value="total" {{#unless .sell.shares}}selected{{/if}}>total company USD value</option>
+                            </select>
+                        </div>
+                        <div id="sellHelp{{@index}}" class="form-text">Percent chance the company is sold / acquired at a particular value such that you can sell your shares at the given share value (or assuming the given total company value). Provide range of share values (see <a href="#levelOfConfidence" class="level-of-confidence-link">level of confidence</a>).</div>
+                    </div>
+                </div>
+                <div class="option">
+                    <div class="mb-3">
+                        <label for="ipoPercent{{@index}}" class="form-label">IPO</label>
+                        <div class="input-group">
+                            <input type="number" class="form-control" id="ipoPercent{{@index}}" aria-describedby="ipoHelp{{@index}}" value="{{ .ipo.percent }}" step="1" pattern="(100|\d{1,2})" min="0" max="100">
+                            <span class="input-group-text">% chance of IPO at</span>
+                            <input type="number" class="form-control" id="ipoAmountLow{{@index}}" aria-describedby="ipoHelp{{@index}}" value="{{ .ipo.amount.low }}" pattern="(\d+|\d+\.\d+)" min="0">
+                            <span class="input-group-text">to</span>
+                            <input type="number" class="form-control" id="ipoAmountHigh{{@index}}" aria-describedby="ipoHelp{{@index}}" value="{{ .ipo.amount.high }}" pattern="(\d+|\d+\.\d+)" min="0">
+                            <select aria-describedby="ipoHelp{{@index}}" class="form-select" id="ipoUnits{{@index}}">
+                                <option value="share" {{#if .ipo.shares}}selected{{/if}}>USD per share</option>
+                                <option value="total" {{#unless .ipo.shares}}selected{{/if}}>total company USD value</option>
+                            </select>
+                        </div>
+                        <div id="ipoHelp{{@index}}" class="form-text">Percent chance the company has an initial public offering such that you can sell your shares at the given share value (or assuming the given total company value). Provide range of share values (see <a href="#levelOfConfidence" class="level-of-confidence-link">level of confidence</a>).</div>
+                    </div>
+                </div>
+                <div class="option">
+                    <div class="mb-3">
+                        <label for="raisePercent{{@index}}" class="form-label">Raise chance</label>
+                        <div class="input-group">
+                            <input type="number" class="form-control" id="raisePercent{{@index}}" aria-describedby="raisePercentHelp{{@index}}" value="else" disabled>
+                            <span class="input-group-text">%</span>
+                        </div>
+                        <div id="raisePercentHelp{{@index}}" class="form-text">Percent chance the company has a fund raise. This is read only, it is 100% minus the probability of failing, selling, or having an IPO.</div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="raiseFmvLow{{@index}}" class="form-label">Raise FMV</label>
+                        <div class="input-group">
+                            <input type="number" class="form-control" id="raiseFmvLow{{@index}}" aria-describedby="raiseFmvHelp{{@index}}" value="{{ .raise.fmv.low }}" pattern="(\d+|\d+\.\d+)" min="0">
+                            <span class="input-group-text">to</span>
+                            <input type="number" class="form-control" id="raiseFmvHigh{{@index}}" aria-describedby="raiseFmvHelp{{@index}}" value="{{ .raise.fmv.high }}" pattern="(\d+|\d+\.\d+)" min="0">
+                            <span class="input-group-text">USD</span>
+                        </div>
+                        <div id="raiseFmvHelp{{@index}}" class="form-text">Range of expected <a href="#info409a" class="info-409a-link">409A fair market values</a> after raise if one happens using <a href="#levelOfConfidence" class="level-of-confidence-link">range settings in simulation section</a>.</div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="raiseDiluteLow{{@index}}" class="form-label">Raise dilution</label>
+                        <div class="input-group">
+                            <input type="number" class="form-control" id="raiseDiluteLow{{@index}}" aria-describedby="raiseDiluteHelp{{@index}}" value="{{ .raise.dilute.low }}" pattern="(100|\d{1,2})" min="0" max="100">
+                            <span class="input-group-text">to</span>
+                            <input type="number" class="form-control" id="raiseDiluteHigh{{@index}}" aria-describedby="raiseDiluteHelp{{@index}}" value="{{ .raise.dilute.high }}" pattern="(100|\d{1,2})" min="0" max="100">
+                            <span class="input-group-text">%</span>
+                        </div>
+                        <div id="raiseDiluteHelp{{@index}}" class="form-text">Range of expected <a href="#infoDilution" class="info-dilution-link">dilution</a> of shares using <a href="#levelOfConfidence" class="level-of-confidence-link">range settings in simulation section</a> if a raise happens.</div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="raiseDelayLow{{@index}}" class="form-label">Delay after raise</label>
+                        <div class="input-group">
+                            <input type="number" class="form-control" id="raiseDelayLow{{@index}}" aria-describedby="raiseDelayHelp{{@index}}" value="{{ .raise.delay.low }}" step="1" pattern="\d+" min="0">
+                            <span class="input-group-text">to</span>
+                            <input type="number" class="form-control" id="raiseDelayHigh{{@index}}" aria-describedby="raiseDelayHelp{{@index}}" value="{{ .raise.delay.high }}" step="1" pattern="\d+" min="0">
+                        </div>
+                        <div id="raiseDelayHelp{{@index}}" class="form-text">Delay between raise if one happens to next stage.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {{/each}}
     </p>
 </details>
 
@@ -139,7 +254,7 @@
                 <option value="1" {{#unless derived.highConfidence}}selected{{/unless}}>Low confidence (ranges represent 68% of outcomes).</option>
                 <option value="2" {{#if derived.highConfidence}}selected{{/if}}>High confidence (ranges represent 95% of outcomes).</option>
             </select>
-            <div id="rangeStdHelp" class="form-text">Level of confidence you have in the ranges provided in the events section (like FMV, amount diluation, IPO share price etc). More <a href="#levelOfConfidence" id="levelOfConfidenceLink">info about level of confidence</a>.</div>
+            <div id="rangeStdHelp" class="form-text">Level of confidence you have in the ranges provided in the events section (like FMV, amount diluation, IPO share price etc). More <a href="#levelOfConfidence" class="level-of-confidence-link">info about level of confidence</a>.</div>
         </div>
     </p>
 </details>

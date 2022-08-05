@@ -16,7 +16,8 @@ QUnit.module("CodeGenUiUtil", function() {
             "totalGrant": 34,
             "startFMV": 0.56,
             "startTotalShares": 78
-        }
+        },
+        "states": []
     };
 
     function makeUtil() {
