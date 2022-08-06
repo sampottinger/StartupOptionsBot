@@ -49,7 +49,11 @@ function codeSupportedByEditor(serialization) {
 
 function parseSerializationFromUi() {
     const getSimpleNumber = (target) => {
-        return parseFloat(document.getElementById(target).value);
+        const element = document.getElementById(target);
+        if (element === undefined) {
+            throw "Could not find " + target;
+        }
+        return parseFloat(element.value);
     };
 
     const getDropdownValue = (target) => {
@@ -70,7 +74,12 @@ function parseSerializationFromUi() {
             "regularIncomeTax": getSimpleNumber("regularIncomeTax"),
             "longTermTax": getSimpleNumber("longTermTax"),
             "startMonthLow": getSimpleNumber("startMonthLow"),
-            "startMonthHigh": getSimpleNumber("startMonthHigh")
+            "startMonthHigh": getSimpleNumber("startMonthHigh"),
+            "ipoBuy": getSimpleNumber("ipoBuy"),
+            "sellBuy": getSimpleNumber("sellBuy"),
+            "quitBuy": getSimpleNumber("quitBuy"),
+            "waitToSell": parseFloat(getDropdownValue("waitToSell")),
+            "rangeStd": parseFloat(getDropdownValue("rangeStd"))
         };
     };
 
@@ -168,7 +177,7 @@ function parseSerializationFromUi() {
     return {
         "variables": getVariables(),
         "states": states
-    }
+    };
 }
 
 
