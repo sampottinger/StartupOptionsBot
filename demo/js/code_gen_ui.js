@@ -52,6 +52,11 @@ function parseSerializationFromUi() {
         return parseFloat(document.getElementById(target).value);
     };
 
+    const getDropdownValue = (target) => {
+        const targetDropdown = document.getElementById(target);
+        return targetDropdown.options[targetDropdown.selectedIndex].value;
+    };
+
     const getVariables = () => {
         return {
             "numOptionsAvailable": getSimpleNumber("numOptions"),
@@ -70,7 +75,8 @@ function parseSerializationFromUi() {
     };
 
     const getState = (index) => {
-        const getSimpleNumberAtIndex(target) => getSimpleNumber(target + index);
+        const getSimpleNumberAtIndex = (target) => getSimpleNumber(target + index);
+        const getDropdownAtIndex = (target) => getDropdownValue(target + index);
 
         const failProba = getSimpleNumberAtIndex("failPercent") / 100;
 
@@ -82,12 +88,12 @@ function parseSerializationFromUi() {
         const sellProba = getSimpleNumberAtIndex("sellPercent") / 100;
         const sellLow = getSimpleNumberAtIndex("sellAmountLow");
         const sellHigh = getSimpleNumberAtIndex("sellAmountHigh");
-        const sellUnits = "";
+        const sellUnits = getDropdownAtIndex("sellUnits");
 
         const ipoProba = getSimpleNumberAtIndex("ipoPercent") / 100;
         const ipoLow = getSimpleNumberAtIndex("ipoAmountLow");
         const ipoHigh = getSimpleNumberAtIndex("ipoAmountHigh");
-        const ipoUnits = "";
+        const ipoUnits = getDropdownAtIndex("ipoUnits");
 
         const fmvLow = getSimpleNumberAtIndex("raiseFmvLow");
         const fmvHigh = getSimpleNumberAtIndex("raiseFmvHigh");
@@ -152,6 +158,17 @@ function parseSerializationFromUi() {
             ]
         };
     };
+    
+    const numStates = document.getElementsByClassName("event").length;
+    const states = [];
+    for (let i = 0; i < numStates; i++) {
+        states.push(getState(i));
+    }
+
+    return {
+        "variables": getVariables(),
+        "states": states
+    }
 }
 
 

@@ -1,6 +1,8 @@
 QUnit.module("SimulationState", function() {
 
-    function makeState(startVestingMonths, immediatelyVest, monthlyVest) {
+    function makeState(startVestingMonths, immediatelyVest, monthlyVest,
+        startMonthLow, startMonthHigh) {
+        
         if (startVestingMonths === undefined) {
             startVestingMonths = 0;
         }
@@ -11,6 +13,14 @@ QUnit.module("SimulationState", function() {
 
         if (monthlyVest === undefined) {
             monthlyVest = 0;
+        }
+
+        if (startMonthLow === undefined) {
+            startMonthLow = 0;
+        }
+
+        if (startMonthHigh === undefined) {
+            startMonthHigh = 0;
         }
 
         const newState = new SimulationState();
@@ -29,13 +39,20 @@ QUnit.module("SimulationState", function() {
         newState.setValue("startFMV", 1.2);
         newState.setValue("startTotalShares", 1234567);
         newState.setValue("rangeStd", 2);
-        newState.setValue("startMonthLow", 12);
-        newState.setValue("startMonthHigh", 24);
+        newState.setValue("startMonthLow", startMonthLow);
+        newState.setValue("startMonthHigh", startMonthHigh);
         return newState;
     }
 
-    function makeSetUpState(startVestingMonths, immediatelyVest, monthlyVest) {
-        const newState = makeState(startVestingMonths, immediatelyVest, monthlyVest);
+    function makeSetUpState(startVestingMonths, immediatelyVest, monthlyVest, startMonthLow,
+        startMonthHigh) {
+        const newState = makeState(
+            startVestingMonths,
+            immediatelyVest,
+            monthlyVest,
+            startMonthLow,
+            startMonthHigh
+        );
         newState.finishSetup();
         return newState;
     }
@@ -149,13 +166,13 @@ QUnit.module("SimulationState", function() {
     });
 
     QUnit.test("vest options", function(assert) {
-        const newState = makeSetUpState(12, 20, 10);
+        const newState = makeSetUpState(12, 20, 10, 1, 1);
         
-        // Zero months
+        // Start
         assert.ok(Math.abs(newState.getOptionsAvailable() - 0) < 0.001);
 
         // Before cliff
-        newState.delay(11);
+        newState.delay(10);
         assert.ok(Math.abs(newState.getOptionsAvailable() - 0) < 0.001);
 
         // Cliff

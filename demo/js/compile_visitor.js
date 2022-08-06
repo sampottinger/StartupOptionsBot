@@ -50,9 +50,9 @@ class CompileVisitor extends toolkit.StartUpOptionsBotLangVisitor {
 
         return (state) => {
             const rangeStd = state.getValue("rangeStd");
-            const fmv = self._getNormVal(fmvLow, fmvHigh, true, rangeStd);
-            const dilution = self._getNormVal(diluteLow, diluteHigh, true, rangeStd);
-            const delay = self._getNormVal(delayLow, delayHigh, true, rangeStd);
+            const fmv = getNormVal(fmvLow, fmvHigh, true, rangeStd);
+            const dilution = getNormVal(diluteLow, diluteHigh, true, rangeStd);
+            const delay = getNormVal(delayLow, delayHigh, true, rangeStd);
 
             state.addEvent("Raised. FMV at " + valuation + " with dilution " + dilution);
             state.setFairMarketValue(fmv);
@@ -245,7 +245,7 @@ class CompileVisitor extends toolkit.StartUpOptionsBotLangVisitor {
 
         return (state) => {
             const rangeStd = state.getValue("rangeStd");
-            const generatedValue = self._getNormVal(low, high, true, rangeStd);
+            const generatedValue = getNormVal(low, high, true, rangeStd);
             const percentOptionsBuy = state.getValue(buyVariable) / 100;
             const optionsAvailable = state.getOptionsAvailable();
             const numOptions = optionsAvailable * percentOptionsBuy;
@@ -263,29 +263,6 @@ class CompileVisitor extends toolkit.StartUpOptionsBotLangVisitor {
 
             return state;
         };
-    }
-
-    _getNormVal(low, high, mustBePositive, rangeStd) {
-        const self = this;
-
-        if (high == low) {
-            return high;
-        } else if (high < low) {
-            const newHigh = low;
-            const newLow = high;
-            low = newLow;
-            high = newHigh;
-        }
-
-        const mean = (high + low) / 2;
-        const std = (high - mean) / rangeStd;
-        const candidate = d3.randomNormal(mean, std)();
-
-        if (mustBePositive) {
-            return candidate < 0 ? 0 : candidate;
-        } else {
-            return candidate;
-        }
     }
 
 }
