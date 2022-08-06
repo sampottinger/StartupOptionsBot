@@ -18,6 +18,35 @@ const SIMPLE_VARIABLES = [
 const NUMBER_REGEX = /^\d+(\.\d+)?$/;
 
 
+function codeSupportedByEditor(serialization) {
+    const hasSingleRaiseElse = (event) => {
+        const options = event["current"];
+        const elseOptions = options.filter((x) => x["isElse"]);
+        
+        if (elseOptions.length != 1) {
+            return false;
+        }
+
+        return elseOptions[0]["target"]["action"] === "raise";
+    };
+
+    const hasMultiAction = (event) => {
+        const options = event["current"];
+        const actions = options.map((x) => x["target"]["action"]);
+        const actionSet = new Set(actions);
+        return actions.length != actionSet.size;
+    };
+
+    const raiseCompatible = (event) => {
+        return event["current"].length == 0 || hasSingleRaiseElse(event);
+    };
+
+    const unsupportedState = (event) => !raiseCompatible(event) || hasMultiAction(event);
+
+    return serialization["states"].filter(unsupportedState).length == 0;
+}
+
+
 class CodeGenUiUtil {
 
     constructor(templateUrl) {
