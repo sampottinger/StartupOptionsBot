@@ -144,8 +144,8 @@
                             <span class="input-group-text">to</span>
                             <input type="number" class="form-control" id="sellAmountHigh{{@index}}" aria-describedby="sellHelp{{@index}}" value="{{ target.sell.amount.high }}" pattern="(\d+|\d+\.\d+)" min="0">
                             <select aria-describedby="sellHelp{{@index}}" class="form-select" id="sellUnits{{@index}}">
-                                <option value="share" {{#if .sell.shares}}selected{{/if}}>USD per share</option>
-                                <option value="total" {{#unless .sell.shares}}selected{{/if}}>total company USD value</option>
+                                <option value="share" {{#if target.sell.shares}}selected{{/if}}>USD per share</option>
+                                <option value="total" {{#unless target.sell.shares}}selected{{/unless}}>total company USD value</option>
                             </select>
                         </div>
                         <div id="sellHelp{{@index}}" class="form-text">Percent chance the company is sold / acquired at a particular value such that you can sell your shares at the given share value (or assuming the given total company value). Provide range of share values (see <a href="#levelOfConfidence" class="level-of-confidence-link">level of confidence</a>).</div>
@@ -161,8 +161,8 @@
                             <span class="input-group-text">to</span>
                             <input type="number" class="form-control" id="ipoAmountHigh{{@index}}" aria-describedby="ipoHelp{{@index}}" value="{{ target.ipo.amount.high }}" pattern="(\d+|\d+\.\d+)" min="0">
                             <select aria-describedby="ipoHelp{{@index}}" class="form-select" id="ipoUnits{{@index}}">
-                                <option value="share" {{#if .ipo.shares}}selected{{/if}}>USD per share</option>
-                                <option value="total" {{#unless .ipo.shares}}selected{{/if}}>total company USD value</option>
+                                <option value="share" {{#if this.ipo.shares}}selected{{/if}}>USD per share</option>
+                                <option value="total" {{#unless this.ipo.shares}}selected{{/unless}}>total company USD value</option>
                             </select>
                         </div>
                         <div id="ipoHelp{{@index}}" class="form-text">Percent chance the company has an initial public offering such that you can sell your shares at the given share value (or assuming the given total company value). Provide range of share values (see <a href="#levelOfConfidence" class="level-of-confidence-link">level of confidence</a>).</div>
