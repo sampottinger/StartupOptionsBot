@@ -134,16 +134,6 @@ class CompileVisitor extends toolkit.StartUpOptionsBotLangVisitor {
             allBranches.push(parsedBranch);
         }
 
-        const getElse = (target) => {
-            if (target.length == 1) {
-                return target[0];
-            } else if (target.length == 0) {
-                return (state) => state;
-            } else {
-                throw "Multiple elses provided";
-            }
-        };
-
         const checkSumProbabilities = (target) => {
             const totalProba = target.map((x) => x["proba"]).reduce((a, b) => a + b, 0);
             if (totalProba > 1) {
@@ -151,7 +141,12 @@ class CompileVisitor extends toolkit.StartUpOptionsBotLangVisitor {
             }
         };
 
-        const chooseBranch = (branches, elseBranch) => {
+        const chooseElse = (options) => {
+            const index = Math.floor(Math.random() * options.length);
+            return options[index];
+        };
+
+        const chooseBranch = (branches, elseBranches) => {
             const chosenProba = d3.randomUniform(0, 1);
             
             const accumulations = [];
@@ -168,20 +163,20 @@ class CompileVisitor extends toolkit.StartUpOptionsBotLangVisitor {
             }
 
             const isElse = i == numAccumulations;
-            return isElse ? elseBranch : branches[i];
+            return isElse ? chooseElse(elseBranches) : branches[i];
         };
 
         const companyBranches = allBranches.filter((x) => x["isCompany"] && !x["isElse"]);
-        const companyElse = getElse(allBranches.filter((x) => x["isCompany"] && x["isElse"]));
+        const companyElses = allBranches.filter((x) => x["isCompany"] && x["isElse"]);
         const employeeBranches = allBranches.filter((x) => !x["isCompany"] && !x["isElse"]);
-        const employeeElse = getElse(allBranches.filter((x) => !x["isCompany"] && x["isElse"]));
+        const employeeElses = allBranches.filter((x) => !x["isCompany"] && x["isElse"]);
 
         checkSumProbabilities(companyBranches);
         checkSumProbabilities(employeeBranches);
 
         return (state) => {
-            const employeeAction = chooseBranch(employeeBranches, employeeElse);
-            const companyAction = chooseBranch(companyBranches, companyElse);
+            const employeeAction = chooseBranch(employeeBranches, employeeElses);
+            const companyAction = chooseBranch(companyBranches, companyElses);
 
             state = employeeAction(state);
             state = companyAction(state);
