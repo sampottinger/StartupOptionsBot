@@ -70,22 +70,22 @@ class CodeGenUiUtil {
         };
         
         const strategies = {
-            "quit": (x) => { outputRecord["quit"]["percent"] = x["proba"]; },
+            "quit": (x) => { outputRecord["quit"]["percent"] = x["proba"] * 100; },
             "buy": (x) => {
-                outputRecord["buy"]["percent"] = x["proba"];
+                outputRecord["buy"]["percent"] = x["proba"] * 100;
                 outputRecord["buy"]["amount"] = x["target"]["percentAmount"];
             },
             "fail": (x) => {
-                outputRecord["fail"]["percent"] = x["proba"];
+                outputRecord["fail"]["percent"] = x["proba"] * 100;
             },
             "sell": (x) => {
-                outputRecord["sell"]["percent"] = x["proba"];
+                outputRecord["sell"]["percent"] = x["proba"] * 100;
                 outputRecord["sell"]["amount"]["low"] = x["target"]["low"];
                 outputRecord["sell"]["amount"]["high"] = x["target"]["high"];
                 outputRecord["sell"]["shares"] = x["target"]["units"] === "share";
             },
             "ipo": (x) => {
-                outputRecord["ipo"]["percent"] = x["proba"];
+                outputRecord["ipo"]["percent"] = x["proba"] * 100;
                 outputRecord["ipo"]["amount"]["low"] = x["target"]["low"];
                 outputRecord["ipo"]["amount"]["high"] = x["target"]["high"];
                 outputRecord["ipo"]["shares"] = x["target"]["units"] === "share";

@@ -17,7 +17,40 @@ QUnit.module("CodeGenUiUtil", function() {
             "startFMV": 0.56,
             "startTotalShares": 78
         },
-        "states": []
+        "states": [
+            {
+                "current": [
+                    {
+                        "proba": 0.01,
+                        "target": {
+                            "action": "quit"
+                        }
+                    },
+                    {
+                        "proba": 0.02,
+                        "target": {
+                            "action": "sell",
+                            "amount": {
+                                "low": 6,
+                                "high": 7
+                            },
+                            "units": "share"
+                        }
+                    },
+                    {
+                        "proba": 0.03,
+                        "target": {
+                            "action": "ipo",
+                            "amount": {
+                                "low": 9,
+                                "high": 10
+                            },
+                            "units": "total"
+                        }
+                    },
+                ]
+            }
+        ]
     };
 
     function makeUtil() {
@@ -74,6 +107,28 @@ QUnit.module("CodeGenUiUtil", function() {
             const rangeStd = document.getElementById("rangeStd").value;
             assert.deepEqual(waitToSell, "0");
             assert.deepEqual(rangeStd, "2");
+            done();
+        });
+    });
+
+    QUnit.test("event inputs", function(assert) {
+        const done = assert.async();
+        const util = makeUtil();
+        util.render("templateTarget", DEFAULT_INPUT).then(() => {
+            const quitPercent = document.getElementById("quitPercent0").value;
+            assert.deepEqual(quitPercent, "1");
+            done();
+        });
+    });
+
+    QUnit.test("event dropdown", function(assert) {
+        const done = assert.async();
+        const util = makeUtil();
+        util.render("templateTarget", DEFAULT_INPUT).then(() => {
+            const sellUnits = document.getElementById("sellUnits0").value;
+            const ipoUnits = document.getElementById("ipoUnits0").value;
+            assert.deepEqual(sellUnits, "share");
+            assert.deepEqual(ipoUnits, "total");
             done();
         });
     });
