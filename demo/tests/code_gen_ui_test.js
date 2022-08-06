@@ -289,8 +289,8 @@ QUnit.module("CodeGenUiUtil", function() {
         const util = makeUtil();
         util.render("templateTarget", DEFAULT_INPUT).then(() => {
             const result = parseSerializationFromUi();
+            assert.equal(result["states"][0]["current"][3]["target"]["units"], "share");
             assert.equal(result["states"][0]["current"][4]["target"]["units"], "total");
-            assert.equal(result["states"][0]["current"][5]["target"]["units"], "share");
             done();
         });
     });
