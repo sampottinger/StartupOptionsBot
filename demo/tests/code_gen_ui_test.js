@@ -1,3 +1,127 @@
+QUnit.module("codeSupportedByEditor", function() {
+
+    function makeSerializationActions() {
+        return [
+            {
+                "proba": 0.01,
+                "isElse": false,
+                "target": {
+                    "action": "quit"
+                }
+            },
+            {
+                "proba": 0.02,
+                "isElse": false,
+                "target": {
+                    "action": "sell",
+                    "amount": {
+                        "low": 6,
+                        "high": 7
+                    },
+                    "units": "share"
+                }
+            },
+            {
+                "proba": 0.03,
+                "isElse": false,
+                "target": {
+                    "action": "ipo",
+                    "amount": {
+                        "low": 9,
+                        "high": 10
+                    },
+                    "units": "total"
+                }
+            },
+            {
+                "proba": "else",
+                "isElse": true,
+                "target": {
+                    "action": "raise"
+                }
+            }
+        ];
+    }
+
+    function makeSerialization(actions) {
+        return {
+            "states": [
+                {
+                    "current": actions
+                }
+            ]
+        };
+    }
+
+    QUnit.test("is supported", function(assert) {
+        const actions = makeSerializationActions();
+        const serialization = makeSerialization(actions);
+        assert.ok(codeSupportedByEditor(serialization));
+    });
+
+    QUnit.test("is supported empty", function(assert) {
+        const testInput = {
+            "states": [
+                {
+                    "current": []
+                }
+            ]
+        };
+
+        assert.ok(codeSupportedByEditor(testInput));
+    });
+
+    QUnit.test("has other else", function(assert) {
+        const actions = makeSerializationActions();
+        actions.push({
+            "proba": "else",
+            "isElse": true,
+            "target": {
+                "action": "buy",
+                "amount": {
+                    "low": 9,
+                    "high": 10
+                }
+            }
+        });
+        const serialization = makeSerialization(actions);
+        assert.ok(!codeSupportedByEditor(serialization));
+    });
+
+    QUnit.test("has multi else", function(assert) {
+        const actions = makeSerializationActions();
+        actions.push({
+            "proba": "else",
+            "isElse": true,
+            "target": {
+                "action": "raise"
+            }
+        });
+        const serialization = makeSerialization(actions);
+        assert.ok(!codeSupportedByEditor(serialization));
+    });
+
+    QUnit.test("has multi action", function(assert) {
+        const actions = makeSerializationActions();
+        actions.push({
+            "proba": 0.03,
+            "isElse": false,
+            "target": {
+                "action": "ipo",
+                "amount": {
+                    "low": 9,
+                    "high": 10
+                },
+                "units": "total"
+            }
+        });
+        const serialization = makeSerialization(actions);
+        assert.ok(!codeSupportedByEditor(serialization));
+    });
+
+});
+
+
 QUnit.module("CodeGenUiUtil", function() {
 
     const DEFAULT_INPUT = {

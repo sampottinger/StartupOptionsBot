@@ -49,9 +49,10 @@ class CompileVisitor extends toolkit.StartUpOptionsBotLangVisitor {
         const nextBranches = ctx.next.accept(self);
 
         return (state) => {
-            const fmv = self._getNormVal(fmvLow, fmvHigh);
-            const dilution = self._getNormVal(diluteLow, diluteHigh);
-            const delay = self._getNormVal(delayLow, delayHigh);
+            const rangeStd = state.getValue("rangeStd");
+            const fmv = self._getNormVal(fmvLow, fmvHigh, true, rangeStd);
+            const dilution = self._getNormVal(diluteLow, diluteHigh, true, rangeStd);
+            const delay = self._getNormVal(delayLow, delayHigh, true, rangeStd);
 
             state.addEvent("Raised. FMV at " + valuation + " with dilution " + dilution);
             state.setFairMarketValue(fmv);
@@ -133,16 +134,6 @@ class CompileVisitor extends toolkit.StartUpOptionsBotLangVisitor {
             allBranches.push(parsedBranch);
         }
 
-        const getElse = (target) => {
-            if (target.length == 1) {
-                return target[0];
-            } else if (target.length == 0) {
-                return (state) => state;
-            } else {
-                throw "Multiple elses provided";
-            }
-        };
-
         const checkSumProbabilities = (target) => {
             const totalProba = target.map((x) => x["proba"]).reduce((a, b) => a + b, 0);
             if (totalProba > 1) {
@@ -150,7 +141,12 @@ class CompileVisitor extends toolkit.StartUpOptionsBotLangVisitor {
             }
         };
 
-        const chooseBranch = (branches, elseBranch) => {
+        const chooseElse = (options) => {
+            const index = Math.floor(Math.random() * options.length);
+            return options[index];
+        };
+
+        const chooseBranch = (branches, elseBranches) => {
             const chosenProba = d3.randomUniform(0, 1);
             
             const accumulations = [];
@@ -167,20 +163,20 @@ class CompileVisitor extends toolkit.StartUpOptionsBotLangVisitor {
             }
 
             const isElse = i == numAccumulations;
-            return isElse ? elseBranch : branches[i];
+            return isElse ? chooseElse(elseBranches) : branches[i];
         };
 
         const companyBranches = allBranches.filter((x) => x["isCompany"] && !x["isElse"]);
-        const companyElse = getElse(allBranches.filter((x) => x["isCompany"] && x["isElse"]));
+        const companyElses = allBranches.filter((x) => x["isCompany"] && x["isElse"]);
         const employeeBranches = allBranches.filter((x) => !x["isCompany"] && !x["isElse"]);
-        const employeeElse = getElse(allBranches.filter((x) => !x["isCompany"] && x["isElse"]));
+        const employeeElses = allBranches.filter((x) => !x["isCompany"] && x["isElse"]);
 
         checkSumProbabilities(companyBranches);
         checkSumProbabilities(employeeBranches);
 
         return (state) => {
-            const employeeAction = chooseBranch(employeeBranches, employeeElse);
-            const companyAction = chooseBranch(companyBranches, companyElse);
+            const employeeAction = chooseBranch(employeeBranches, employeeElses);
+            const companyAction = chooseBranch(companyBranches, companyElses);
 
             state = employeeAction(state);
             state = companyAction(state);
@@ -248,7 +244,8 @@ class CompileVisitor extends toolkit.StartUpOptionsBotLangVisitor {
         const isValue = ctx.unit.getText().includes("total");
 
         return (state) => {
-            const generatedValue = self._getNormVal(low, high);
+            const rangeStd = state.getValue("rangeStd");
+            const generatedValue = self._getNormVal(low, high, true, rangeStd);
             const percentOptionsBuy = state.getValue(buyVariable) / 100;
             const optionsAvailable = state.getOptionsAvailable();
             const numOptions = optionsAvailable * percentOptionsBuy;
@@ -268,10 +265,12 @@ class CompileVisitor extends toolkit.StartUpOptionsBotLangVisitor {
         };
     }
 
-    _getNormVal(low, high) {
+    _getNormVal(low, high, mustBePositive, rangeStd) {
         const self = this;
 
-        if (high < low) {
+        if (high == low) {
+            return high;
+        } else if (high < low) {
             const newHigh = low;
             const newLow = high;
             low = newLow;
@@ -279,8 +278,14 @@ class CompileVisitor extends toolkit.StartUpOptionsBotLangVisitor {
         }
 
         const mean = (high + low) / 2;
-        const std = high - mean;
-        return d3.randomNormal(mean, std);
+        const std = (high - mean) / rangeStd;
+        const candidate = d3.randomNormal(mean, std)();
+
+        if (mustBePositive) {
+            return candidate < 0 ? 0 : candidate;
+        } else {
+            return candidate;
+        }
     }
 
 }

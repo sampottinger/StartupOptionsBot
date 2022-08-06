@@ -7,7 +7,11 @@ class SimulationState {
         self._currentMonth = 0;
         self._variables = new Map();
         
-        self._numOptionsAvailable = 0;
+        self._totalGrant = 0;
+        self._noOptionsAvailable = true;
+        self._startVestingMonths = 0;
+        self._immediatelyVest = 0;
+        self._monthlyVest = 0;
         self._numOptionsPurchased = 0;
         self._fairMarketValue = 0;
         self._strikePrice = 0;
@@ -30,6 +34,7 @@ class SimulationState {
         }
         self._setUp = true;
 
+        // Misc required vars
         self._assureValuePresent("ipoBuy");
         self._assureValuePresent("sellBuy");
         self._assureValuePresent("quitBuy");
@@ -41,12 +46,25 @@ class SimulationState {
         self._assureValuePresent("startMonthLow");
         self._assureValuePresent("startMonthHigh");
 
+        // Grant info
         self._assureValuePresent("strikePrice");
         self._strikePrice = self.getValue("strikePrice");
 
         self._assureValuePresent("totalGrant");
-        self._numOptionsAvailable = self.getValue("totalGrant");
+        self._totalGrant = self.getValue("totalGrant");
 
+        self._assureValuePresent("startVestingMonths");
+        self._startVestingMonths = self.getValue("startVestingMonths");
+
+        self._assureValuePresent("immediatelyVest");
+        self._immediatelyVest = self.getValue("immediatelyVest");
+
+        self._assureValuePresent("monthlyVest");
+        self._monthlyVest = self.getValue("monthlyVest");
+
+        self._noOptionsAvailable = false;
+
+        // Company
         self._assureValuePresent("startFMV");
         self._fairMarketValue = self.getValue("startFMV");
 
@@ -79,49 +97,69 @@ class SimulationState {
 
     setExitValue(newValue) {
         const self = this;
+        newValue = self._ensurePositive(newValue);
         const percentPerShare = 1 / self._numTotalShares;
         self.setExitShare(percentPerShare * newValue);
     }
 
     setExitShare(newValue) {
         const self = this;
+        newValue = self._ensurePositive(newValue);
         self._exitShare = newValue;
         self.setFairMarketValue(newValue);
     }
 
     setFairMarketValue(newValue) {
         const self = this;
+        newValue = self._ensurePositive(newValue);
         self._fairMarketValue = newValue;
     }
 
     diluteOptions(dilution) {
         const self = this;
+        dilution = self._ensurePositive(dilution);
         self._numTotalShares = self._numTotalShares * (1 + dilution);
     }
 
     delay(months) {
         const self = this;
+        months = self._ensurePositive(months);
         self._currentMonth += months;
     }
 
     getOptionsAvailable() {
         const self = this;
-        return self._numOptionsAvailable;
+        
+        const isBeforeCliff = self._currentMonth < self._startVestingMonths;
+
+        if (isBeforeCliff || self._noOptionsAvailable) {
+            return 0;
+        }
+
+        const monthsSinceCliff = self._currentMonth - self._startVestingMonths;
+        const totalVested = self._immediatelyVest + self._monthlyVest * monthsSinceCliff;
+
+        const reachedCap = totalVested > self._totalGrant;
+        const totalVestedCap = reachedCap ? self._totalGrant : totalVested;
+
+        return totalVestedCap - self._numOptionsPurchased;
     }
 
     buyOptions(numOptionsRequested) {
         const self = this;
+
+        numOptionsRequested = self._ensurePositive(numOptionsRequested);
+        const optionsAvailable = self.getOptionsAvailable();
         
         const numOptionsRequestedInt = Math.round(numOptionsRequested);
-        const requestedAvailable = numOptionsRequestedInt < self._numOptionsAvailable;
-        const numOptions = requestedAvailable ? numOptionsRequestedInt : self._numOptionsAvailable;
+        const requestedAvailable = numOptionsRequestedInt < optionsAvailable;
+        const numOptions = requestedAvailable ? numOptionsRequestedInt : optionsAvailable;
         
         const spreadPerOption = self._fairMarketValue - self._strikePrice;
         const marginalSpread = numOptions * spreadPerOption;
 
         self._totalSpread += marginalSpread;
         self._numOptionsPurchased += numOptions;
-        self._numOptionsAvailable -= numOptions;
 
         self._purchaseHistory.push({
             "months": self._currentMonth,
@@ -132,7 +170,7 @@ class SimulationState {
 
     clearRemainingOptions() {
         const self = this;
-        self._numOptionsAvailable = 0;
+        self._noOptionsAvailable = true;
     }
 
     finalize() {
@@ -228,6 +266,11 @@ class SimulationState {
         if (!self._variables.has(name)) {
             throw "Variable not provided " + name + ".";
         }
+    }
+
+    _ensurePositive(target) {
+        const self = this;
+        return target < 0 ? 0 : target;
     }
 
 }

@@ -1,6 +1,18 @@
 QUnit.module("SimulationState", function() {
 
-    function makeState() {
+    function makeState(startVestingMonths, immediatelyVest, monthlyVest) {
+        if (startVestingMonths === undefined) {
+            startVestingMonths = 0;
+        }
+
+        if (immediatelyVest === undefined) {
+            immediatelyVest = 123;
+        }
+
+        if (monthlyVest === undefined) {
+            monthlyVest = 0;
+        }
+
         const newState = new SimulationState();
         newState.setValue("ipoBuy", 100);
         newState.setValue("sellBuy", 90);
@@ -11,6 +23,9 @@ QUnit.module("SimulationState", function() {
         newState.setValue("waitToSell", 0.8);
         newState.setValue("strikePrice", 1.1);
         newState.setValue("totalGrant", 123);
+        newState.setValue("startVestingMonths", startVestingMonths);
+        newState.setValue("immediatelyVest", immediatelyVest);
+        newState.setValue("monthlyVest", monthlyVest);
         newState.setValue("startFMV", 1.2);
         newState.setValue("startTotalShares", 1234567);
         newState.setValue("rangeStd", 2);
@@ -19,8 +34,8 @@ QUnit.module("SimulationState", function() {
         return newState;
     }
 
-    function makeSetUpState() {
-        const newState = makeState();
+    function makeSetUpState(startVestingMonths, immediatelyVest, monthlyVest) {
+        const newState = makeState(startVestingMonths, immediatelyVest, monthlyVest);
         newState.finishSetup();
         return newState;
     }
@@ -102,7 +117,7 @@ QUnit.module("SimulationState", function() {
         const newState = makeSetUpState();
         newState.clearRemainingOptions();
 
-        assert.equal(newState._numOptionsAvailable, 0);
+        assert.equal(newState.getOptionsAvailable(), 0);
     });
 
     QUnit.test("get proceeds pre-tax", function(assert) {
@@ -121,16 +136,43 @@ QUnit.module("SimulationState", function() {
 
     QUnit.test("decrement options", function(assert) {
         const newState = makeSetUpState();
-        assert.equal(newState._numOptionsAvailable, 123);
+        assert.equal(newState.getOptionsAvailable(), 123);
         assert.equal(newState._numOptionsPurchased, 0);
         
         newState.buyOptions(99.9);
-        assert.equal(newState._numOptionsAvailable, 23);
+        assert.equal(newState.getOptionsAvailable(), 23);
         assert.equal(newState._numOptionsPurchased, 100);
 
         newState.buyOptions(99.9);
-        assert.equal(newState._numOptionsAvailable, 0);
+        assert.equal(newState.getOptionsAvailable(), 0);
         assert.equal(newState._numOptionsPurchased, 123);
+    });
+
+    QUnit.test("vest options", function(assert) {
+        const newState = makeSetUpState(12, 20, 10);
+        
+        // Zero months
+        assert.ok(Math.abs(newState.getOptionsAvailable() - 0) < 0.001);
+
+        // Before cliff
+        newState.delay(11);
+        assert.ok(Math.abs(newState.getOptionsAvailable() - 0) < 0.001);
+
+        // Cliff
+        newState.delay(1);
+        assert.ok(Math.abs(newState.getOptionsAvailable() - 20) < 0.001);
+
+        // Months later
+        newState.delay(2);
+        assert.ok(Math.abs(newState.getOptionsAvailable() - 40) < 0.001);
+
+        // Max
+        newState.delay(100);
+        assert.ok(Math.abs(newState.getOptionsAvailable() - 123) < 0.001);
+
+        // Clear
+        newState.clearRemainingOptions();
+        assert.ok(Math.abs(newState.getOptionsAvailable() - 0) < 0.001);
     });
 
     QUnit.test("buy options", function(assert) {
