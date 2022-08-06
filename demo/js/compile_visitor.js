@@ -273,7 +273,9 @@ class CompileVisitor extends toolkit.StartUpOptionsBotLangVisitor {
     _getNormVal(low, high, mustBePositive, rangeStd) {
         const self = this;
 
-        if (high < low) {
+        if (high == low) {
+            return high;
+        } else if (high < low) {
             const newHigh = low;
             const newLow = high;
             low = newLow;
@@ -282,7 +284,7 @@ class CompileVisitor extends toolkit.StartUpOptionsBotLangVisitor {
 
         const mean = (high + low) / 2;
         const std = (high - mean) / rangeStd;
-        const candidate = d3.randomNormal(mean, std);
+        const candidate = d3.randomNormal(mean, std)();
 
         if (mustBePositive) {
             return candidate < 0 ? 0 : candidate;
