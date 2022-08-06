@@ -79,28 +79,33 @@ class SimulationState {
 
     setExitValue(newValue) {
         const self = this;
+        newValue = self._ensurePositive(newValue);
         const percentPerShare = 1 / self._numTotalShares;
         self.setExitShare(percentPerShare * newValue);
     }
 
     setExitShare(newValue) {
         const self = this;
+        newValue = self._ensurePositive(newValue);
         self._exitShare = newValue;
         self.setFairMarketValue(newValue);
     }
 
     setFairMarketValue(newValue) {
         const self = this;
+        newValue = self._ensurePositive(newValue);
         self._fairMarketValue = newValue;
     }
 
     diluteOptions(dilution) {
         const self = this;
+        dilution = self._ensurePositive(dilution);
         self._numTotalShares = self._numTotalShares * (1 + dilution);
     }
 
     delay(months) {
         const self = this;
+        months = self._ensurePositive(months);
         self._currentMonth += months;
     }
 
@@ -111,6 +116,8 @@ class SimulationState {
 
     buyOptions(numOptionsRequested) {
         const self = this;
+
+        numOptionsRequested = self._ensurePositive(numOptionsRequested);
         
         const numOptionsRequestedInt = Math.round(numOptionsRequested);
         const requestedAvailable = numOptionsRequestedInt < self._numOptionsAvailable;
@@ -228,6 +235,11 @@ class SimulationState {
         if (!self._variables.has(name)) {
             throw "Variable not provided " + name + ".";
         }
+    }
+
+    _ensurePositive(target) {
+        const self = this;
+        return target < 0 ? 0 : target;
     }
 
 }
