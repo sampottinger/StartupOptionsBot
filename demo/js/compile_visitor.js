@@ -49,9 +49,10 @@ class CompileVisitor extends toolkit.StartUpOptionsBotLangVisitor {
         const nextBranches = ctx.next.accept(self);
 
         return (state) => {
-            const fmv = self._getNormVal(fmvLow, fmvHigh, true);
-            const dilution = self._getNormVal(diluteLow, diluteHigh, true);
-            const delay = self._getNormVal(delayLow, delayHigh, true);
+            const rangeStd = state.getValue("rangeStd");
+            const fmv = self._getNormVal(fmvLow, fmvHigh, true, rangeStd);
+            const dilution = self._getNormVal(diluteLow, diluteHigh, true, rangeStd);
+            const delay = self._getNormVal(delayLow, delayHigh, true, rangeStd);
 
             state.addEvent("Raised. FMV at " + valuation + " with dilution " + dilution);
             state.setFairMarketValue(fmv);
@@ -248,7 +249,8 @@ class CompileVisitor extends toolkit.StartUpOptionsBotLangVisitor {
         const isValue = ctx.unit.getText().includes("total");
 
         return (state) => {
-            const generatedValue = self._getNormVal(low, high, true);
+            const rangeStd = state.getValue("rangeStd");
+            const generatedValue = self._getNormVal(low, high, true, rangeStd);
             const percentOptionsBuy = state.getValue(buyVariable) / 100;
             const optionsAvailable = state.getOptionsAvailable();
             const numOptions = optionsAvailable * percentOptionsBuy;
@@ -268,7 +270,7 @@ class CompileVisitor extends toolkit.StartUpOptionsBotLangVisitor {
         };
     }
 
-    _getNormVal(low, high, mustBePositive) {
+    _getNormVal(low, high, mustBePositive, rangeStd) {
         const self = this;
 
         if (high < low) {
@@ -279,7 +281,7 @@ class CompileVisitor extends toolkit.StartUpOptionsBotLangVisitor {
         }
 
         const mean = (high + low) / 2;
-        const std = high - mean;
+        const std = (high - mean) / rangeStd;
         const candidate = d3.randomNormal(mean, std);
 
         if (mustBePositive) {
