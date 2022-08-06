@@ -47,6 +47,140 @@ function codeSupportedByEditor(serialization) {
 }
 
 
+function parseSerializationFromUi() {
+    const getSimpleNumber = (target) => {
+        const element = document.getElementById(target);
+        if (element === undefined) {
+            throw "Could not find " + target;
+        }
+        return parseFloat(element.value);
+    };
+
+    const getDropdownValue = (target) => {
+        const targetDropdown = document.getElementById(target);
+        return targetDropdown.options[targetDropdown.selectedIndex].value;
+    };
+
+    const getVariables = () => {
+        return {
+            "numOptionsAvailable": getSimpleNumber("numOptions"),
+            "strikePrice": getSimpleNumber("strikePrice"),
+            "startFMV": getSimpleNumber("strikePrice"),
+            "startTotalShares": getSimpleNumber("startTotalShares"),
+            "startVestingMonths": getSimpleNumber("startVestingMonths"),
+            "immediatelyVest": getSimpleNumber("immediatelyVest"),
+            "monthlyVest": getSimpleNumber("monthlyVest"),
+            "optionTax": getSimpleNumber("optionTax"),
+            "regularIncomeTax": getSimpleNumber("regularIncomeTax"),
+            "longTermTax": getSimpleNumber("longTermTax"),
+            "startMonthLow": getSimpleNumber("startMonthLow"),
+            "startMonthHigh": getSimpleNumber("startMonthHigh"),
+            "ipoBuy": getSimpleNumber("ipoBuy"),
+            "sellBuy": getSimpleNumber("sellBuy"),
+            "quitBuy": getSimpleNumber("quitBuy"),
+            "waitToSell": parseFloat(getDropdownValue("waitToSell")),
+            "rangeStd": parseFloat(getDropdownValue("rangeStd"))
+        };
+    };
+
+    const getState = (index) => {
+        const getSimpleNumberAtIndex = (target) => getSimpleNumber(target + index);
+        const getDropdownAtIndex = (target) => getDropdownValue(target + index);
+
+        const failProba = getSimpleNumberAtIndex("failPercent") / 100;
+
+        const quitProba = getSimpleNumberAtIndex("quitPercent") / 100;
+        
+        const buyProba = getSimpleNumberAtIndex("buyPercent") / 100;
+        const buyPercentAmount = getSimpleNumberAtIndex("buyAmount");
+        
+        const sellProba = getSimpleNumberAtIndex("sellPercent") / 100;
+        const sellLow = getSimpleNumberAtIndex("sellAmountLow");
+        const sellHigh = getSimpleNumberAtIndex("sellAmountHigh");
+        const sellUnits = getDropdownAtIndex("sellUnits");
+
+        const ipoProba = getSimpleNumberAtIndex("ipoPercent") / 100;
+        const ipoLow = getSimpleNumberAtIndex("ipoAmountLow");
+        const ipoHigh = getSimpleNumberAtIndex("ipoAmountHigh");
+        const ipoUnits = getDropdownAtIndex("ipoUnits");
+
+        const fmvLow = getSimpleNumberAtIndex("raiseFmvLow");
+        const fmvHigh = getSimpleNumberAtIndex("raiseFmvHigh");
+        const diluteLow = getSimpleNumberAtIndex("raiseDiluteLow");
+        const diluteHigh = getSimpleNumberAtIndex("raiseDiluteHigh");
+        const delayLow = getSimpleNumberAtIndex("raiseDelayLow");
+        const delayHigh = getSimpleNumberAtIndex("raiseDelayHigh");
+
+        return {
+            "current": [
+                {
+                    "proba": failProba,
+                    "isElse": false,
+                    "target": {"action": "fail"}
+                },
+                {
+                    "proba": quitProba,
+                    "isElse": false,
+                    "target": {"action": "quit"}
+                },
+                {
+                    "proba": buyProba,
+                    "isElse": false,
+                    "target": {
+                        "action": "buy",
+                        "percentAmount": buyPercentAmount
+                    }
+                },
+                {
+                    "proba": sellProba,
+                    "isElse": false,
+                    "target": {
+                        "action": "sell",
+                        "low": sellLow,
+                        "high": sellHigh,
+                        "units": sellUnits
+                    }
+                },
+                {
+                    "proba": ipoProba,
+                    "isElse": false,
+                    "target": {
+                        "action": "ipo",
+                        "low": ipoLow,
+                        "high": ipoHigh,
+                        "units": ipoUnits
+                    }
+                },
+                {
+                    "proba": "else",
+                    "isElse": true,
+                    "target": {
+                        "action": "raise",
+                        "fmvLow": fmvLow,
+                        "fmvHigh": fmvHigh,
+                        "diluteLow": diluteLow,
+                        "diluteHigh": diluteHigh,
+                        "delayLow": delayLow,
+                        "delayHigh": delayHigh
+                    }
+                }
+            ]
+        };
+    };
+    
+    const numStates = document.getElementsByClassName("event").length;
+    const states = [];
+    for (let i = 0; i < numStates; i++) {
+        states.push(getState(i));
+    }
+
+    return {
+        "variables": getVariables(),
+        "states": states
+    };
+}
+
+
 class CodeGenUiUtil {
 
     constructor(templateUrl) {

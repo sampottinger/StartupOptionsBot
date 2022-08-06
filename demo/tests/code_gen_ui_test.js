@@ -154,10 +154,8 @@ QUnit.module("CodeGenUiUtil", function() {
                         "proba": 0.02,
                         "target": {
                             "action": "sell",
-                            "amount": {
-                                "low": 6,
-                                "high": 7
-                            },
+                            "low": 6,
+                            "high": 7,
                             "units": "share"
                         }
                     },
@@ -165,10 +163,8 @@ QUnit.module("CodeGenUiUtil", function() {
                         "proba": 0.03,
                         "target": {
                             "action": "ipo",
-                            "amount": {
-                                "low": 9,
-                                "high": 10
-                            },
+                            "low": 9,
+                            "high": 10,
                             "units": "total"
                         }
                     },
@@ -253,6 +249,48 @@ QUnit.module("CodeGenUiUtil", function() {
             const ipoUnits = document.getElementById("ipoUnits0").value;
             assert.deepEqual(sellUnits, "share");
             assert.deepEqual(ipoUnits, "total");
+            done();
+        });
+    });
+
+    QUnit.test("parse variables", function(assert) {
+        const done = assert.async();
+        const util = makeUtil();
+        util.render("templateTarget", DEFAULT_INPUT).then(() => {
+            const result = parseSerializationFromUi();
+            assert.equal(result["variables"]["ipoBuy"], 100);
+            done();
+        });
+    });
+
+    QUnit.test("parse probability", function(assert) {
+        const done = assert.async();
+        const util = makeUtil();
+        util.render("templateTarget", DEFAULT_INPUT).then(() => {
+            const result = parseSerializationFromUi();
+            assert.equal(result["states"][0]["current"][1]["proba"], 0.01);
+            done();
+        });
+    });
+
+    QUnit.test("parse simple", function(assert) {
+        const done = assert.async();
+        const util = makeUtil();
+        util.render("templateTarget", DEFAULT_INPUT).then(() => {
+            const result = parseSerializationFromUi();
+            assert.deepEqual(result["states"][0]["current"][4]["target"]["action"], "ipo");
+            assert.equal(result["states"][0]["current"][4]["target"]["low"], 9);
+            done();
+        });
+    });
+
+    QUnit.test("parse dropdown", function(assert) {
+        const done = assert.async();
+        const util = makeUtil();
+        util.render("templateTarget", DEFAULT_INPUT).then(() => {
+            const result = parseSerializationFromUi();
+            assert.equal(result["states"][0]["current"][3]["target"]["units"], "share");
+            assert.equal(result["states"][0]["current"][4]["target"]["units"], "total");
             done();
         });
     });

@@ -43,8 +43,6 @@ class SimulationState {
         self._assureValuePresent("longTermTax");
         self._assureValuePresent("waitToSell");
         self._assureValuePresent("rangeStd");
-        self._assureValuePresent("startMonthLow");
-        self._assureValuePresent("startMonthHigh");
 
         // Grant info
         self._assureValuePresent("strikePrice");
@@ -70,6 +68,16 @@ class SimulationState {
 
         self._assureValuePresent("startTotalShares");
         self._numTotalShares = self.getValue("startTotalShares");
+
+        // Apply offset for start month
+        self._assureValuePresent("startMonthLow");
+        const startMonthLow = self.getValue("startMonthLow");
+
+        self._assureValuePresent("startMonthHigh");
+        const startMonthHigh = self.getValue("startMonthHigh");
+
+        const delay = getNormVal(startMonthLow, startMonthHigh, true, self.getValue("rangeStd"));
+        self.delay(delay);
     }
 
     addEvent(description) {
