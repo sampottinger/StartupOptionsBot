@@ -46,11 +46,11 @@ class CodeGenUiUtil {
         return self._getTemplate().then((template) => {
             const result = template({
                 "derived": derived,
-                "variables": variables,
+                "variables": outputVariables,
                 "events": simplifiedEvents
             });
             document.getElementById(targetId).innerHTML = result;
-        });
+        }, (x) => console.log(x));
     }
 
     _simplifyEvent(originalEvent) {
@@ -104,7 +104,7 @@ class CodeGenUiUtil {
             const action = option["target"]["action"];
             strategies[action](option);
         });
-
+        
         return outputRecord;
     }
 
@@ -116,10 +116,11 @@ class CodeGenUiUtil {
             }
 
             fetch(self._templateUrl).then((templateContent) => {
-                const templateContentText = templateContent.text();
-                self._template = Handlebars.compile(templateContentText);
-                resolve(self._template);
-            });
+                templateContent.text().then((templateContentText) => {
+                    self._template = Handlebars.compile(templateContentText);
+                    resolve(self._template);
+                });
+            }, (x) => { console.log(x); });
         });
     }
 
