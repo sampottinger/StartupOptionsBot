@@ -249,7 +249,7 @@ class CompileVisitor extends toolkit.StartUpOptionsBotLangVisitor {
 
         return (state) => {
             const generatedValue = self._getNormVal(low, high);
-            const percentOptionsBuy = state.getValue(buyVariable);
+            const percentOptionsBuy = state.getValue(buyVariable) / 100;
             const optionsAvailable = state.getOptionsAvailable();
             const numOptions = optionsAvailable * percentOptionsBuy;
 
