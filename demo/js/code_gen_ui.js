@@ -82,12 +82,12 @@ function parseSerializationFromUi() {
         const sellProba = getSimpleNumberAtIndex("sellPercent") / 100;
         const sellLow = getSimpleNumberAtIndex("sellAmountLow");
         const sellHigh = getSimpleNumberAtIndex("sellAmountHigh");
-        const sellUnits = ;
+        const sellUnits = "";
 
         const ipoProba = getSimpleNumberAtIndex("ipoPercent") / 100;
         const ipoLow = getSimpleNumberAtIndex("ipoAmountLow");
         const ipoHigh = getSimpleNumberAtIndex("ipoAmountHigh");
-        const ipoUnits = ;
+        const ipoUnits = "";
 
         const fmvLow = getSimpleNumberAtIndex("raiseFmvLow");
         const fmvHigh = getSimpleNumberAtIndex("raiseFmvHigh");
