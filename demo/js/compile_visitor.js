@@ -142,6 +142,9 @@ class CompileVisitor extends toolkit.StartUpOptionsBotLangVisitor {
         };
 
         const chooseElse = (options) => {
+            if (options.lenth == 0) {
+                return {"target": (x) => x};
+            }
             const index = Math.floor(Math.random() * options.length);
             return options[index];
         };
@@ -178,8 +181,9 @@ class CompileVisitor extends toolkit.StartUpOptionsBotLangVisitor {
             const employeeAction = chooseBranch(employeeBranches, employeeElses);
             const companyAction = chooseBranch(companyBranches, companyElses);
 
-            state = employeeAction(state);
-            state = companyAction(state);
+            state = employeeAction["target"](state);
+            state = companyAction["target"](state);
+
             return state;
         };
     }
