@@ -15,7 +15,6 @@ QUnit.module("SimTest", function() {
         runProgram = () => {
             const newState = new SimulationState();
             program(newState);
-            newState.finalize();
             return newState.getProfit();
         };
 
