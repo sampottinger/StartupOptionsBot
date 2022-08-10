@@ -87,10 +87,10 @@ class CompileVisitor extends toolkit.StartUpOptionsBotLangVisitor {
         return (state) => {
             const optionsAvailable = state.getOptionsAvailable();
             const numOptions = percentAmount * optionsAvailable;
-            
+
             state.addEvent("Bought " + numOptions + " options.");
             state.buyOptions(numOptions);
-            
+
             return state;
         };
     }
@@ -142,8 +142,8 @@ class CompileVisitor extends toolkit.StartUpOptionsBotLangVisitor {
         };
 
         const chooseElse = (options) => {
-            if (options.lenth == 0) {
-                return {"target": (x) => x};
+            if (options.length == 0) {
+                return {"target": [(x) => x]};
             }
             const index = Math.floor(Math.random() * options.length);
             return options[index];
@@ -151,7 +151,7 @@ class CompileVisitor extends toolkit.StartUpOptionsBotLangVisitor {
 
         const chooseBranch = (branches, elseBranches) => {
             const chosenProba = d3.randomUniform(0, 1);
-            
+
             const accumulations = [];
             let acc = 0;
             branches.forEach((x) => {
@@ -181,8 +181,16 @@ class CompileVisitor extends toolkit.StartUpOptionsBotLangVisitor {
             const employeeAction = chooseBranch(employeeBranches, employeeElses);
             const companyAction = chooseBranch(companyBranches, companyElses);
 
-            state = employeeAction["target"](state);
-            state = companyAction["target"](state);
+            const applyAll = (target, state) => {
+                let newState = state;
+                target.forEach((x) => {
+                    newState = x(newState)
+                });
+                return newState;
+            };
+
+            state = applyAll(employeeAction["target"], state);
+            state = applyAll(companyAction["target"], state);
 
             return state;
         };
