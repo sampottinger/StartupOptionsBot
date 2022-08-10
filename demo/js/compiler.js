@@ -19,6 +19,21 @@ function applyVisitor(input, visitor) {
 }
 
 
+function visitProgram(input) {
+    const programSource = getProgram(input);
+    if (programSource["errors"].length > 0) {
+        return programSource;
+    }
+
+    const visitor = new CompileVisitor();
+    const program = programSource["program"].accept(visitor);
+    return {
+        "program": program,
+        "errors": []
+    };
+}
+
+
 function getProgram(input) {
     const errors = [];
 
@@ -35,7 +50,7 @@ function getProgram(input) {
     const tokens = new toolkit.antlr4.CommonTokenStream(lexer);
     const parser = new toolkit.StartUpOptionsBotLangParser(tokens);
 
-    parser.buildParsePlants = true;
+    parser.buildParseTrees = true;
     parser.removeErrorListeners();
     parser.addErrorListener({
         syntaxError: (recognizer, offendingSymbol, line, column, msg, err) => {
