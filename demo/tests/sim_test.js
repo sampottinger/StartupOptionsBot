@@ -22,7 +22,6 @@ QUnit.module("SimTest", function() {
         for (let i=0; i<100; i++) {
             results.push(runProgram());
         }
-        assert.ok(results[0] >= 0);
 
         const unique = new Set(results);
         assert.ok(unique.size > 1);
