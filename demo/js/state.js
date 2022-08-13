@@ -1,3 +1,24 @@
+class SimulationResult {
+
+    constructor(months, profit) {
+        const self = this;
+        self._months = months;
+        self._profit = profit;
+    }
+
+    getMonths() {
+        const self = this;
+        return self._months;
+    }
+
+    getProfit() {
+        const self = this;
+        return self._profit;
+    }
+
+}
+
+
 class SimulationState {
 
     constructor() {
@@ -252,6 +273,15 @@ class SimulationState {
         }
 
         return self._currentMonth;
+    }
+
+    getResult() {
+        const self = this;
+
+        const profit = self.getProfit();
+        const months = self.getDuration();
+
+        return new SimulationResult(months, profit);
     }
 
     _getProceedsPreTax(options) {
