@@ -18,7 +18,7 @@ const SIMPLE_VARIABLES = [
 const NUMBER_REGEX = /^\d+(\.\d+)?$/;
 
 
-function codeSupportedByEditor(serialization) {
+function codeSupportedByUiEditor(serialization) {
     const hasSingleRaiseElse = (event) => {
         const options = event["current"];
         const elseOptions = options.filter((x) => x["isElse"]);
