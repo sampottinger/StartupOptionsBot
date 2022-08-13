@@ -80,10 +80,9 @@ class VisualizationPresenter {
             };
         };
 
-        new Chart(
-            document.getElementById(self._detailsContainerId),
-            getConfig()
-        );
+        const canvasId = self._createCanvas(self._detailsContainerId, "details-chart");
+
+        new Chart(document.getElementById(canvasId), getConfig());
     }
 
     _clearSummaryContainer() {
@@ -113,10 +112,20 @@ class VisualizationPresenter {
             };
         };
 
-        new Chart(
-            document.getElementById(self._summaryContainerId),
-            getConfig()
-        );
+        const canvasId = self._createCanvas(self._summaryContainerId, "summary-chart");
+
+        new Chart(document.getElementById(canvasId), getConfig());
+    }
+
+    _createCanvas(outsideId, chartClass) {
+        const self = this;
+        const canvasId = outsideId + "Canvas";
+        const canvasPrefix = "<canvas id='" + canvasId;
+        const canvasMiddle = "' class='" + chartClass;
+        const canvasPostfix = "'></canvas>";
+        const canvasHtml = canvasPrefix + canvasMiddle + canvasPostfix;
+        document.getElementById(self._detailsContainerId).innerHTML = canvasHtml;
+        return canvasId;
     }
 
 }
