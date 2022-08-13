@@ -56,7 +56,7 @@ QUnit.module("codeSupportedByEditor", function() {
     QUnit.test("is supported", function(assert) {
         const actions = makeSerializationActions();
         const serialization = makeSerialization(actions);
-        assert.ok(codeSupportedByEditor(serialization));
+        assert.ok((serialization));
     });
 
     QUnit.test("is supported empty", function(assert) {
@@ -68,7 +68,7 @@ QUnit.module("codeSupportedByEditor", function() {
             ]
         };
 
-        assert.ok(codeSupportedByEditor(testInput));
+        assert.ok(codeSupportedByUiEditor(testInput));
     });
 
     QUnit.test("has other else", function(assert) {
@@ -85,7 +85,7 @@ QUnit.module("codeSupportedByEditor", function() {
             }
         });
         const serialization = makeSerialization(actions);
-        assert.ok(!codeSupportedByEditor(serialization));
+        assert.ok(!codeSupportedByUiEditor(serialization));
     });
 
     QUnit.test("has multi else", function(assert) {
@@ -98,7 +98,7 @@ QUnit.module("codeSupportedByEditor", function() {
             }
         });
         const serialization = makeSerialization(actions);
-        assert.ok(!codeSupportedByEditor(serialization));
+        assert.ok(!codeSupportedByUiEditor(serialization));
     });
 
     QUnit.test("has multi action", function(assert) {
@@ -116,7 +116,7 @@ QUnit.module("codeSupportedByEditor", function() {
             }
         });
         const serialization = makeSerialization(actions);
-        assert.ok(!codeSupportedByEditor(serialization));
+        assert.ok(!codeSupportedByUiEditor(serialization));
     });
 
 });

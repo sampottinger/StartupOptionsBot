@@ -280,4 +280,25 @@ QUnit.module("SimulationState", function() {
         assert.ok(Math.abs(newState.getProfit() - proceeds) < 0.001);
     });
 
+    QUnit.test("get outcome", function(assert) {
+        const newState = makeSetUpState();
+
+        newState.setFairMarketValue(1.2);
+        newState.buyOptions(99.9);
+
+        newState.delay(23);
+        newState.setFairMarketValue(2.3);
+        newState.buyOptions(99.9);
+
+        newState.setExitShare(4.5);
+        newState.delay(6);
+        newState.setValue("waitToSell", 0);
+
+        newState.finalize();
+
+        const result = newState.getResult();
+        assert.ok(result.getMonths() > 0);
+        assert.ok(result.getProfit() > 0);
+    });
+
 });
