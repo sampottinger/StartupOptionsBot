@@ -40,7 +40,9 @@ class CodeDeserializer {
 
     _currentToCode(states, next) {
         const self = this;
-        const componentStrs = states.map((x) => self._currentOptionToCode(x, next));
+        const componentStrs = states.map((x) => self._currentOptionToCode(x, next)).filter(
+            (x) => x !== null
+        );
         return "{" + componentStrs.join(",") + "}";
     }
 
@@ -54,6 +56,10 @@ class CodeDeserializer {
         const target = state["target"];
         const action = target["action"];
         const body = self._stateStrategies[action](target, next);
+
+        if (body === null) {
+            return null;
+        }
 
         return actor + proba + ":" + body;
     }
@@ -98,6 +104,10 @@ class CodeDeserializer {
 
     _raiseToCode(target, next) {
         const self = this;
+
+        if (next.length == 0) {
+            return null;
+        }
 
         const fmvLow = target["fmvLow"];
         const fmvHigh = target["fmvHigh"];

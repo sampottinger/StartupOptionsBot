@@ -19,15 +19,29 @@ const NUMBER_REGEX = /^\d+(\.\d+)?$/;
 
 
 function codeSupportedByUiEditor(serialization) {
-    const hasSingleRaiseElse = (event) => {
+    const hasFinalOrRaiseElse = (event, i) => {
         const options = event["current"];
         const elseOptions = options.filter((x) => x["isElse"]);
+
+        const isFinal = serialization["states"].length == i + 1;
         
-        if (elseOptions.length != 1) {
+        if (elseOptions.length > 1) {
             return false;
         }
 
-        return elseOptions[0]["target"]["action"] === "raise";
+        if (isFinal) {
+            if (elseOptions.length == 0) {
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            if (elseOptions.length == 0) {
+                return false;
+            } else {
+                return elseOptions[0]["target"]["action"] === "raise";
+            }
+        }
     };
 
     const hasMultiAction = (event) => {
@@ -37,12 +51,12 @@ function codeSupportedByUiEditor(serialization) {
         return actions.length != actionSet.size;
     };
 
-    const raiseCompatible = (event) => {
-        return event["current"].length == 0 || hasSingleRaiseElse(event);
+    const raiseCompatible = (event, i) => {
+        return event["current"].length == 0 || hasFinalOrRaiseElse(event, i);
     };
 
-    const unsupportedState = (event) => !raiseCompatible(event) || hasMultiAction(event);
-
+    const unsupportedState = (event, i) => !raiseCompatible(event, i) || hasMultiAction(event);
+    
     return serialization["states"].filter(unsupportedState).length == 0;
 }
 

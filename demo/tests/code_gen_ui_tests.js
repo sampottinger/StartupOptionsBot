@@ -53,10 +53,31 @@ QUnit.module("codeSupportedByEditor", function() {
         };
     }
 
+    function addNewState(serialization, action) {
+        serialization["states"].push({"current": [action]});
+    }
+
+    QUnit.test("is dangling raise", function(assert) {
+        const actions = makeSerializationActions();
+        const serialization = makeSerialization(actions);
+        assert.ok(!codeSupportedByUiEditor(serialization));
+    });
+
     QUnit.test("is supported", function(assert) {
         const actions = makeSerializationActions();
         const serialization = makeSerialization(actions);
-        assert.ok((serialization));
+        addNewState(serialization, {
+            "proba": "100",
+            "isElse": false,
+            "target": {
+                "action": "buy",
+                "amount": {
+                    "low": 9,
+                    "high": 10
+                }
+            }
+        });
+        assert.ok(codeSupportedByUiEditor(serialization));
     });
 
     QUnit.test("is supported empty", function(assert) {
@@ -85,6 +106,23 @@ QUnit.module("codeSupportedByEditor", function() {
             }
         });
         const serialization = makeSerialization(actions);
+        assert.ok(!codeSupportedByUiEditor(serialization));
+    });
+
+    QUnit.test("has other else dangling", function(assert) {
+        const actions = makeSerializationActions();
+        const serialization = makeSerialization(actions);
+        addNewState(serialization, {
+            "proba": "else",
+            "isElse": true,
+            "target": {
+                "action": "buy",
+                "amount": {
+                    "low": 9,
+                    "high": 10
+                }
+            }
+        });
         assert.ok(!codeSupportedByUiEditor(serialization));
     });
 
