@@ -64,6 +64,11 @@ class SerializationVisitor extends toolkit.StartUpOptionsBotLangVisitor {
         return {"action": "buy", "percentAmount": percentAmount};
     }
 
+    visitPercent(ctx) {
+        const self = this;
+        return ctx.target.accept(self);
+    }
+
     visitProbval(ctx) {
         const self = this;
 
