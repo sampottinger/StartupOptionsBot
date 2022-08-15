@@ -167,7 +167,7 @@ class SerializationVisitor extends toolkit.StartUpOptionsBotLangVisitor {
         const self = this;
 
         const low = ctx.low.accept(self);
-        const high = ctx.low.accept(self);
+        const high = ctx.high.accept(self);
         const units = ctx.unit.getText();
 
         return {

@@ -12,7 +12,10 @@ const SIMPLE_VARIABLES = [
     "strikePrice",
     "totalGrant",
     "startFMV",
-    "startTotalShares"
+    "startTotalShares",
+    "startVestingMonths",
+    "immediatelyVest",
+    "monthlyVest"
 ];
 
 const NUMBER_REGEX = /^\d+(\.\d+)?$/;
@@ -81,7 +84,7 @@ function parseSerializationFromUi(targetId) {
 
     const getVariables = () => {
         return {
-            "numOptionsAvailable": getSimpleNumber("numOptions"),
+            "totalGrant": getSimpleNumber("totalGrant"),
             "strikePrice": getSimpleNumber("strikePrice"),
             "startFMV": getSimpleNumber("strikePrice"),
             "startTotalShares": getSimpleNumber("startTotalShares"),
@@ -134,16 +137,19 @@ function parseSerializationFromUi(targetId) {
                 {
                     "proba": failProba,
                     "isElse": false,
+                    "isCompany": true,
                     "target": {"action": "fail"}
                 },
                 {
                     "proba": quitProba,
                     "isElse": false,
+                    "isCompany": false,
                     "target": {"action": "quit"}
                 },
                 {
                     "proba": buyProba,
                     "isElse": false,
+                    "isCompany": false,
                     "target": {
                         "action": "buy",
                         "percentAmount": buyPercentAmount
@@ -152,6 +158,7 @@ function parseSerializationFromUi(targetId) {
                 {
                     "proba": sellProba,
                     "isElse": false,
+                    "isCompany": true,
                     "target": {
                         "action": "sell",
                         "low": sellLow,
@@ -162,6 +169,7 @@ function parseSerializationFromUi(targetId) {
                 {
                     "proba": ipoProba,
                     "isElse": false,
+                    "isCompany": true,
                     "target": {
                         "action": "ipo",
                         "low": ipoLow,
@@ -172,6 +180,7 @@ function parseSerializationFromUi(targetId) {
                 {
                     "proba": "else",
                     "isElse": true,
+                    "isCompany": true,
                     "target": {
                         "action": "raise",
                         "fmvLow": fmvLow,

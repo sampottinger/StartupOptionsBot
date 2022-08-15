@@ -36,7 +36,7 @@ QUnit.module("CodeDeserializer", function() {
         ], []);
         const resultCompact = result.replaceAll(" ", "");
 
-        assert.deepEqual(resultCompact, "{c.0.1:fail(),c.0.2:ipo(0.3-0.4share),c.else:sell(0.5-0.6share),e.0.7:quit(),e.else:buy(80%)}");
+        assert.deepEqual(resultCompact, "{c_0.1:fail()|c_0.2:ipo(0.3-0.4share)|c_else:sell(0.5-0.6share)|e_0.7:quit()|e_else:buy(80%)}");
     });
 
     QUnit.test("deserialize recursive", function(assert) {
@@ -67,8 +67,8 @@ QUnit.module("CodeDeserializer", function() {
         );
         const resultCompact = result.replaceAll(" ", "");
 
-        assert.ok(resultCompact.includes("c.0.1:fail()"));
-        assert.ok(resultCompact.includes("c.0.9:fail()"));
+        assert.ok(resultCompact.includes("c_0.1:fail()"));
+        assert.ok(resultCompact.includes("c_0.9:fail()"));
         assert.ok(resultCompact.includes("raise(0.3-0.4fmv,5-6%,7-8months"));
     });
 
@@ -105,8 +105,8 @@ QUnit.module("CodeDeserializer", function() {
         const resultCompact = result.replaceAll(" ", "");
 
         assert.ok(resultCompact.includes("[testa=1testb=2.3]"));
-        assert.ok(resultCompact.includes("c.0.1:fail()"));
-        assert.ok(resultCompact.includes("c.0.9:fail()"));
+        assert.ok(resultCompact.includes("c_0.1:fail()"));
+        assert.ok(resultCompact.includes("c_0.9:fail()"));
         assert.ok(resultCompact.includes("raise(0.3-0.4fmv,5-6%,7-8months,{"));
     });
 

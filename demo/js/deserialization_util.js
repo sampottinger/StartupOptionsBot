@@ -43,7 +43,7 @@ class CodeDeserializer {
         const componentStrs = states.map((x) => self._currentOptionToCode(x, next)).filter(
             (x) => x !== null
         );
-        return "{" + componentStrs.join(",") + "}";
+        return "{" + componentStrs.join("|") + "}";
     }
 
     _currentOptionToCode(state, next) {
@@ -52,7 +52,7 @@ class CodeDeserializer {
         const isElse = state["isElse"];
         const proba = isElse ? "else" : state["proba"];
         const isCompany = state["isCompany"];
-        const actor = isCompany ? "c." : "e.";
+        const actor = isCompany ? "c_" : "e_";
         const target = state["target"];
         const action = target["action"];
         const body = self._stateStrategies[action](target, next);
