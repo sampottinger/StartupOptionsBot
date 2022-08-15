@@ -53,26 +53,50 @@ function removeWhitespace(target) {
 }
 
 
+function addUiState(templateUrl) {
+    const serialization = parseSerializationFromUi();
+    serialization["states"].push({"current": []});
+    
+    const deserializer = new CodeDeserializer();
+    const code = deserializer.serializationToCode(deserializer);
+    pushCodeToUrl(code);
+
+    showUiEditor(templateUrl);
+}
+
+
+function removeUiState(index) {
+    const serialization = parseSerializationFromUi();
+    serialization["states"].splice(index, 1);
+    
+    const deserializer = new CodeDeserializer();
+    const code = deserializer.serializationToCode(deserializer);
+    pushCodeToUrl(code);
+
+    showUiEditor(templateUrl);
+}
+
+
 function getEditorCode() {
     const getFromUiEditor = () => {
         const serialization = parseSerializationFromUi();
         const deserializer = new CodeDeserializer();
         const code = deserializer.serializationToCode(deserializer);
-        return removeWhitespace(code);
+        return code;
     };
 
     const getFromCodeEditor = () => {
         const code = document.getElementById("codeEditorInput").value;
-        return removeWhitespace(code);
+        return code;
     };
 
     return isUsingCodeEditor ? getFromCodeEditor() : getFromUiEditor();
 }
 
 
-function pushCodeToUrl() {
+function pushCodeToUrl(code) {
     const searchParams = new URLSearchParams(window.location.search);
-    searchParams.set("code", getEditorCode());
+    searchParams.set("code", removeWhitespace(code));
     window.location.search = searchParams.toString();
 }
 
