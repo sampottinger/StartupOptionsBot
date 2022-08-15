@@ -124,7 +124,7 @@ class VisualizationPresenter {
         const canvasMiddle = "' class='" + chartClass;
         const canvasPostfix = "'></canvas>";
         const canvasHtml = canvasPrefix + canvasMiddle + canvasPostfix;
-        document.getElementById(self._detailsContainerId).innerHTML = canvasHtml;
+        document.getElementById(outsideId).innerHTML = canvasHtml;
         return canvasId;
     }
 

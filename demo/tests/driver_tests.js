@@ -63,4 +63,21 @@ QUnit.module("Driver", function() {
         assert.deepEqual(result, "test123");
     });
 
+    QUnit.test("run simulations", function(assert) {
+        pushCodeToUrl(DEFAULT_CODE);
+        const done = assert.async();
+        
+        document.getElementById("outputSummaryContainer").innerHTML = "";
+        document.getElementById("outputDetailsContainer").innerHTML = "";
+
+        assert.deepEqual(document.getElementById("outputSummaryContainer").innerHTML, "");
+        assert.deepEqual(document.getElementById("outputDetailsContainer").innerHTML, "");
+        
+        runSimulations(100).then(() => {
+            assert.ok(document.getElementById("outputSummaryContainer").innerHTML !== "");
+            assert.ok(document.getElementById("outputDetailsContainer").innerHTML !== "");
+            done();
+        });
+    });
+
 });

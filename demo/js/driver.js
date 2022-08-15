@@ -95,7 +95,7 @@ function getEditorCode() {
     const getFromUiEditor = () => {
         const serialization = parseSerializationFromUi();
         const deserializer = new CodeDeserializer();
-        const code = deserializer.serializationToCode(deserializer);
+        const code = deserializer.serializationToCode(serialization);
         return code;
     };
 
@@ -125,29 +125,32 @@ function runSimulations(numSimulations) {
         numSimulations = NUM_SIMULATIONS;
     }
 
-    setTimeout(() => {
-        const result = visitProgram(getCodeFromUrl());
-        if (result.errors.length > 0) {
-            alert("Whoops! There's a coding error in your program: " + result.errors[0]);
-            return;
-        }
-        const program = result["program"];
-
-        const runProgram = () => {
-            const newState = new SimulationState();
-            program(newState);
-            return newState.getResult();
-        };
-
-        const outcomes = [];
-        for (let i = 0; i < numSimulations; i++) {
-            outcomes.push(runProgram());
-        }
-
-        const vizPresenter = new VisualizationPresenter(
-            "outputSummaryContainer",
-            "outputDetailsContainer"
-        );
-        vizPresenter.render(outcomes);
-    }, 500);
+    return new Promise((resolve, reject) => {
+        setTimeout(() => {
+            const result = visitProgram(getCodeFromUrl());
+            if (result.errors.length > 0) {
+                alert("Whoops! There's a coding error in your program: " + result.errors[0]);
+                return;
+            }
+            const program = result["program"];
+    
+            const runProgram = () => {
+                const newState = new SimulationState();
+                program(newState);
+                return newState.getResult();
+            };
+    
+            const outcomes = [];
+            for (let i = 0; i < numSimulations; i++) {
+                outcomes.push(runProgram());
+            }
+    
+            const vizPresenter = new VisualizationPresenter(
+                "outputSummaryContainer",
+                "outputDetailsContainer"
+            );
+            vizPresenter.render(outcomes);
+            resolve();
+        }, 100);
+    });
 }
