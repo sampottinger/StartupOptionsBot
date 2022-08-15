@@ -218,7 +218,7 @@ class CodeGenUiUtil {
         derived["highConfidence"] = outputVariables["rangeStd"] > 1.5;
 
         const events = serialization["states"].map((x) => x["current"]);
-        const simplifiedEvents = events.map((x) => self._simplifyEvent(x))
+        const simplifiedEvents = events.map((x) => self._simplifyEvent(x));
 
         return self._getTemplate().then((template) => {
             const result = template({

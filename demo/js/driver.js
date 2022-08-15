@@ -51,10 +51,13 @@ function showUiEditor(templateUrl) {
         isUsingCodeEditor = false;
         changeEditorVisibility(false, true, false);
         const codeGenUiUtil = new CodeGenUiUtil(templateUrl);
-        codeGenUiUtil.render("codeUiBody", serialization["result"]);
+        return codeGenUiUtil.render("codeUiBody", serialization["result"]);
     } else {
         isUsingCodeEditor = true;
         changeEditorVisibility(false, false, true);
+        return new Promise((resolve) => {
+            resolve();
+        });
     }
 }
 

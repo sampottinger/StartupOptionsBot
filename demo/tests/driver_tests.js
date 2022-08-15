@@ -31,12 +31,36 @@ QUnit.module("Driver", function() {
     });
 
     QUnit.test("show UI editor supported", function(assert) {
-        assert.deepEqual(document.getElementById("uiEditor").style.display, "none");
-        assert.deepEqual(document.getElementById("uiNotSupported").style.display, "none");
+        document.getElementById("uiEditor").style.display = "none";
+        document.getElementById("uiNotSupported").style.display = "none";
         pushCodeToUrl(DEFAULT_CODE);
         showUiEditor("../templates/code_gen_ui.html");
         assert.deepEqual(document.getElementById("uiEditor").style.display, "block");
         assert.deepEqual(document.getElementById("uiNotSupported").style.display, "none");
+    });
+
+    QUnit.test("generate UI from show UI editor", function(assert) {
+        pushCodeToUrl(DEFAULT_CODE);
+        const done = assert.async();
+        showUiEditor("../templates/code_gen_ui.html").then(() => {
+            const outsideDiv = document.getElementById("codeUiBody");
+            assert.equal(outsideDiv.getElementsByClassName("inner-event").length, 2);
+            done();
+        });
+    });
+
+    QUnit.test("show UI editor not supported", function(assert) {
+        document.getElementById("uiEditor").style.display = "none";
+        document.getElementById("uiNotSupported").style.display = "none";
+        pushCodeToUrl("test");
+        showUiEditor("../templates/code_gen_ui.html");
+        assert.deepEqual(document.getElementById("uiEditor").style.display, "none");
+        assert.deepEqual(document.getElementById("uiNotSupported").style.display, "block");
+    });
+
+    QUnit.test("remove whitespace", function(assert) {
+        const result = removeWhitespace("test\n1\t2 3");
+        assert.deepEqual(result, "test123");
     });
 
 });
