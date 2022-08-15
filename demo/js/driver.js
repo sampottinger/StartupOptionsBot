@@ -72,10 +72,10 @@ function addUiState(templateUrl) {
     serialization["states"].push({"current": []});
     
     const deserializer = new CodeDeserializer();
-    const code = deserializer.serializationToCode(deserializer);
+    const code = deserializer.serializationToCode(serialization);
     pushCodeToUrl(code);
 
-    showUiEditor(templateUrl);
+    return showUiEditor(templateUrl);
 }
 
 
@@ -149,6 +149,7 @@ function runSimulations(numSimulations) {
                 "outputSummaryContainer",
                 "outputDetailsContainer"
             );
+
             vizPresenter.render(outcomes);
             resolve();
         }, 100);

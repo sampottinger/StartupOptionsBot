@@ -131,12 +131,3 @@ class CodeDeserializer {
 
 
 }
-
-
-class UiDeserializer {
-
-    constructor() {
-        
-    }
-
-}

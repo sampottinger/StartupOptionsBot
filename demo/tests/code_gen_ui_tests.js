@@ -305,7 +305,7 @@ QUnit.module("CodeGenUiUtil", function() {
         const done = assert.async();
         const util = makeUtil();
         util.render("templateTarget", DEFAULT_INPUT).then(() => {
-            const result = parseSerializationFromUi();
+            const result = parseSerializationFromUi("templateTarget");
             assert.equal(result["states"][0]["current"][1]["proba"], 0.01);
             done();
         });
@@ -315,7 +315,7 @@ QUnit.module("CodeGenUiUtil", function() {
         const done = assert.async();
         const util = makeUtil();
         util.render("templateTarget", DEFAULT_INPUT).then(() => {
-            const result = parseSerializationFromUi();
+            const result = parseSerializationFromUi("templateTarget");
             assert.deepEqual(result["states"][0]["current"][4]["target"]["action"], "ipo");
             assert.equal(result["states"][0]["current"][4]["target"]["low"], 9);
             done();
@@ -326,7 +326,7 @@ QUnit.module("CodeGenUiUtil", function() {
         const done = assert.async();
         const util = makeUtil();
         util.render("templateTarget", DEFAULT_INPUT).then(() => {
-            const result = parseSerializationFromUi();
+            const result = parseSerializationFromUi("templateTarget");
             assert.equal(result["states"][0]["current"][3]["target"]["units"], "share");
             assert.equal(result["states"][0]["current"][4]["target"]["units"], "total");
             done();

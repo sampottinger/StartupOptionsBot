@@ -63,6 +63,19 @@ QUnit.module("Driver", function() {
         assert.deepEqual(result, "test123");
     });
 
+    QUnit.test("add UI state", function(assert) {
+        pushCodeToUrl(DEFAULT_CODE);
+        // [numOptionsAvailable=NaN strikePrice=0.12 startFMV=0.12 startTotalShares=78 startVestingMonths=NaN immediatelyVest=NaN monthlyVest=NaN optionTax=30 regularIncomeTax=31 longTermTax=22 startMonthLow=12 startMonthHigh=24 ipoBuy=100 sellBuy=90 quitBuy=90 waitToSell=0 rangeStd=2]
+        const done = assert.async();
+        showUiEditor("../templates/code_gen_ui.html").then(() => {
+            addUiState("../templates/code_gen_ui.html").then(() => {
+                const outsideDiv = document.getElementById("codeUiBody");
+                assert.equal(outsideDiv.getElementsByClassName("inner-event").length, 3);
+                done();
+            });
+        });
+    });
+
     QUnit.test("run simulations", function(assert) {
         pushCodeToUrl(DEFAULT_CODE);
         const done = assert.async();

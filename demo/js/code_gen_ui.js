@@ -61,10 +61,14 @@ function codeSupportedByUiEditor(serialization) {
 }
 
 
-function parseSerializationFromUi() {
+function parseSerializationFromUi(targetId) {
+    if (targetId === undefined) {
+        targetId = "codeUiBody";
+    }
+
     const getSimpleNumber = (target) => {
         const element = document.getElementById(target);
-        if (element === undefined) {
+        if (element === null) {
             throw "Could not find " + target;
         }
         return parseFloat(element.value);
@@ -182,7 +186,8 @@ function parseSerializationFromUi() {
         };
     };
     
-    const numStates = document.getElementsByClassName("event").length;
+    const outerDiv = document.getElementById(targetId);
+    const numStates = outerDiv.getElementsByClassName("event").length;
     const states = [];
     for (let i = 0; i < numStates; i++) {
         states.push(getState(i));
