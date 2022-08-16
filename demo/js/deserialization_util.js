@@ -40,8 +40,10 @@ class CodeDeserializer {
 
     _currentToCode(states, next) {
         const self = this;
-        const componentStrs = states.map((x) => self._currentOptionToCode(x, next));
-        return "{" + componentStrs.join(",") + "}";
+        const componentStrs = states.map((x) => self._currentOptionToCode(x, next)).filter(
+            (x) => x !== null
+        );
+        return "{" + componentStrs.join("|") + "}";
     }
 
     _currentOptionToCode(state, next) {
@@ -50,10 +52,14 @@ class CodeDeserializer {
         const isElse = state["isElse"];
         const proba = isElse ? "else" : state["proba"];
         const isCompany = state["isCompany"];
-        const actor = isCompany ? "c." : "e.";
+        const actor = isCompany ? "c_" : "e_";
         const target = state["target"];
         const action = target["action"];
         const body = self._stateStrategies[action](target, next);
+
+        if (body === null) {
+            return null;
+        }
 
         return actor + proba + ":" + body;
     }
@@ -99,6 +105,10 @@ class CodeDeserializer {
     _raiseToCode(target, next) {
         const self = this;
 
+        if (next.length == 0) {
+            return null;
+        }
+
         const fmvLow = target["fmvLow"];
         const fmvHigh = target["fmvHigh"];
         const diluteLow = target["diluteLow"];
@@ -119,14 +129,5 @@ class CodeDeserializer {
         return "raise(" + componentsStr + ")";
     }
 
-
-}
-
-
-class UiDeserializer {
-
-    constructor() {
-        
-    }
 
 }

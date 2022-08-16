@@ -2,9 +2,9 @@
     <summary>Grant</summary>
     <p>
         <div class="mb-3">
-            <label for="numOptions" class="form-label">Number of options</label>
-            <input type="number" class="form-control" id="numOptions" aria-describedby="numOptionsHelp" value="{{ variables.numOptionsAvailable }}" step="1" pattern="\d+" min="0">
-            <div id="numOptionsHelp" class="form-text">Total number of options granted.</div>
+            <label for="totalGrant" class="form-label">Number of options</label>
+            <input type="number" class="form-control" id="totalGrant" aria-describedby="totalGrantHelp" value="{{ variables.totalGrant }}" step="1" pattern="\d+" min="0">
+            <div id="totalGrantHelp" class="form-text">Total number of options granted.</div>
         </div>
         <div class="mb-3">
             <label for="strikePrice" class="form-label">Strike price</label>
@@ -96,7 +96,7 @@
             </div>
         </div>
         {{#each events as |target|}}
-        <div class="event">
+        <div class="event inner-event">
             <div class="actor">
                 <div class="label">Your actions</div>
                 <div class="option">

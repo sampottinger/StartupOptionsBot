@@ -53,10 +53,31 @@ QUnit.module("codeSupportedByEditor", function() {
         };
     }
 
+    function addNewState(serialization, action) {
+        serialization["states"].push({"current": [action]});
+    }
+
+    QUnit.test("is dangling raise", function(assert) {
+        const actions = makeSerializationActions();
+        const serialization = makeSerialization(actions);
+        assert.ok(!codeSupportedByUiEditor(serialization));
+    });
+
     QUnit.test("is supported", function(assert) {
         const actions = makeSerializationActions();
         const serialization = makeSerialization(actions);
-        assert.ok((serialization));
+        addNewState(serialization, {
+            "proba": "100",
+            "isElse": false,
+            "target": {
+                "action": "buy",
+                "amount": {
+                    "low": 9,
+                    "high": 10
+                }
+            }
+        });
+        assert.ok(codeSupportedByUiEditor(serialization));
     });
 
     QUnit.test("is supported empty", function(assert) {
@@ -85,6 +106,23 @@ QUnit.module("codeSupportedByEditor", function() {
             }
         });
         const serialization = makeSerialization(actions);
+        assert.ok(!codeSupportedByUiEditor(serialization));
+    });
+
+    QUnit.test("has other else dangling", function(assert) {
+        const actions = makeSerializationActions();
+        const serialization = makeSerialization(actions);
+        addNewState(serialization, {
+            "proba": "else",
+            "isElse": true,
+            "target": {
+                "action": "buy",
+                "amount": {
+                    "low": 9,
+                    "high": 10
+                }
+            }
+        });
         assert.ok(!codeSupportedByUiEditor(serialization));
     });
 
@@ -139,7 +177,10 @@ QUnit.module("CodeGenUiUtil", function() {
             "strikePrice": 0.12,
             "totalGrant": 34,
             "startFMV": 0.56,
-            "startTotalShares": 78
+            "startTotalShares": 78,
+            "startVestingMonths": 0,
+            "immediatelyVest": 1,
+            "monthlyVest": 2
         },
         "states": [
             {
@@ -210,7 +251,7 @@ QUnit.module("CodeGenUiUtil", function() {
     QUnit.test("regular variables", function(assert) {
         const done = assert.async();
         const util = makeUtil();
-        util.render("templateTarget", DEFAULT_INPUT).then(() => {
+        util.render("codeUiBody", DEFAULT_INPUT).then(() => {
             const ipoBuy = document.getElementById("ipoBuy").value;
             const sellBuy = document.getElementById("sellBuy").value;
             assert.deepEqual(ipoBuy, "100");
@@ -222,7 +263,7 @@ QUnit.module("CodeGenUiUtil", function() {
     QUnit.test("derived variables", function(assert) {
         const done = assert.async();
         const util = makeUtil();
-        util.render("templateTarget", DEFAULT_INPUT).then(() => {
+        util.render("codeUiBody", DEFAULT_INPUT).then(() => {
             const waitToSell = document.getElementById("waitToSell").value;
             const rangeStd = document.getElementById("rangeStd").value;
             assert.deepEqual(waitToSell, "0");
@@ -234,7 +275,7 @@ QUnit.module("CodeGenUiUtil", function() {
     QUnit.test("event inputs", function(assert) {
         const done = assert.async();
         const util = makeUtil();
-        util.render("templateTarget", DEFAULT_INPUT).then(() => {
+        util.render("codeUiBody", DEFAULT_INPUT).then(() => {
             const quitPercent = document.getElementById("quitPercent0").value;
             assert.deepEqual(quitPercent, "1");
             done();
@@ -244,7 +285,7 @@ QUnit.module("CodeGenUiUtil", function() {
     QUnit.test("event dropdown", function(assert) {
         const done = assert.async();
         const util = makeUtil();
-        util.render("templateTarget", DEFAULT_INPUT).then(() => {
+        util.render("codeUiBody", DEFAULT_INPUT).then(() => {
             const sellUnits = document.getElementById("sellUnits0").value;
             const ipoUnits = document.getElementById("ipoUnits0").value;
             assert.deepEqual(sellUnits, "share");
@@ -256,7 +297,7 @@ QUnit.module("CodeGenUiUtil", function() {
     QUnit.test("parse variables", function(assert) {
         const done = assert.async();
         const util = makeUtil();
-        util.render("templateTarget", DEFAULT_INPUT).then(() => {
+        util.render("codeUiBody", DEFAULT_INPUT).then(() => {
             const result = parseSerializationFromUi();
             assert.equal(result["variables"]["ipoBuy"], 100);
             done();
@@ -266,8 +307,8 @@ QUnit.module("CodeGenUiUtil", function() {
     QUnit.test("parse probability", function(assert) {
         const done = assert.async();
         const util = makeUtil();
-        util.render("templateTarget", DEFAULT_INPUT).then(() => {
-            const result = parseSerializationFromUi();
+        util.render("codeUiBody", DEFAULT_INPUT).then(() => {
+            const result = parseSerializationFromUi("codeUiBody");
             assert.equal(result["states"][0]["current"][1]["proba"], 0.01);
             done();
         });
@@ -276,8 +317,8 @@ QUnit.module("CodeGenUiUtil", function() {
     QUnit.test("parse simple", function(assert) {
         const done = assert.async();
         const util = makeUtil();
-        util.render("templateTarget", DEFAULT_INPUT).then(() => {
-            const result = parseSerializationFromUi();
+        util.render("codeUiBody", DEFAULT_INPUT).then(() => {
+            const result = parseSerializationFromUi("codeUiBody");
             assert.deepEqual(result["states"][0]["current"][4]["target"]["action"], "ipo");
             assert.equal(result["states"][0]["current"][4]["target"]["low"], 9);
             done();
@@ -287,8 +328,8 @@ QUnit.module("CodeGenUiUtil", function() {
     QUnit.test("parse dropdown", function(assert) {
         const done = assert.async();
         const util = makeUtil();
-        util.render("templateTarget", DEFAULT_INPUT).then(() => {
-            const result = parseSerializationFromUi();
+        util.render("codeUiBody", DEFAULT_INPUT).then(() => {
+            const result = parseSerializationFromUi("codeUiBody");
             assert.equal(result["states"][0]["current"][3]["target"]["units"], "share");
             assert.equal(result["states"][0]["current"][4]["target"]["units"], "total");
             done();

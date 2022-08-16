@@ -12,22 +12,39 @@ const SIMPLE_VARIABLES = [
     "strikePrice",
     "totalGrant",
     "startFMV",
-    "startTotalShares"
+    "startTotalShares",
+    "startVestingMonths",
+    "immediatelyVest",
+    "monthlyVest"
 ];
 
 const NUMBER_REGEX = /^\d+(\.\d+)?$/;
 
 
 function codeSupportedByUiEditor(serialization) {
-    const hasSingleRaiseElse = (event) => {
+    const hasFinalOrRaiseElse = (event, i) => {
         const options = event["current"];
         const elseOptions = options.filter((x) => x["isElse"]);
+
+        const isFinal = serialization["states"].length == i + 1;
         
-        if (elseOptions.length != 1) {
+        if (elseOptions.length > 1) {
             return false;
         }
 
-        return elseOptions[0]["target"]["action"] === "raise";
+        if (isFinal) {
+            if (elseOptions.length == 0) {
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            if (elseOptions.length == 0) {
+                return false;
+            } else {
+                return elseOptions[0]["target"]["action"] === "raise";
+            }
+        }
     };
 
     const hasMultiAction = (event) => {
@@ -37,20 +54,24 @@ function codeSupportedByUiEditor(serialization) {
         return actions.length != actionSet.size;
     };
 
-    const raiseCompatible = (event) => {
-        return event["current"].length == 0 || hasSingleRaiseElse(event);
+    const raiseCompatible = (event, i) => {
+        return event["current"].length == 0 || hasFinalOrRaiseElse(event, i);
     };
 
-    const unsupportedState = (event) => !raiseCompatible(event) || hasMultiAction(event);
-
+    const unsupportedState = (event, i) => !raiseCompatible(event, i) || hasMultiAction(event);
+    
     return serialization["states"].filter(unsupportedState).length == 0;
 }
 
 
-function parseSerializationFromUi() {
+function parseSerializationFromUi(targetId) {
+    if (targetId === undefined) {
+        targetId = "codeUiBody";
+    }
+
     const getSimpleNumber = (target) => {
         const element = document.getElementById(target);
-        if (element === undefined) {
+        if (element === null) {
             throw "Could not find " + target;
         }
         return parseFloat(element.value);
@@ -63,7 +84,7 @@ function parseSerializationFromUi() {
 
     const getVariables = () => {
         return {
-            "numOptionsAvailable": getSimpleNumber("numOptions"),
+            "totalGrant": getSimpleNumber("totalGrant"),
             "strikePrice": getSimpleNumber("strikePrice"),
             "startFMV": getSimpleNumber("strikePrice"),
             "startTotalShares": getSimpleNumber("startTotalShares"),
@@ -116,16 +137,19 @@ function parseSerializationFromUi() {
                 {
                     "proba": failProba,
                     "isElse": false,
+                    "isCompany": true,
                     "target": {"action": "fail"}
                 },
                 {
                     "proba": quitProba,
                     "isElse": false,
+                    "isCompany": false,
                     "target": {"action": "quit"}
                 },
                 {
                     "proba": buyProba,
                     "isElse": false,
+                    "isCompany": false,
                     "target": {
                         "action": "buy",
                         "percentAmount": buyPercentAmount
@@ -134,6 +158,7 @@ function parseSerializationFromUi() {
                 {
                     "proba": sellProba,
                     "isElse": false,
+                    "isCompany": true,
                     "target": {
                         "action": "sell",
                         "low": sellLow,
@@ -144,6 +169,7 @@ function parseSerializationFromUi() {
                 {
                     "proba": ipoProba,
                     "isElse": false,
+                    "isCompany": true,
                     "target": {
                         "action": "ipo",
                         "low": ipoLow,
@@ -154,6 +180,7 @@ function parseSerializationFromUi() {
                 {
                     "proba": "else",
                     "isElse": true,
+                    "isCompany": true,
                     "target": {
                         "action": "raise",
                         "fmvLow": fmvLow,
@@ -168,7 +195,8 @@ function parseSerializationFromUi() {
         };
     };
     
-    const numStates = document.getElementsByClassName("event").length;
+    const outerDiv = document.getElementById(targetId);
+    const numStates = outerDiv.getElementsByClassName("event").length;
     const states = [];
     for (let i = 0; i < numStates; i++) {
         states.push(getState(i));
@@ -204,7 +232,7 @@ class CodeGenUiUtil {
         derived["highConfidence"] = outputVariables["rangeStd"] > 1.5;
 
         const events = serialization["states"].map((x) => x["current"]);
-        const simplifiedEvents = events.map((x) => self._simplifyEvent(x))
+        const simplifiedEvents = events.map((x) => self._simplifyEvent(x));
 
         return self._getTemplate().then((template) => {
             const result = template({
