@@ -1,5 +1,7 @@
 google-chrome-stable_current_amd64.deb
 
+.DS_Store
+
 # Intermediate
 StartUpOptionsBotLang.interp
 StartUpOptionsBotLang.tokens
