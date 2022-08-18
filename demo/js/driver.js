@@ -159,6 +159,7 @@ function loadCodeToEditors(templateUrl) {
 
 
 function runSimulations(numSimulations) {
+    document.getElementById("simButtonHolder").style.display = "none";
     document.getElementById("runningSimDisplay").style.display = "block";
     document.getElementById("simOutputDisplay").style.display = "none";
 
@@ -166,11 +167,18 @@ function runSimulations(numSimulations) {
         numSimulations = NUM_SIMULATIONS;
     }
 
+    const cleanUpUi = () => {
+        document.getElementById("simButtonHolder").style.display = "block";
+        document.getElementById("runningSimDisplay").style.display = "none";
+        document.getElementById("simOutputDisplay").style.display = "block";
+    };
+
     return new Promise((resolve, reject) => {
         setTimeout(() => {
             const result = visitProgram(getCodeFromUrl());
             if (result.errors.length > 0) {
                 alert("Whoops! There's a coding error in your program: " + result.errors[0]);
+                cleanUpUi();
                 return;
             }
             const program = result["program"];
@@ -192,6 +200,7 @@ function runSimulations(numSimulations) {
             );
 
             vizPresenter.render(outcomes);
+            cleanUpUi();
             resolve();
         }, 100);
     });
@@ -219,5 +228,11 @@ function init() {
     codeEditorLink.addEventListener("click", () => {
         pushCurrentCodeToUrl();
         showCodeEditor();
+    });
+
+    const runSimButton = document.getElementById("runSimButton");
+    runSimButton.addEventListener("click", () => {
+        document.getElementById("outputs").style.display = "block";
+        runSimulations();
     });
 }

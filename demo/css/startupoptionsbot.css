@@ -67,6 +67,19 @@ article #editorNav {
     margin-bottom: 10px;
 }
 
+article #outputs {
+    display: none;
+}
+
+article #outputs .output-panel {
+    border-top: 1px solid #C0C0C0;
+}
+
+article #outputs #runningSimDisplay {
+    text-align: center;
+    padding: 20px;
+}
+
 article #postDisclaimerPanel {
     display: none;
     margin: 15px;
