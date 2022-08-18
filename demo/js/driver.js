@@ -33,6 +33,8 @@ function changeEditorVisibility(showCodeEditor, showUiEditor, showNotSupported) 
 function showCodeEditor() {
     const code = getCodeFromUrl();
     changeEditorVisibility(true, false, false);
+    document.getElementById("uiEditorLink").classList.remove("active");
+    document.getElementById("codeEditorLink").classList.add("active");
     document.getElementById("codeEditorInput").value = code;
 }
 
@@ -42,6 +44,9 @@ function showUiEditor(templateUrl, targetId) {
     const serialization = getSerialization(code);
     const hasErrors = serialization.errors.length > 0;
     const isCodeUiSupported = !hasErrors && codeSupportedByUiEditor(serialization["result"]);
+
+    document.getElementById("uiEditorLink").classList.add("active");
+    document.getElementById("codeEditorLink").classList.remove("active");
 
     if (templateUrl === undefined) {
         templateUrl = "/templates/code_gen_ui.html";
@@ -130,6 +135,11 @@ function getEditorCode() {
 }
 
 
+function pushCurrentCodeToUrl() {
+    pushCodeToUrl(getEditorCode());
+}
+
+
 function loadCodeToEditors(templateUrl) {
     if (isUsingCodeEditor) {
         showCodeEditor();
@@ -190,5 +200,15 @@ function init() {
         });
     });
 
+    const uiEditorLink = document.getElementById("uiEditorLink");
+    uiEditorLink.addEventListener("click", () => {
+        pushCurrentCodeToUrl();
+        showUiEditor();
+    });
 
+    const codeEditorLink = document.getElementById("codeEditorLink");
+    codeEditorLink.addEventListener("click", () => {
+        pushCurrentCodeToUrl();
+        showCodeEditor();
+    });
 }

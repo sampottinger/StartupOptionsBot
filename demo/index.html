@@ -39,11 +39,20 @@
                 <div id="postDisclaimerLoadingPanel">Please wait...</div>
                 <div id="postDisclaimerPanel">
                     <div id="editors">
-                        <div id="codeEditor">
-                            <input type="text" id="codeEditorInput">
-                        </div>
+                        <ul class="nav justify-content-center nav-pills" id="editorNav">
+                            <li class="nav-item">
+                                <a class="nav-link" id="uiEditorLink" href="#uiEditor">UI-Based Editor</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="codeEditorLink" href="#codeEditor">Code Editor</a>
+                            </li>
+                        </ul>
                         <div id="uiEditor">
                             <div id="codeUiBody"></div>
+                        </div>
+                        <div id="codeEditor">
+                            <div class="intro">In addition to the UI editor, you can also program the simulation through a small <a href="#dsl" id="dslLink">domain specific language</a>.</div>
+                            <textarea id="codeEditorInput" class="form-control"></textarea>
                         </div>
                         <div id="uiNotSupported"></div>
                     </div>

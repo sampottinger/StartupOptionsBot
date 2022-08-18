@@ -11,6 +11,10 @@ article details summary {
     font-size: 21px;
 }
 
+article #codeEditorInput {
+    height: 300px;
+}
+
 article #codeGenUiInner .event-like {
     margin: 20px 10px;
     padding: 5px;
@@ -56,6 +60,11 @@ article #disclaimerPanel .btn-holder {
 article #disclaimerPanel ul {
     margin-top: 20px;
     margin-bottom: 20px;
+}
+
+article #editorNav {
+    margin-top: 10px;
+    margin-bottom: 10px;
 }
 
 article #postDisclaimerPanel {
