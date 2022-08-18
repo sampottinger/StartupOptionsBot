@@ -177,3 +177,18 @@ function runSimulations(numSimulations) {
         }, 100);
     });
 }
+
+
+function init() {
+    const disclaimerAgree = document.getElementById("disclaimerAgree");
+    disclaimerAgree.addEventListener("click", () => {
+        document.getElementById("disclaimerPanel").style.display = "none";
+        document.getElementById("postDisclaimerLoadingPanel").style.display = "block";
+        showUiEditor().then(() => {
+            document.getElementById("postDisclaimerLoadingPanel").style.display = "none"
+            document.getElementById("postDisclaimerPanel").style.display = "block";
+        });
+    });
+
+
+}
