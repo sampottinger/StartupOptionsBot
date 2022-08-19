@@ -161,7 +161,7 @@ function removeUiState(index, templateUrl) {
             .style("opacity", 0)
             .duration(700)
             .on("end", () => {
-                future();
+                future(resolve);
             });
     });
 }
