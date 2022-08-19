@@ -53,31 +53,33 @@ function showCodeEditor() {
 
 
 function showUiEditor(templateUrl, targetId) {
-    const code = getCodeFromUrl();
-    const serialization = getSerialization(code);
-    const hasErrors = serialization.errors.length > 0;
-    const isCodeUiSupported = !hasErrors && codeSupportedByUiEditor(serialization["result"]);
-
-    if (templateUrl === undefined) {
-        templateUrl = "/templates/code_gen_ui.html";
-    }
-
-    if (targetId === undefined) {
-        targetId = "codeUiBody";
-    }
-
-    if (isCodeUiSupported) {
-        isUsingCodeEditor = false;
-        changeEditorVisibility(false, true, false);
-        const codeGenUiUtil = new CodeGenUiUtil(templateUrl);
-        return codeGenUiUtil.render(targetId, serialization["result"]);
-    } else {
-        isUsingCodeEditor = true;
-        changeEditorVisibility(false, false, true);
-        return new Promise((resolve) => {
+    return new Promise((resolve) => {
+        const code = getCodeFromUrl();
+        const serialization = getSerialization(code);
+        const hasErrors = serialization.errors.length > 0;
+        const isCodeUiSupported = !hasErrors && codeSupportedByUiEditor(serialization["result"]);
+    
+        if (templateUrl === undefined) {
+            templateUrl = "/templates/code_gen_ui.html";
+        }
+    
+        if (targetId === undefined) {
+            targetId = "codeUiBody";
+        }
+    
+        if (isCodeUiSupported) {
+            isUsingCodeEditor = false;
+            changeEditorVisibility(false, true, false);
+            const codeGenUiUtil = new CodeGenUiUtil(templateUrl);
+            return codeGenUiUtil.render(targetId, serialization["result"]).then(() => {
+                resolve();
+            });
+        } else {
+            isUsingCodeEditor = true;
+            changeEditorVisibility(false, false, true);
             resolve();
-        });
-    }
+        }
+    });
 }
 
 
@@ -97,34 +99,68 @@ function cycleUiState(templateUrl) {
 }
 
 
-function addUiState(templateUrl) {
-    const serialization = parseSerializationFromUi();
-    serialization["states"].push({"current": [
-        {
-            "proba": 1,
-            "isElse": false,
-            "isCompany": true,
-            "target": {"action": "fail"}
-        }
-    ]});
-    
-    const deserializer = new CodeDeserializer();
-    const code = deserializer.serializationToCode(serialization);
-    pushCodeToUrl(code);
+function makeFocusOnState(index) {
+    return new Promise((resolve) => {
+        const targetId = "event" + index;
+        document.getElementById("statesDetails").setAttribute("open", "true");
+        document.getElementById(targetId).scrollIntoView();
+        resolve(); 
+    });
+}
 
-    return showUiEditor(templateUrl);
+
+function addUiState(templateUrl) {
+    return new Promise((resolve) => {
+        const serialization = parseSerializationFromUi();
+        serialization["states"].push({"current": [
+            {
+                "proba": 1,
+                "isElse": false,
+                "isCompany": true,
+                "target": {"action": "fail"}
+            }
+        ]});
+        const newIndex = serialization["states"].length - 1;
+        
+        const deserializer = new CodeDeserializer();
+        const code = deserializer.serializationToCode(serialization);
+        pushCodeToUrl(code);
+    
+        return showUiEditor(templateUrl).then(() => {
+            makeFocusOnState(newIndex).then(() => {
+               resolve(); 
+            });
+        });
+    });
 }
 
 
 function removeUiState(index, templateUrl) {
-    const serialization = parseSerializationFromUi();
-    serialization["states"].splice(index, 1);
+    const future = (resolve) => {
+        const serialization = parseSerializationFromUi();
+        serialization["states"].splice(index, 1);
+        
+        const deserializer = new CodeDeserializer();
+        const code = deserializer.serializationToCode(serialization);
+        pushCodeToUrl(code);
     
-    const deserializer = new CodeDeserializer();
-    const code = deserializer.serializationToCode(serialization);
-    pushCodeToUrl(code);
-
-    return showUiEditor(templateUrl);
+        showUiEditor(templateUrl).then(() => {
+            makeFocusOnState(index).then(() => {
+                resolve();
+            });
+        });
+    };
+    
+    return new Promise((resolve) => {
+        const eventSelection = d3.select("#event" + index);
+        eventSelection.style("opacity", 1);
+        eventSelection.transition()
+            .style("opacity", 0)
+            .duration(700)
+            .on("end", () => {
+                future();
+            });
+    });
 }
 
 

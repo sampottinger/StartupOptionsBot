@@ -15,6 +15,10 @@ article #codeEditorInput {
     height: 300px;
 }
 
+article #codeGenUiInner .add-state-holder {
+    text-align: center;
+}
+
 article #codeGenUiInner .event-like {
     margin: 20px 10px;
     padding: 5px;
