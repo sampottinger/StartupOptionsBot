@@ -24,24 +24,14 @@ class VisualizationPresenter {
         const self = this;
 
         const profits = results.map((x) => x.getProfit());
-        const minProfit = Math.min(...profits);
-        const maxProfit = Math.max(...profits);
+        const minProfit = Math.round(Math.min(...profits));
+        const maxProfit = Math.round(Math.max(...profits));
         const profitRange = maxProfit - minProfit;
         if (profitRange == 0) {
             return [{'bin': minProfit, 'count': results.length}];
         }
 
-        const roundBucketSize = (x) => {
-            const degree = Math.floor(Math.log10(x));
-            if (degree < 1) {
-                return x;
-            } else {
-                const rounder = Math.pow(10, degree-1);
-                return Math.round(x / rounder) * rounder;
-            }
-        };
-
-        const bucketSize = roundBucketSize(profitRange / NUM_BUCKETS);
+        const bucketSize = Math.round(profitRange / NUM_BUCKETS);
         const aggregator = new Map();
         results.forEach((x) => {
             const profit = x.getProfit();
@@ -60,7 +50,12 @@ class VisualizationPresenter {
             flatOutputs.push({"profit": profit, "count": count});
         });
 
-        return flatOutputs;
+        flatOutputs.sort((a, b) => a["profit"] - b["profit"]);
+        const total = flatOutputs.map((x) => x["count"]).reduce((a, b) => a + b);
+
+        return flatOutputs.map((x) => {
+            return {"profit": x["profit"], "count": count / total * 100};
+        });
     }
 
     _clearDetailsContainer() {
