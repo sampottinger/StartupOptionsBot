@@ -184,7 +184,7 @@ class CompileVisitor extends toolkit.StartUpOptionsBotLangVisitor {
             const applyAll = (target, state) => {
                 let newState = state;
                 target.forEach((x) => {
-                    newState = x(newState)
+                    newState = x(newState);
                 });
                 return newState;
             };
@@ -252,7 +252,7 @@ class CompileVisitor extends toolkit.StartUpOptionsBotLangVisitor {
         const self = this;
 
         const low = ctx.low.accept(self);
-        const high = ctx.low.accept(self);
+        const high = ctx.high.accept(self);
         const isValue = ctx.unit.getText().includes("total");
 
         return (state) => {
