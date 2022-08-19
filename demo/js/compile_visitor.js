@@ -54,7 +54,7 @@ class CompileVisitor extends toolkit.StartUpOptionsBotLangVisitor {
             const dilution = getNormVal(diluteLow, diluteHigh, true, rangeStd);
             const delay = getNormVal(delayLow, delayHigh, true, rangeStd);
 
-            state.addEvent("Raised. FMV at " + valuation + " with dilution " + dilution);
+            state.addEvent("Raised. FMV at " + fmv + " with dilution " + dilution);
             state.setFairMarketValue(fmv);
             state.diluteOptions(dilution);
             state.delay(delay);
@@ -150,7 +150,7 @@ class CompileVisitor extends toolkit.StartUpOptionsBotLangVisitor {
         };
 
         const chooseBranch = (branches, elseBranches) => {
-            const chosenProba = d3.randomUniform(0, 1);
+            const chosenProba = d3.randomUniform(0, 1)();
 
             const accumulations = [];
             let acc = 0;
@@ -184,7 +184,7 @@ class CompileVisitor extends toolkit.StartUpOptionsBotLangVisitor {
             const applyAll = (target, state) => {
                 let newState = state;
                 target.forEach((x) => {
-                    newState = x(newState)
+                    newState = x(newState);
                 });
                 return newState;
             };
@@ -252,7 +252,7 @@ class CompileVisitor extends toolkit.StartUpOptionsBotLangVisitor {
         const self = this;
 
         const low = ctx.low.accept(self);
-        const high = ctx.low.accept(self);
+        const high = ctx.high.accept(self);
         const isValue = ctx.unit.getText().includes("total");
 
         return (state) => {
