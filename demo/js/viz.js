@@ -31,7 +31,17 @@ class VisualizationPresenter {
             return [{'bin': minProfit, 'count': results.length}];
         }
 
-        const bucketSize = profitRange / NUM_BUCKETS;
+        const roundBucketSize = (x) => {
+            const degree = Math.floor(Math.log10(x));
+            if (degree < 1) {
+                return x;
+            } else {
+                const rounder = Math.pow(10, degree-1);
+                return Math.round(x / rounder) * rounder;
+            }
+        };
+
+        const bucketSize = roundBucketSize(profitRange / NUM_BUCKETS);
         const aggregator = new Map();
         results.forEach((x) => {
             const profit = x.getProfit();
