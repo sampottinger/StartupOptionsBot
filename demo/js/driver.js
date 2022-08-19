@@ -103,7 +103,10 @@ function makeFocusOnState(index) {
     return new Promise((resolve) => {
         const targetId = "event" + index;
         document.getElementById("statesDetails").setAttribute("open", "true");
-        document.getElementById(targetId).scrollIntoView();
+        const scrollTarget = document.getElementById(targetId);
+        if (scrollTarget !== null) {
+            scrollTarget.scrollIntoView();
+        }
         resolve(); 
     });
 }
