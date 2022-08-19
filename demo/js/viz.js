@@ -54,7 +54,7 @@ class VisualizationPresenter {
         const total = flatOutputs.map((x) => x["count"]).reduce((a, b) => a + b);
 
         return flatOutputs.map((x) => {
-            return {"profit": x["profit"], "count": count / total * 100};
+            return {"profit": x["profit"], "count": x["count"] / total * 100};
         });
     }
 
@@ -72,8 +72,9 @@ class VisualizationPresenter {
             });
             return {
                 "datasets": [{
-                    "label": "Individual Simluations",
-                    "data": data
+                    "label": "Simluations",
+                    "data": data,
+                    "backgroundColor": "rgba(140, 140, 220, 0.2)"
                 }]
             };
         };
@@ -81,7 +82,32 @@ class VisualizationPresenter {
         const getConfig = () => {
             return {
                 type: "scatter",
-                data: getData()
+                data: getData(),
+                options: {
+                    plugins: {
+                        title: {
+                            text: "Individual Simulation Outcomes",
+                            display: true
+                        },
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        x: {
+                            title: {
+                                text: "Months",
+                                display: true
+                            }
+                        },
+                        y: {
+                            title: {
+                                text: "Profit",
+                                display: true
+                            }
+                        }
+                    }
+                }
             };
         };
 
@@ -104,8 +130,9 @@ class VisualizationPresenter {
             return {
                 "labels": labels,
                 "datasets": [{
-                    label: "Histogram of Simulation Outcomes",
-                    data: counts
+                    label: "Simulations",
+                    data: counts,
+                    backgroundColor: "rgb(140, 140, 220)"
                 }]
             };
         };
@@ -113,7 +140,32 @@ class VisualizationPresenter {
         const getConfig = () => {
             return {
                 type: "bar",
-                data: getData()
+                data: getData(),
+                options: {
+                    plugins: {
+                        title: {
+                            text: "Histogram of Simulation Profit",
+                            display: true
+                        },
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        x: {
+                            title: {
+                                text: "Profit",
+                                display: true
+                            }
+                        },
+                        y: {
+                            title: {
+                                text: "Percent of Simulations",
+                                display: true
+                            }
+                        }
+                    }
+                }
             };
         };
 
