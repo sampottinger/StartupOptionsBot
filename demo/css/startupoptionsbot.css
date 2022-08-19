@@ -15,6 +15,10 @@ article #codeEditorInput {
     height: 300px;
 }
 
+article #codeGenUiInner .add-state-holder {
+    text-align: center;
+}
+
 article #codeGenUiInner .event-like {
     margin: 20px 10px;
     padding: 5px;
@@ -73,6 +77,11 @@ article #outputs {
 
 article #outputs .output-panel {
     border-top: 1px solid #C0C0C0;
+}
+
+article #outputs .output-panel .subpanel {
+    padding-top: 15px;
+    padding-bottom: 15px;
 }
 
 article #outputs #runningSimDisplay {

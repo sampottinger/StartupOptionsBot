@@ -24,14 +24,14 @@ class VisualizationPresenter {
         const self = this;
 
         const profits = results.map((x) => x.getProfit());
-        const minProfit = Math.min(...profits);
-        const maxProfit = Math.max(...profits);
+        const minProfit = Math.round(Math.min(...profits));
+        const maxProfit = Math.round(Math.max(...profits));
         const profitRange = maxProfit - minProfit;
         if (profitRange == 0) {
             return [{'bin': minProfit, 'count': results.length}];
         }
 
-        const bucketSize = profitRange / NUM_BUCKETS;
+        const bucketSize = Math.round(profitRange / NUM_BUCKETS);
         const aggregator = new Map();
         results.forEach((x) => {
             const profit = x.getProfit();
@@ -50,7 +50,12 @@ class VisualizationPresenter {
             flatOutputs.push({"profit": profit, "count": count});
         });
 
-        return flatOutputs;
+        flatOutputs.sort((a, b) => a["profit"] - b["profit"]);
+        const total = flatOutputs.map((x) => x["count"]).reduce((a, b) => a + b);
+
+        return flatOutputs.map((x) => {
+            return {"profit": x["profit"], "count": x["count"] / total * 100};
+        });
     }
 
     _clearDetailsContainer() {
@@ -67,8 +72,9 @@ class VisualizationPresenter {
             });
             return {
                 "datasets": [{
-                    "label": "Individual Simluations",
-                    "data": data
+                    "label": "Simulations",
+                    "data": data,
+                    "backgroundColor": "rgba(140, 140, 220, 0.2)"
                 }]
             };
         };
@@ -76,7 +82,41 @@ class VisualizationPresenter {
         const getConfig = () => {
             return {
                 type: "scatter",
-                data: getData()
+                data: getData(),
+                options: {
+                    plugins: {
+                        title: {
+                            text: "Individual Simulation Outcomes",
+                            display: true
+                        },
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: (context) => {
+                                    const months = Math.round(context.parsed.x);
+                                    const profit = Math.round(context.parsed.y);
+                                    return months + " months to profit of " + profit;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            title: {
+                                text: "Months",
+                                display: true
+                            }
+                        },
+                        y: {
+                            title: {
+                                text: "Profit",
+                                display: true
+                            }
+                        }
+                    }
+                }
             };
         };
 
@@ -99,8 +139,9 @@ class VisualizationPresenter {
             return {
                 "labels": labels,
                 "datasets": [{
-                    label: "Histogram of Simulation Outcomes",
-                    data: counts
+                    label: "Percent of Simulations",
+                    data: counts,
+                    backgroundColor: "rgb(140, 140, 220)"
                 }]
             };
         };
@@ -108,7 +149,40 @@ class VisualizationPresenter {
         const getConfig = () => {
             return {
                 type: "bar",
-                data: getData()
+                data: getData(),
+                options: {
+                    plugins: {
+                        title: {
+                            text: "Histogram of Simulation Profit",
+                            display: true
+                        },
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                title: (tooltipItems) => {
+                                    const profit = tooltipItems[0].label;
+                                    return "Approx profit of " + profit;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            title: {
+                                text: "Profit",
+                                display: true
+                            }
+                        },
+                        y: {
+                            title: {
+                                text: "Percent of Simulations",
+                                display: true
+                            }
+                        }
+                    }
+                }
             };
         };
 

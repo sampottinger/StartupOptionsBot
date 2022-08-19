@@ -1,4 +1,5 @@
-const DEFAULT_CODE = "[ipoBuy = 100 sellBuy = 90 quitBuy = 50 optionTax = 22 regularIncomeTax = 33 longTermTax = 20 waitToSell = 0.8 strikePrice = 1.1 totalGrant = 123 startVestingMonths = 10 immediatelyVest = 20 monthlyVest = 10 startFMV = 1.2 startTotalShares = 1234567 rangeStd = 2 startMonthLow = 5 startMonthHigh = 15]{e_0.1: buy(80%) | c_0.1: ipo(3 - 4 share) | c_0.4: sell(2 - 3 share) | c_else:raise(1.1 - 1.2 fmv, 10 - 20%, 12 - 24 months, {c_0.45: sell(1 - 2 share) | c_0.55: ipo(2 - 3.5 share)} ) }";
+const DEFAULT_CODE = "[ipoBuy = 100 sellBuy = 90 quitBuy = 50 optionTax = 22 regularIncomeTax = 33 longTermTax = 20 waitToSell = 0.8 strikePrice = 1.1 totalGrant = 123 startVestingMonths = 10 immediatelyVest = 20 monthlyVest = 10 startFMV = 1.2 startTotalShares = 12300 rangeStd = 2 startMonthLow = 5 startMonthHigh = 15]{e_0.1: buy(80%) | c_0.1: ipo(3 - 4 share) | c_0.4: sell(2 - 3 share) | c_else:raise(1.1 - 1.2 fmv, 10 - 20%, 12 - 24 months, {c_0.45: sell(1 - 2 share) | c_0.55: ipo(2 - 3.5 share)} ) }";
+
 const NUM_SIMULATIONS = 5000;
 
 let isUsingCodeEditor = false;
@@ -52,31 +53,33 @@ function showCodeEditor() {
 
 
 function showUiEditor(templateUrl, targetId) {
-    const code = getCodeFromUrl();
-    const serialization = getSerialization(code);
-    const hasErrors = serialization.errors.length > 0;
-    const isCodeUiSupported = !hasErrors && codeSupportedByUiEditor(serialization["result"]);
-
-    if (templateUrl === undefined) {
-        templateUrl = "/templates/code_gen_ui.html";
-    }
-
-    if (targetId === undefined) {
-        targetId = "codeUiBody";
-    }
-
-    if (isCodeUiSupported) {
-        isUsingCodeEditor = false;
-        changeEditorVisibility(false, true, false);
-        const codeGenUiUtil = new CodeGenUiUtil(templateUrl);
-        return codeGenUiUtil.render(targetId, serialization["result"]);
-    } else {
-        isUsingCodeEditor = true;
-        changeEditorVisibility(false, false, true);
-        return new Promise((resolve) => {
+    return new Promise((resolve) => {
+        const code = getCodeFromUrl();
+        const serialization = getSerialization(code);
+        const hasErrors = serialization.errors.length > 0;
+        const isCodeUiSupported = !hasErrors && codeSupportedByUiEditor(serialization["result"]);
+    
+        if (templateUrl === undefined) {
+            templateUrl = "/templates/code_gen_ui.html";
+        }
+    
+        if (targetId === undefined) {
+            targetId = "codeUiBody";
+        }
+    
+        if (isCodeUiSupported) {
+            isUsingCodeEditor = false;
+            changeEditorVisibility(false, true, false);
+            const codeGenUiUtil = new CodeGenUiUtil(templateUrl);
+            return codeGenUiUtil.render(targetId, serialization["result"]).then(() => {
+                resolve();
+            });
+        } else {
+            isUsingCodeEditor = true;
+            changeEditorVisibility(false, false, true);
             resolve();
-        });
-    }
+        }
+    });
 }
 
 
@@ -96,34 +99,72 @@ function cycleUiState(templateUrl) {
 }
 
 
-function addUiState(templateUrl) {
-    const serialization = parseSerializationFromUi();
-    serialization["states"].push({"current": [
-        {
-            "proba": 1,
-            "isElse": false,
-            "isCompany": true,
-            "target": {"action": "fail"}
+function makeFocusOnState(index) {
+    return new Promise((resolve) => {
+        const targetId = "event" + index;
+        document.getElementById("statesDetails").setAttribute("open", "true");
+        const scrollTarget = document.getElementById(targetId);
+        if (scrollTarget !== null) {
+            scrollTarget.scrollIntoView();
+            scrollTarget.focus();
         }
-    ]});
-    
-    const deserializer = new CodeDeserializer();
-    const code = deserializer.serializationToCode(serialization);
-    pushCodeToUrl(code);
+        resolve(); 
+    });
+}
 
-    return showUiEditor(templateUrl);
+
+function addUiState(templateUrl) {
+    return new Promise((resolve) => {
+        const serialization = parseSerializationFromUi();
+        serialization["states"].push({"current": [
+            {
+                "proba": 1,
+                "isElse": false,
+                "isCompany": true,
+                "target": {"action": "fail"}
+            }
+        ]});
+        const newIndex = serialization["states"].length - 1;
+        
+        const deserializer = new CodeDeserializer();
+        const code = deserializer.serializationToCode(serialization);
+        pushCodeToUrl(code);
+    
+        return showUiEditor(templateUrl).then(() => {
+            makeFocusOnState(newIndex).then(() => {
+               resolve(); 
+            });
+        });
+    });
 }
 
 
 function removeUiState(index, templateUrl) {
-    const serialization = parseSerializationFromUi();
-    serialization["states"].splice(index, 1);
+    const future = (resolve) => {
+        const serialization = parseSerializationFromUi();
+        serialization["states"].splice(index, 1);
+        
+        const deserializer = new CodeDeserializer();
+        const code = deserializer.serializationToCode(serialization);
+        pushCodeToUrl(code);
     
-    const deserializer = new CodeDeserializer();
-    const code = deserializer.serializationToCode(serialization);
-    pushCodeToUrl(code);
-
-    return showUiEditor(templateUrl);
+        showUiEditor(templateUrl).then(() => {
+            makeFocusOnState(index).then(() => {
+                resolve();
+            });
+        });
+    };
+    
+    return new Promise((resolve) => {
+        const eventSelection = d3.select("#event" + index);
+        eventSelection.style("opacity", 1);
+        eventSelection.transition()
+            .style("opacity", 0)
+            .duration(700)
+            .on("end", () => {
+                future(resolve);
+            });
+    });
 }
 
 

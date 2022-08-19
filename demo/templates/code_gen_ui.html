@@ -84,23 +84,23 @@
             </p>
         </details>
 
-        <details>
-            <summary>Events</summary>
+        <details id="statesDetails">
+            <summary>States</summary>
             <p>
                 <div class="first-event event-like">
                     <div class="mb-3">
-                        <label for="startMonthLow" class="form-label">Delay till first event</label>
+                        <label for="startMonthLow" class="form-label">Delay till first state</label>
                         <div class="input-group">
                             <input type="number" class="form-control code-ui-input" id="startMonthLow" aria-describedby="startingMonthsHelp" value="{{ variables.startMonthLow }}" step="1" pattern="\d+" min="0" required>
                             <span class="input-group-text">to</span>
                             <input type="number" class="form-control code-ui-input" id="startMonthHigh" aria-describedby="startingMonthsHelp" value="{{ variables.startMonthHigh }}" step="1" pattern="\d+" min="0" required>
                         </div>
-                        <div id="startingMonthsHelp" class="form-text">Number of months to delay before first event (called "Event 0").</div>
+                        <div id="startingMonthsHelp" class="form-text">Number of months to delay before first state (called "State 0").</div>
                     </div>
                 </div>
                 {{#each events as |target|}}
-                <div class="event inner-event event-like">
-                    <h4>Event {{@index}}</h4>
+                <div class="event inner-event event-like" id="event{{@index}}">
+                    <h4>State {{@index}} - <a href="#event{{@index}}" onclick="removeUiState({{@index}})" aria-label="Delete State {{@index}}" class="btn btn-outline-danger"><i class="bi bi-trash-fill"></i></a></h4>
                     <div class="actor">
                         <div class="label">Your actions</div>
                         <div class="option">
@@ -182,7 +182,7 @@
                                     <input type="text" class="form-control code-ui-input" id="raisePercent{{@index}}" aria-describedby="raisePercentHelp{{@index}}" value="else" disabled>
                                     <span class="input-group-text">%</span>
                                 </div>
-                                <div id="raisePercentHelp{{@index}}" class="form-text">Percent chance the company has a fund raise. This is read only, it is 100% minus the probability of failing, selling, or having an IPO.</div>
+                                <div id="raisePercentHelp{{@index}}" class="form-text">Percent chance the company has a fund raise. This is read only, it is 100% minus the probability of failing, selling, or having an IPO. If there is a raise, the simulation will go to the next state. Otherwise, it will terminate.</div>
                             </div>
                             <div class="mb-3">
                                 <label for="raiseFmvLow{{@index}}" class="form-label">Raise FMV</label>
@@ -211,12 +211,17 @@
                                     <span class="input-group-text">to</span>
                                     <input type="number" class="form-control code-ui-input" id="raiseDelayHigh{{@index}}" aria-describedby="raiseDelayHelp{{@index}}" value="{{ target.raise.delay.high }}" step="1" pattern="\d+" min="0" required>
                                 </div>
-                                <div id="raiseDelayHelp{{@index}}" class="form-text">Delay between raise if one happens to next stage.</div>
+                                <div id="raiseDelayHelp{{@index}}" class="form-text">Delay between raise if one happens to next state.</div>
                             </div>
                         </div>
                     </div>
                 </div>
                 {{/each}}
+                <div id="event{{numEvents}}" class="add-state-holder">
+                    <a href="#event{{numEvents}}" onclick="addUiState()" class="btn btn-outline-success">
+                        <i class="bi bi-node-plus-fill"></i> Add State
+                    </a>
+                </div>
             </p>
         </details>
 

@@ -204,7 +204,8 @@ function parseSerializationFromUi(targetId) {
 
     return {
         "variables": getVariables(),
-        "states": states
+        "states": states,
+        "numEvents": states.length
     };
 }
 
