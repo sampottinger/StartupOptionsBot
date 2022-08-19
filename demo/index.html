@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <title>Startup Options Bot</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="/third_party/bootstrap.min.css">
+        <link rel="stylesheet" href="/third_party/bootstrap-icons-1.9.1/bootstrap-icons.css">
+        <link rel="stylesheet" href="/css/startupoptionsbot.css?version=20220817">
+    </head>
+
+    <body>
+        <div>
+            <header>
+                <div><a id="skipLink" href="#toolSection">Skip to Content</a></div>
+                <div class="headline">
+                <h1><i class="bi bi-robot"></i> Startup Options Bot</h1>
+                <div class="subtitle">
+                    <span class="prefix">Are start ups big money?</span>
+                    When joining a start up, often folks will get options: stocks they can purchase but often can't immediately sell.
+                    Some start ups will eventually offer employees an opportunity to sell options at profit while others may end up in a loss.
+                    How can simulations can help paint a picture of potential options outcomes?
+                </div>
+            </header>
+
+            <article id="toolSection">
+                <div id="disclaimerPanel">
+                    <div>
+                        <div><span class="prefix"><i class="bi bi-exclamation-circle-fill"></i> Woah buddy.</span> We are talking money and probability. This is a free open source community project to demonstrate data science techniques. Please review and agree to the following below before continuing:</div>
+                        <ul>
+                            <li><a href="/disclaimer.html#website">You agree to our website disclaimer</a> in which, among other things, we have no liability of any kind as a result of using this website or its information.</li>
+                            <li><a href="/disclaimer.html#links">You agree to our external links disclaimer</a> in which, among other things, we have no liability of any kind for any third party websites linked from this website.</li>
+                            <li><a href="/disclaimer.html#financial">You agree to our financial and professional disclaimer</a> in which, among other things, we state we are not financial advisors, accountants, or attorneys and that this website does not provide financial advice. Consult a financial advisor.</li>
+                            <li><a href="/terms.html">You agree to our terms of service and privacy policy</a> in which, among other things, we affirm we do not use cookies.</li>
+                        </ul>
+                        <div class="btn-holder"><a href="#postDisclaimerPanel" class="btn btn-primary" id="disclaimerAgree">I have read and agree to the above.</a></div>
+                    </div>
+                </div>
+                <div id="postDisclaimerLoadingPanel">Please wait...</div>
+                <div id="postDisclaimerPanel">
+                    <div id="editors">
+                        <ul class="nav justify-content-center nav-tabs" id="editorNav">
+                            <li class="nav-item">
+                                <a class="nav-link" id="uiEditorLink" href="#uiEditor">UI-Based Editor</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="codeEditorLink" href="#codeEditor">Code Editor</a>
+                            </li>
+                        </ul>
+                        <div id="uiEditor">
+                            <div id="codeUiBody"></div>
+                        </div>
+                        <div id="codeEditor">
+                            <div class="intro">In addition to the UI editor, you can also program the simulation through a small <a href="#dsl" id="dslLink">domain specific language</a>.</div>
+                            <textarea id="codeEditorInput" class="form-control"></textarea>
+                        </div>
+                        <div id="uiNotSupported"></div>
+                    </div>
+                    <div id="simButtonHolder">
+                        <a href="#outputs" id="runSimButton" class="btn btn-primary"><i class="bi bi-dice-3-fill"></i> Run Simulations</a>
+                    </div>
+                    <div id="outputs">
+                        <div class="output-panel" id="runningSimDisplay"><i class="bi bi-hourglass-split"></i> Running please wait...</div>
+                        <div class="output-panel" id="simOutputDisplay">
+                            <div id="outputSummaryContainer"></div>
+                            <div id="outputDetailsContainer"></div>
+                        </div>
+                    </div>
+                </div>
+            </article>
+            <footer>
+                Made by <a href="https://gleap.org">A Samuel Pottinger</a> and possibly other open source. <a href="https://github.com/sampottinger/incomegaps">Open source</a> using a number of <a href="https://github.com/sampottinger/incomegaps/blob/main/README.md#open-source">open source tools</a>. By using this site, you agree the <a href="https://github.com/sampottinger/incomegaps/blob/main/LICENSE">MIT license</a>. By using this page you agree to <a href="/terms.html">terms and conditions</a> as well as our <a href="privacy.html">privacy policy</a>. Views and opinions my own.
+            </footer>
+        </div>
+    </body>
+
+    <script src="/third_party/d3.min.js"></script>
+    <script src="/third_party/handlebars.min.js"></script>
+    <script src="/third_party/chart.min.js"></script>
+    
+    <script src="/js/startupoptionsbotlang.js"></script>
+    <script src="/js/shared.js"></script>
+    <script src="/js/rand_util.js"></script>
+    <script src="/js/compiler.js"></script>
+    <script src="/js/state.js"></script>
+    <script src="/js/compile_visitor.js"></script>
+    <script src="/js/serialization_visitor.js"></script>
+    <script src="/js/deserialization_util.js"></script>
+    <script src="/js/code_gen_ui.js"></script>
+    <script src="/js/viz.js"></script>
+    <script src="/js/driver.js"></script>
+
+    <script>init();</script>
+
+</html>

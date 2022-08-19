@@ -1,5 +1,5 @@
 const DEFAULT_CODE = "[ipoBuy = 100 sellBuy = 90 quitBuy = 50 optionTax = 22 regularIncomeTax = 33 longTermTax = 20 waitToSell = 0.8 strikePrice = 1.1 totalGrant = 123 startVestingMonths = 10 immediatelyVest = 20 monthlyVest = 10 startFMV = 1.2 startTotalShares = 1234567 rangeStd = 2 startMonthLow = 5 startMonthHigh = 15]{e_0.1: buy(80%) | c_0.1: ipo(3 - 4 share) | c_0.4: sell(2 - 3 share) | c_else:raise(1.1 - 1.2 fmv, 10 - 20%, 12 - 24 months, {c_0.45: sell(1 - 2 share) | c_0.55: ipo(2 - 3.5 share)} ) }";
-const NUM_SIMULATIONS = 20000;
+const NUM_SIMULATIONS = 5000;
 
 let isUsingCodeEditor = false;
 
@@ -27,6 +27,20 @@ function changeEditorVisibility(showCodeEditor, showUiEditor, showNotSupported) 
     document.getElementById("codeEditor").style.display = showCodeEditor ? "block" : "none";
     document.getElementById("uiEditor").style.display = showUiEditor ? "block" : "none";
     document.getElementById("uiNotSupported").style.display = showNotSupported ? "block" : "none";
+
+    const uiEditorLink = document.getElementById("uiEditorLink");
+    const codeEditorLink = document.getElementById("codeEditorLink");
+    if (showCodeEditor) {
+        uiEditorLink.classList.remove("active");
+        codeEditorLink.classList.add("active");
+        uiEditorLink.setAttribute("aria-current", "false");
+        codeEditorLink.setAttribute("aria-current", "location");
+    } else {
+        uiEditorLink.classList.add("active");
+        codeEditorLink.classList.remove("active");
+        uiEditorLink.setAttribute("aria-current", "location");
+        codeEditorLink.setAttribute("aria-current", "false");
+    }
 }
 
 
@@ -130,6 +144,11 @@ function getEditorCode() {
 }
 
 
+function pushCurrentCodeToUrl() {
+    pushCodeToUrl(getEditorCode());
+}
+
+
 function loadCodeToEditors(templateUrl) {
     if (isUsingCodeEditor) {
         showCodeEditor();
@@ -140,6 +159,7 @@ function loadCodeToEditors(templateUrl) {
 
 
 function runSimulations(numSimulations) {
+    document.getElementById("simButtonHolder").style.display = "none";
     document.getElementById("runningSimDisplay").style.display = "block";
     document.getElementById("simOutputDisplay").style.display = "none";
 
@@ -147,11 +167,18 @@ function runSimulations(numSimulations) {
         numSimulations = NUM_SIMULATIONS;
     }
 
+    const cleanUpUi = () => {
+        document.getElementById("simButtonHolder").style.display = "block";
+        document.getElementById("runningSimDisplay").style.display = "none";
+        document.getElementById("simOutputDisplay").style.display = "block";
+    };
+
     return new Promise((resolve, reject) => {
         setTimeout(() => {
             const result = visitProgram(getCodeFromUrl());
             if (result.errors.length > 0) {
                 alert("Whoops! There's a coding error in your program: " + result.errors[0]);
+                cleanUpUi();
                 return;
             }
             const program = result["program"];
@@ -173,7 +200,39 @@ function runSimulations(numSimulations) {
             );
 
             vizPresenter.render(outcomes);
+            cleanUpUi();
             resolve();
         }, 100);
+    });
+}
+
+
+function init() {
+    const disclaimerAgree = document.getElementById("disclaimerAgree");
+    disclaimerAgree.addEventListener("click", () => {
+        document.getElementById("disclaimerPanel").style.display = "none";
+        document.getElementById("postDisclaimerLoadingPanel").style.display = "block";
+        showUiEditor().then(() => {
+            document.getElementById("postDisclaimerLoadingPanel").style.display = "none"
+            document.getElementById("postDisclaimerPanel").style.display = "block";
+        });
+    });
+
+    const uiEditorLink = document.getElementById("uiEditorLink");
+    uiEditorLink.addEventListener("click", () => {
+        pushCurrentCodeToUrl();
+        showUiEditor();
+    });
+
+    const codeEditorLink = document.getElementById("codeEditorLink");
+    codeEditorLink.addEventListener("click", () => {
+        pushCurrentCodeToUrl();
+        showCodeEditor();
+    });
+
+    const runSimButton = document.getElementById("runSimButton");
+    runSimButton.addEventListener("click", () => {
+        document.getElementById("outputs").style.display = "block";
+        runSimulations();
     });
 }

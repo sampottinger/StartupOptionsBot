@@ -241,7 +241,28 @@ class CodeGenUiUtil {
                 "events": simplifiedEvents
             });
             document.getElementById(targetId).innerHTML = result;
+
+            self._associateValidChecks(targetId);
         }, (x) => console.log(x));
+    }
+
+    _associateValidChecks() {
+        const self = this;
+        const inputs = document.getElementsByClassName("code-ui-input");
+        if (inputs.length == 0) {
+            throw "No elements.";
+        }
+
+        for (var i = 0; i < inputs.length; i++) {
+            const target = inputs.item(i);
+            target.addEventListener("change", () => {
+                if (target.validity.valid) {
+                    target.classList.remove("is-invalid");
+                } else {
+                    target.classList.add("is-invalid");
+                }
+            });
+        }      
     }
 
     _simplifyEvent(originalEvent) {

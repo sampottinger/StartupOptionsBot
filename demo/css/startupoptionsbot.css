@@ -1,0 +1,153 @@
+article details {
+    border-bottom: 1px solid #C0C0C0;
+}
+
+article details:last-of-type {
+    border-bottom: 1px solid black;
+}
+
+article details summary {
+    font-weight: bold;
+    font-size: 21px;
+}
+
+article #codeEditorInput {
+    height: 300px;
+}
+
+article #codeGenUiInner .event-like {
+    margin: 20px 10px;
+    padding: 5px;
+    border: 1px solid #C0C0C0;
+}
+
+article #codeGenUiInner .event-like h4 {
+    text-align: center;
+}
+
+article #codeGenUiInner .event-like .actor {
+    border-top: 1px dotted #C0C0C0;
+}
+
+article #codeGenUiInner .event-like .actor .label {
+    font-weight: bold;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+article #codeGenUiInner .event-like .actor .option {
+    margin-left: 10px;
+}
+
+article #codeGenUiInner .intro {
+    font-weight: bold;
+    border-bottom: 1px solid black;
+    text-align: center;
+}
+
+article #disclaimerPanel {
+    margin: 40px;
+    padding: 5px;
+    border: 1px dotted black;
+}
+
+article #disclaimerPanel .btn-holder {
+    margin-top: 10px;
+    margin-bottom: 5px;
+    text-align: center;
+}
+
+article #disclaimerPanel ul {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+article #editorNav {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+article #outputs {
+    display: none;
+}
+
+article #outputs .output-panel {
+    border-top: 1px solid #C0C0C0;
+}
+
+article #outputs #runningSimDisplay {
+    text-align: center;
+    padding: 20px;
+}
+
+article #postDisclaimerPanel {
+    display: none;
+    margin: 15px;
+}
+
+article #postDisclaimerLoadingPanel {
+    display: none;
+    margin: 10px;
+    text-align: center;
+}
+
+article #simButtonHolder {
+    text-align: center;
+    padding-top: 10px;
+    padding-bottom: 20px;
+}
+
+footer {
+    border-top: 1px solid #A0A0A0;
+    padding: 10px 5px;
+    margin: 10px 0;
+    font-size: 13px;
+}
+
+header {
+    background-color: #E0E0E0;
+    padding: 10px;
+}
+
+header h1 {
+    border-bottom: 1px solid black;
+}
+
+header .subtitle {
+    font-size: 15px;
+}
+
+.mb-3 {
+    margin-top: 1rem!important;
+    margin-bottom: 2rem!important;
+}
+
+.prefix {
+    font-weight: bold;
+}
+
+#disclaimersBody .button-holder {
+    text-align: center;
+    border-top: 1px solid black;
+    padding-top: 10px;
+    margin-left: 10px;
+    margin-right: 10px;
+    margin-bottom: 20px;
+}
+
+#disclaimersBody .disclaimer {
+    margin: 20px;
+    padding: 5px;
+}
+
+#skipLink {
+    position: absolute;
+    top: -100px;
+}
+
+#skipLink:focus {
+    position: absolute;
+    top: 0px;
+    background-color: black;
+    color: white;
+}

@@ -18,13 +18,20 @@
   <div id="outputDetailsContainer"></div>
   <div id="runningSimDisplay"></div>
   <div id="simOutputDisplay"></div>
-  
+
+  <a href="#" id="uiEditorLink"></a>
+  <a href="#" id="codeEditorLink"></a>
+
+  <div id="simButtonHolder">
+    <a href="#outputs" id="runSimButton" class="btn btn-primary"><i class="bi bi-dice-3-fill"></i> Run Simulations</a>
+  </div>
+
   <script src="./qunit-2.19.0.js"></script>
-  
+
   <script src="../third_party/d3.min.js"></script>
   <script src="../third_party/handlebars.min.js"></script>
   <script src="../third_party/chart.min.js"></script>
-  
+
   <script src="../js/startupoptionsbotlang.js"></script>
   <script src="../js/shared.js"></script>
   <script src="../js/rand_util.js"></script>
@@ -36,7 +43,7 @@
   <script src="../js/code_gen_ui.js"></script>
   <script src="../js/viz.js"></script>
   <script src="../js/driver.js"></script>
-  
+
   <script src="./rand_util_tests.js"></script>
   <script src="./compile_visitor_tests.js"></script>
   <script src="./serialization_visitor_tests.js"></script>

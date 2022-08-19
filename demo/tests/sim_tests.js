@@ -24,7 +24,7 @@ QUnit.module("SimTest", function() {
         }
 
         assert.ok(Math.max(...results) > 1);
-
+        
         const unique = new Set(results);
         assert.ok(unique.size > 1);
     });
