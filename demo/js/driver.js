@@ -106,6 +106,7 @@ function makeFocusOnState(index) {
         const scrollTarget = document.getElementById(targetId);
         if (scrollTarget !== null) {
             scrollTarget.scrollIntoView();
+            scrollTarget.focus();
         }
         resolve(); 
     });
