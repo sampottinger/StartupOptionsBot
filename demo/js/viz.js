@@ -72,7 +72,7 @@ class VisualizationPresenter {
             });
             return {
                 "datasets": [{
-                    "label": "Simluations",
+                    "label": "Simulations",
                     "data": data,
                     "backgroundColor": "rgba(140, 140, 220, 0.2)"
                 }]
@@ -91,6 +91,15 @@ class VisualizationPresenter {
                         },
                         legend: {
                             display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: (context) => {
+                                    const months = Math.round(context.parsed.x);
+                                    const profit = Math.round(context.parsed.y);
+                                    return months + " months to profit of " + profit;
+                                }
+                            }
                         }
                     },
                     scales: {
@@ -130,7 +139,7 @@ class VisualizationPresenter {
             return {
                 "labels": labels,
                 "datasets": [{
-                    label: "Simulations",
+                    label: "Percent of Simulations",
                     data: counts,
                     backgroundColor: "rgb(140, 140, 220)"
                 }]
@@ -149,6 +158,14 @@ class VisualizationPresenter {
                         },
                         legend: {
                             display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                title: (tooltipItems) => {
+                                    const profit = tooltipItems[0].label;
+                                    return "Approx profit of " + profit;
+                                }
+                            }
                         }
                     },
                     scales: {
