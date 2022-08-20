@@ -1,6 +1,6 @@
 grammar StartUpOptionsBotLang;
 
-WHITE_SPACE: [ \u000B\t\r\n] -> channel(HIDDEN);
+WHITE_SPACE: [ \u000B\t\r\n,] -> channel(HIDDEN);
 
 COLON_: ':';
 
@@ -50,9 +50,9 @@ BUY_: 'b' 'u' 'y';
 
 QUIT_: 'q' 'u' 'i' 't';
 
-FLOAT_: [0-9,]+ '.' [0-9]+;
+FLOAT_: [0-9]+ '.' [0-9]+;
 
-INTEGER_: [0-9,]+;
+INTEGER_: [0-9]+;
 
 ELSE_: 'e' 'l' 's' 'e';
 
