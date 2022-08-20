@@ -74,7 +74,7 @@ QUnit.module("Driver", function() {
 
                 const outputCode = removeWhitespace(getEditorCode());
                 assert.ok(outputCode.includes("totalGrant=100"));
-                assert.ok(outputCode.includes("c_0.55:ipo(500000000"));
+                assert.ok(outputCode.includes("c_0.55:ipo(500,000,000"));
 
                 done();
             });
