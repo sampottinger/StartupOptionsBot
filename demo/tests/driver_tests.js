@@ -39,7 +39,7 @@ QUnit.module("Driver", function() {
         assert.deepEqual(document.getElementById("uiEditor").style.display, "block");
     });
 
-    /*QUnit.test("generate UI from show UI editor", function(assert) {
+    QUnit.test("generate UI from show UI editor", function(assert) {
         pushCodeToUrl(DEFAULT_CODE);
         const done = assert.async();
         showUiEditor("../templates/code_gen_ui.html").then(() => {
@@ -120,6 +120,6 @@ QUnit.module("Driver", function() {
             assert.ok(document.getElementById("outputDetailsContainer").innerHTML !== "");
             done();
         });
-    });*/
+    });
 
 });
