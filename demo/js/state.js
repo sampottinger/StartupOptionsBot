@@ -204,7 +204,7 @@ class SimulationState {
         self._purchaseHistory.push({
             "months": self._currentMonth,
             "count": numOptions,
-            "basis": numOptions * self._fairMarketValue
+            "basis": self._fairMarketValue
         });
     }
 
@@ -252,7 +252,6 @@ class SimulationState {
 
         const proceedsRegular = self._getProceedsPreTax(optionsRegularIncome);
         const proceedsLongTerm = self._getProceedsPreTax(optionsLongTerm);
-        const totalProceeds = proceedsRegular + proceedsLongTerm;
         
         // Determine total sale
         const totalOptions = self._purchaseHistory.map(

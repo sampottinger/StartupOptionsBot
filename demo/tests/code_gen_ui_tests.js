@@ -164,6 +164,7 @@ QUnit.module("CodeGenUiUtil", function() {
 
     const DEFAULT_INPUT = {
         "variables": {
+            "useLogNorm": 0,
             "ipoBuy": 100,
             "sellBuy": 90,
             "quitBuy": 80,
