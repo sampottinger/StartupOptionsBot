@@ -3,7 +3,7 @@ class SerializationVisitor extends toolkit.StartUpOptionsBotLangVisitor {
     visitNumber(ctx) {
         const self = this;
 
-        const targetStr = ctx.getText().replaceAll(",", "");
+        const targetStr = ctx.getText();
         const isFloat = targetStr.includes(".");
         return isFloat ? parseFloat(targetStr) : parseInt(targetStr);
     }
