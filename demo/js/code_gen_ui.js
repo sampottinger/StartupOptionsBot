@@ -276,8 +276,8 @@ class CodeGenUiUtil {
             "quit": {"percent": 0},
             "buy": {"percent": 0, "amount": 0},
             "fail": {"percent": 0},
-            "sell": {"percent": 0, "amount": {"low": 0, "high": 0}, "shares": true},
-            "ipo": {"percent": 0, "amount": {"low": 0, "high": 0}, "shares": true},
+            "sell": {"percent": 0, "amount": {"low": 0, "high": 0}, "shares": false},
+            "ipo": {"percent": 0, "amount": {"low": 0, "high": 0}, "shares": false},
             "raise": {
                 "fmv": {"low": 0, "high": 0},
                 "dilute": {"low": 0, "high": 0},
