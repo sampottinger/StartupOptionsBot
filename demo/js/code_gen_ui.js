@@ -75,7 +75,8 @@ function parseSerializationFromUi(targetId) {
         if (element === null) {
             throw "Could not find " + target;
         }
-        return parseFloat(element.value);
+        const floatVal = parseFloat(element.value);
+        return floatVal.toLocaleString("en-US");
     };
 
     const getDropdownValue = (target) => {
