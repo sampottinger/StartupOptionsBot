@@ -263,10 +263,18 @@
                 <div class="mb-3">
                     <label for="rangeStd" class="form-label">Range confidence</label>
                     <select class="form-select" id="rangeStd" aria-describedby="rangeStdHelp">
-                        <option value="1" {{#unless derived.highConfidence}}selected{{/unless}}>Low confidence (ranges represent 68% of outcomes).</option>
-                        <option value="2" {{#if derived.highConfidence}}selected{{/if}}>High confidence (ranges represent 95% of outcomes).</option>
+                        <option value="1" {{#unless derived.highConfidence}}selected{{/unless}}>Low confidence (ranges represent 68% of outcomes if normal).</option>
+                        <option value="2" {{#if derived.highConfidence}}selected{{/if}}>High confidence (ranges represent 95% of outcomes if normal).</option>
                     </select>
                     <div id="rangeStdHelp" class="form-text">Level of confidence you have in the ranges provided in the events section (like FMV, amount diluation, IPO share price etc). More <a href="#levelOfConfidence" class="level-of-confidence-link">info about level of confidence</a>.</div>
+                </div>
+                <div class="mb-3">
+                    <label for="useLogNorm" class="form-label">Company Value Distribution</label>
+                    <select class="form-select" id="useLogNorm" aria-describedby="useLogNormHelp">
+                        <option value="0" {{#unless derived.useLogNorm}}selected{{/unless}}>Normal Distribution</option>
+                        <option value="1" {{#if derived.useLogNorm}}selected{{/if}}>Log Normal Distribution (use with caution)</option>
+                    </select>
+                    <div id="useLogNormHelp" class="form-text">The type of distribution to use when simulating share or company value during sale or IPO. Though not recommended in most cases, <a href="">log normal is also supported</a>. In either case, this simulation does not <a href="">consider different classes of stocks</a>.
                 </div>
             </p>
         </details>

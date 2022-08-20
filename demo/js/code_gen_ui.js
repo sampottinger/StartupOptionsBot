@@ -15,7 +15,8 @@ const SIMPLE_VARIABLES = [
     "startTotalShares",
     "startVestingMonths",
     "immediatelyVest",
-    "monthlyVest"
+    "monthlyVest",
+    "useLogNorm"
 ];
 
 const NUMBER_REGEX = /^\d+(\.\d+)?$/;
@@ -100,7 +101,8 @@ function parseSerializationFromUi(targetId) {
             "sellBuy": getSimpleNumber("sellBuy"),
             "quitBuy": getSimpleNumber("quitBuy"),
             "waitToSell": parseFloat(getDropdownValue("waitToSell")),
-            "rangeStd": parseFloat(getDropdownValue("rangeStd"))
+            "rangeStd": parseFloat(getDropdownValue("rangeStd")),
+            "useLogNorm": parseFloat(getDropdownValue("useLogNorm"))
         };
     };
 
@@ -231,6 +233,7 @@ class CodeGenUiUtil {
         const derived = {};
         derived["longTerm"] = outputVariables["waitToSell"] > 0.5;
         derived["highConfidence"] = outputVariables["rangeStd"] > 1.5;
+        derived["useLogNorm"] = outputVariables["useLogNorm"] > 0.5;
 
         const events = serialization["states"].map((x) => x["current"]);
         const simplifiedEvents = events.map((x) => self._simplifyEvent(x));
@@ -308,8 +311,8 @@ class CodeGenUiUtil {
                 outputRecord["raise"]["fmv"]["high"] = x["target"]["fmvHigh"];
                 outputRecord["raise"]["dilute"]["low"] = x["target"]["diluteLow"];
                 outputRecord["raise"]["dilute"]["high"] = x["target"]["diluteHigh"];
-                outputRecord["raise"]["delay"]["low"] = x["target"]["diluteLow"];
-                outputRecord["raise"]["delay"]["high"] = x["target"]["diluteHigh"];
+                outputRecord["raise"]["delay"]["low"] = x["target"]["delayLow"];
+                outputRecord["raise"]["delay"]["high"] = x["target"]["delayHigh"];
             }
         };
 

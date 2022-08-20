@@ -54,7 +54,9 @@ class CompileVisitor extends toolkit.StartUpOptionsBotLangVisitor {
             const dilution = getNormVal(diluteLow, diluteHigh, true, rangeStd);
             const delay = getNormVal(delayLow, delayHigh, true, rangeStd);
 
-            state.addEvent("Raised. FMV at " + fmv + " with dilution " + dilution);
+            const fmvStr = Math.round(fmv * 100) / 100;
+            const dilutionStr = Math.round(dilution * 100) / 100;
+            state.addEvent("Raised. FMV at " + fmvStr + " with dilution " + dilutionStr);
             state.setFairMarketValue(fmv);
             state.diluteOptions(dilution);
             state.delay(delay);
@@ -70,8 +72,7 @@ class CompileVisitor extends toolkit.StartUpOptionsBotLangVisitor {
             const percentOptionsBuy = state.getValue("quitBuy");
             const optionsAvailable = state.getOptionsAvailable();
             const numOptions = percentOptionsBuy * optionsAvailable;
-
-            state.addEvent("Bought " + numOptions + " options.");
+            
             state.buyOptions(numOptions);
             state.clearRemainingOptions();
 
@@ -87,8 +88,7 @@ class CompileVisitor extends toolkit.StartUpOptionsBotLangVisitor {
         return (state) => {
             const optionsAvailable = state.getOptionsAvailable();
             const numOptions = percentAmount * optionsAvailable;
-
-            state.addEvent("Bought " + numOptions + " options.");
+            
             state.buyOptions(numOptions);
 
             return state;
@@ -111,7 +111,7 @@ class CompileVisitor extends toolkit.StartUpOptionsBotLangVisitor {
         const self = this;
 
         const retObj = ctx.value.accept(self);
-        retObj["isCompany"] = ctx.target.getText().includes("c.");
+        retObj["isCompany"] = ctx.target.getText().includes("c");
         return retObj;
     }
 
@@ -136,7 +136,7 @@ class CompileVisitor extends toolkit.StartUpOptionsBotLangVisitor {
 
         const checkSumProbabilities = (target) => {
             const totalProba = target.map((x) => x["proba"]).reduce((a, b) => a + b, 0);
-            if (totalProba > 1) {
+            if (totalProba > 1.01) {
                 throw "Probabilities add up to over 1.";
             }
         };
@@ -168,12 +168,12 @@ class CompileVisitor extends toolkit.StartUpOptionsBotLangVisitor {
             const isElse = i == numAccumulations;
             return isElse ? chooseElse(elseBranches) : branches[i];
         };
-
+        
         const companyBranches = allBranches.filter((x) => x["isCompany"] && !x["isElse"]);
         const companyElses = allBranches.filter((x) => x["isCompany"] && x["isElse"]);
         const employeeBranches = allBranches.filter((x) => !x["isCompany"] && !x["isElse"]);
         const employeeElses = allBranches.filter((x) => !x["isCompany"] && x["isElse"]);
-
+        
         checkSumProbabilities(companyBranches);
         checkSumProbabilities(employeeBranches);
 
@@ -257,20 +257,21 @@ class CompileVisitor extends toolkit.StartUpOptionsBotLangVisitor {
 
         return (state) => {
             const rangeStd = state.getValue("rangeStd");
-            const generatedValue = getNormVal(low, high, true, rangeStd);
+            const useLogNorm = state.getValue("useLogNorm") > 0.5;
+            const generatedValue = getNormVal(low, high, true, rangeStd, useLogNorm);
             const percentOptionsBuy = state.getValue(buyVariable) / 100;
             const optionsAvailable = state.getOptionsAvailable();
             const numOptions = optionsAvailable * percentOptionsBuy;
 
-            state.addEvent("Company " + label + "! New value: " + generatedValue);
+            const valStr = Math.round(generatedValue * 100) / 100;
+            state.addEvent("Company " + label + "! New value: " + valStr);
 
             if (isValue) {
                 state.setExitValue(generatedValue);
             } else {
                 state.setExitShare(generatedValue);
             }
-
-            state.addEvent("Bought " + numOptions + " options.")
+            
             state.buyOptions(numOptions);
 
             return state;
