@@ -6,14 +6,14 @@
             <p>
                 <div class="mb-3">
                     <label for="totalGrant" class="form-label">Number of options</label>
-                    <input type="text" class="form-control code-ui-input" id="totalGrant" aria-describedby="totalGrantHelp" value="{{ variables.totalGrant }}" step="1" pattern="[0-9\,]+" min="0" required>
+                    <input type="text" class="form-control code-ui-input" id="totalGrant" aria-describedby="totalGrantHelp" value="{{ variables.totalGrant }}" pattern="[0-9,]+" required>
                     <div id="totalGrantHelp" class="form-text">Total number of options granted.</div>
                 </div>
                 <div class="mb-3">
                     <label for="strikePrice" class="form-label">Strike price</label>
                     <div class="input-group">
                         <span class="input-group-text">$</span>
-                        <input type="text" class="form-control code-ui-input" id="strikePrice" aria-describedby="strikePriceHelp" value="{{ variables.strikePrice }}" pattern="([0-9\,]+|[0-9\,]+\.\d+)" required>
+                        <input type="text" class="form-control code-ui-input" id="strikePrice" aria-describedby="strikePriceHelp" value="{{ variables.strikePrice }}" pattern="([0-9,]+|[0-9,]+\.\d+)" required>
                     </div>
                     <div id="strikePriceHelp" class="form-text">Strike price or cost to purchase per share in dollars.</div>
                 </div>
@@ -21,13 +21,13 @@
                     <label for="startFMV" class="form-label">Start FMV</label>
                     <div class="input-group">
                         <span class="input-group-text">$</span>
-                        <input type="text" class="form-control code-ui-input" id="strikePrice" aria-describedby="startFMVHelp" value="{{ variables.startFMV }}" pattern="([0-9\,]+|[0-9\,]+\.\d+)" required>
+                        <input type="text" class="form-control code-ui-input" id="strikePrice" aria-describedby="startFMVHelp" value="{{ variables.startFMV }}" pattern="([0-9,]+|[0-9,]+\.\d+)" required>
                     </div>
                     <div id="startFMVHelp" class="form-text">Starting <a href="#info409a" class="info-409a-link">409A fair market value</a> per share. Note that this simulation will <a href="#simulateFMVChanges" id="simulateFMVChangesLink">simulate FMV changes</a> tied to new rounds.</div>
                 </div>
                 <div class="mb-3">
                     <label for="startTotalShares" class="form-label">Start total shares</label>
-                    <input type="text" class="form-control code-ui-input" id="startTotalShares" aria-describedby="startTotalSharesHelp" value="{{ variables.startTotalShares }}" step="1" pattern="[0-9\,]+" min="0" required>
+                    <input type="text" class="form-control code-ui-input" id="startTotalShares" aria-describedby="startTotalSharesHelp" value="{{ variables.startTotalShares }}" pattern="[0-9,]+" required>
                     <div id="startTotalSharesHelp" class="form-text">Starting fully diluted shares: shares you have plus shares you don't. You can also <a id="calculateFromPercentOwnershipLink" href="#calculateFromPercentOwnership">calculate this from your fully diluted percent ownership</a> in the company. Simulation will diluate shares with new raises.</div>
                 </div>
             </p>
@@ -38,17 +38,17 @@
             <p>
                 <div class="mb-3">
                     <label for="startVestingMonths" class="form-label">Months till cliff</label>
-                    <input type="text" class="form-control code-ui-input" id="startVestingMonths" aria-describedby="startVestingMonthsHelp" value="{{ variables.startVestingMonths }}" step="1" pattern="[0-9\,]+" min="0" required>
+                    <input type="text" class="form-control code-ui-input" id="startVestingMonths" aria-describedby="startVestingMonthsHelp" value="{{ variables.startVestingMonths }}" pattern="[0-9,]+"  required>
                     <div id="startVestingMonthsHelp" class="form-text">Number of months until vesting starts.</div>
                 </div>
                 <div class="mb-3">
                     <label for="immediatelyVest" class="form-label">Immediately vest at cliff</label>
-                    <input type="text" class="form-control code-ui-input" id="immediatelyVest" aria-describedby="immediatelyVestHelp" value="{{ variables.immediatelyVest }}" step="1" pattern="[0-9\,]+" min="0" required>
+                    <input type="text" class="form-control code-ui-input" id="immediatelyVest" aria-describedby="immediatelyVestHelp" value="{{ variables.immediatelyVest }}" pattern="[0-9,]+" required>
                     <div id="immediatelyVestHelp" class="form-text">Number of shares that will immedietly vest at cliff.</div>
                 </div>
                 <div class="mb-3">
                     <label for="monthlyVest" class="form-label">Monthly vest after cliff</label>
-                    <input type="text" class="form-control code-ui-input" id="monthlyVest" aria-describedby="monthlyVestHelp" value="{{ variables.monthlyVest }}" step="1" pattern="[0-9\,]+" min="0" required>
+                    <input type="text" class="form-control code-ui-input" id="monthlyVest" aria-describedby="monthlyVestHelp" value="{{ variables.monthlyVest }}" pattern="[0-9,]+"  required>
                     <div id="monthlyVestHelp" class="form-text">Number of shares vesting per month after cliff.</div>
                 </div>
             </p>
@@ -60,7 +60,7 @@
                 <div class="mb-3">
                     <label for="optionTax" class="form-label">Taxes on option purchase</label>
                     <div class="input-group">
-                        <input type="text" class="form-control code-ui-input" id="optionTax" aria-describedby="optionTaxHelp" value="{{ variables.optionTax }}"step="1" pattern="(100|\d{1,2})" min="0" max="100" required>
+                        <input type="text" class="form-control code-ui-input" id="optionTax" aria-describedby="optionTaxHelp" value="{{ variables.optionTax }}"pattern="(100|\d{1,2})" required>
                         <span class="input-group-text">%</span>
                     </div>
                     <div id="optionTaxHelp" class="form-text">Effective tax rate on "spread" between your strike price and fair maket value. <a href="#taxSpread" id="taxSpreadLink">More info on taxes paid on spread</a>. Input value from 0 to 100.</div>
@@ -68,7 +68,7 @@
                 <div class="mb-3">
                     <label for="regularIncomeTax" class="form-label">Effective regular income tax rate</label>
                     <div class="input-group">
-                        <input type="text" class="form-control code-ui-input" id="regularIncomeTax" aria-describedby="regularIncomeTaxHelp" value="{{ variables.regularIncomeTax }}" step="1" pattern="(100|\d{1,2})" min="0" max="100" required>
+                        <input type="text" class="form-control code-ui-input" id="regularIncomeTax" aria-describedby="regularIncomeTaxHelp" value="{{ variables.regularIncomeTax }}" pattern="(100|\d{1,2})" required>
                         <span class="input-group-text">%</span>
                     </div>
                     <div id="regularIncomeTaxHelp" class="form-text">Effective tax rate on short term gains / regular income. <a href="#taxRegular" id="taxRegularLink">More info on regular income taxes</a>. Input value from 0 to 100.</div>
@@ -76,7 +76,7 @@
                 <div class="mb-3">
                     <label for="longTermTax" class="form-label">Effective long term tax rate</label>
                     <div class="input-group">
-                        <input type="text" class="form-control code-ui-input" id="longTermTax" aria-describedby="longTermTaxHelp" value="{{ variables.longTermTax }}" step="1" pattern="(100|\d{1,2})" min="0" max="100" required>
+                        <input type="text" class="form-control code-ui-input" id="longTermTax" aria-describedby="longTermTaxHelp" value="{{ variables.longTermTax }}" pattern="(100|\d{1,2})" required>
                         <span class="input-group-text">%</span>
                     </div>
                     <div id="longTermTaxHelp" class="form-text">Effective tax rate on long term capital gains. <a href="#taxLongTerm" id="taxLongTermLink">More info on long term capital gains taxes</a>. Input value from 0 to 100.</div>
@@ -91,9 +91,10 @@
                     <div class="mb-3">
                         <label for="startMonthLow" class="form-label">Delay till first state</label>
                         <div class="input-group">
-                            <input type="text" class="form-control code-ui-input" id="startMonthLow" aria-describedby="startingMonthsHelp" value="{{ variables.startMonthLow }}" step="1" pattern="[0-9\,]+" min="0" required>
+                            <input type="text" class="form-control code-ui-input" id="startMonthLow" aria-describedby="startingMonthsHelp" value="{{ variables.startMonthLow }}" pattern="[0-9,]+"  required>
                             <span class="input-group-text">to</span>
-                            <input type="text" class="form-control code-ui-input" id="startMonthHigh" aria-describedby="startingMonthsHelp" value="{{ variables.startMonthHigh }}" step="1" pattern="[0-9\,]+" min="0" required>
+                            <input type="text" class="form-control code-ui-input" id="startMonthHigh" aria-describedby="startingMonthsHelp" value="{{ variables.startMonthHigh }}" pattern="[0-9,]+"  required>
+                            <span class="input-group-text">months</span>
                         </div>
                         <div id="startingMonthsHelp" class="form-text">Number of months to delay before first state (called "State 0").</div>
                     </div>
@@ -107,7 +108,7 @@
                             <div class="mb-3">
                                 <label for="quitPercent{{@index}}" class="form-label">Quit</label>
                                 <div class="input-group">
-                                    <input type="text" class="form-control code-ui-input" id="quitPercent{{@index}}" aria-describedby="quitHelp{{@index}}" value="{{ target.quit.percent }}" step="1" pattern="(100|\d{1,2})" min="0" max="100" required>
+                                    <input type="text" class="form-control code-ui-input" id="quitPercent{{@index}}" aria-describedby="quitHelp{{@index}}" value="{{ target.quit.percent }}" pattern="(100|\d{1,2})" required>
                                     <span class="input-group-text">%</span>
                                 </div>
                                 <div id="quitHelp{{@index}}" class="form-text">Percent chance of you quitting at this stage.</div>
@@ -117,9 +118,9 @@
                             <div class="mb-3">
                                 <label for="buyPercent{{@index}}" class="form-label">Buy</label>
                                 <div class="input-group">
-                                    <input type="text" class="form-control code-ui-input" id="buyPercent{{@index}}" aria-describedby="buyHelp{{@index}}" value="{{ target.buy.percent }}" step="1" pattern="(100|\d{1,2})" min="0" max="100" required>
+                                    <input type="text" class="form-control code-ui-input" id="buyPercent{{@index}}" aria-describedby="buyHelp{{@index}}" value="{{ target.buy.percent }}" pattern="(100|\d{1,2})" required>
                                     <span class="input-group-text">% chance of buying</span>
-                                    <input type="text" class="form-control code-ui-input" id="buyAmount{{@index}}" aria-describedby="buyHelp{{@index}}" value="{{ target.buy.amount }}" step="1" pattern="(100|\d{1,2})" min="0" max="100" required>
+                                    <input type="text" class="form-control code-ui-input" id="buyAmount{{@index}}" aria-describedby="buyHelp{{@index}}" value="{{ target.buy.amount }}" pattern="(100|\d{1,2})" required>
                                     <span class="input-group-text">% of your available shares</span>
                                 </div>
                                 <div id="buyHelp{{@index}}" class="form-text">Percent chance of you buying the given percent of your vested shares at this stage.</div>
@@ -132,7 +133,7 @@
                             <div class="mb-3">
                                 <label for="failPercent{{@index}}" class="form-label">Fail</label>
                                 <div class="input-group">
-                                    <input type="text" class="form-control code-ui-input" id="failPercent{{@index}}" aria-describedby="failHelp{{@index}}" value="{{ target.fail.percent }}" step="1" pattern="(100|\d{1,2})" min="0" max="100" required>
+                                    <input type="text" class="form-control code-ui-input" id="failPercent{{@index}}" aria-describedby="failHelp{{@index}}" value="{{ target.fail.percent }}" pattern="(100|\d{1,2})" required>
                                     <span class="input-group-text">%</span>
                                 </div>
                                 <div id="failHelp{{@index}}" class="form-text">Percent chance of company "failing" at this stage such that the value of shares is effectively zero.</div>
@@ -142,11 +143,11 @@
                             <div class="mb-3">
                                 <label for="sellPercent{{@index}}" class="form-label">Sell</label>
                                 <div class="input-group">
-                                    <input type="text" class="form-control code-ui-input" id="sellPercent{{@index}}" aria-describedby="sellHelp{{@index}}" value="{{ target.sell.percent }}" step="1" pattern="(100|\d{1,2})" min="0" max="100" required>
+                                    <input type="text" class="form-control code-ui-input" id="sellPercent{{@index}}" aria-describedby="sellHelp{{@index}}" value="{{ target.sell.percent }}" pattern="(100|\d{1,2})" required>
                                     <span class="input-group-text">% chance of selling at</span>
-                                    <input type="text" class="form-control code-ui-input" id="sellAmountLow{{@index}}" aria-describedby="sellHelp{{@index}}" value="{{ target.sell.amount.low }}" pattern="([0-9\,]+|[0-9\,]+\.\d+)" required>
+                                    <input type="text" class="form-control code-ui-input" id="sellAmountLow{{@index}}" aria-describedby="sellHelp{{@index}}" value="{{ target.sell.amount.low }}" pattern="([0-9,]+|[0-9,]+\.\d+)" required>
                                     <span class="input-group-text">to</span>
-                                    <input type="text" class="form-control code-ui-input" id="sellAmountHigh{{@index}}" aria-describedby="sellHelp{{@index}}" value="{{ target.sell.amount.high }}" pattern="([0-9\,]+|[0-9\,]+\.\d+)" required>
+                                    <input type="text" class="form-control code-ui-input" id="sellAmountHigh{{@index}}" aria-describedby="sellHelp{{@index}}" value="{{ target.sell.amount.high }}" pattern="([0-9,]+|[0-9,]+\.\d+)" required>
                                     <select aria-describedby="sellHelp{{@index}}" class="form-select" id="sellUnits{{@index}}">
                                         <option value="share" {{#if target.sell.shares}}selected{{/if}}>USD per share</option>
                                         <option value="total" {{#unless target.sell.shares}}selected{{/unless}}>total company USD value</option>
@@ -159,11 +160,11 @@
                             <div class="mb-3">
                                 <label for="ipoPercent{{@index}}" class="form-label">IPO</label>
                                 <div class="input-group">
-                                    <input type="text" class="form-control code-ui-input" id="ipoPercent{{@index}}" aria-describedby="ipoHelp{{@index}}" value="{{ target.ipo.percent }}" step="1" pattern="(100|\d{1,2})" min="0" max="100" required>
+                                    <input type="text" class="form-control code-ui-input" id="ipoPercent{{@index}}" aria-describedby="ipoHelp{{@index}}" value="{{ target.ipo.percent }}" pattern="(100|\d{1,2})" required>
                                     <span class="input-group-text">% chance of IPO at</span>
-                                    <input type="text" class="form-control code-ui-input" id="ipoAmountLow{{@index}}" aria-describedby="ipoHelp{{@index}}" value="{{ target.ipo.amount.low }}" pattern="([0-9\,]+|[0-9\,]+\.\d+)" required>
+                                    <input type="text" class="form-control code-ui-input" id="ipoAmountLow{{@index}}" aria-describedby="ipoHelp{{@index}}" value="{{ target.ipo.amount.low }}" pattern="([0-9,]+|[0-9,]+\.\d+)" required>
                                     <span class="input-group-text">to</span>
-                                    <input type="text" class="form-control code-ui-input" id="ipoAmountHigh{{@index}}" aria-describedby="ipoHelp{{@index}}" value="{{ target.ipo.amount.high }}" pattern="([0-9\,]+|[0-9\,]+\.\d+)" required>
+                                    <input type="text" class="form-control code-ui-input" id="ipoAmountHigh{{@index}}" aria-describedby="ipoHelp{{@index}}" value="{{ target.ipo.amount.high }}" pattern="([0-9,]+|[0-9,]+\.\d+)" required>
                                     <select aria-describedby="ipoHelp{{@index}}" class="form-select" id="ipoUnits{{@index}}">
                                         <option value="share" {{#if this.ipo.shares}}selected{{/if}}>USD per share</option>
                                         <option value="total" {{#unless this.ipo.shares}}selected{{/unless}}>total company USD value</option>
@@ -187,9 +188,9 @@
                             <div class="mb-3">
                                 <label for="raiseFmvLow{{@index}}" class="form-label">Raise FMV</label>
                                 <div class="input-group">
-                                    <input type="text" class="form-control code-ui-input" id="raiseFmvLow{{@index}}" aria-describedby="raiseFmvHelp{{@index}}" value="{{ target.raise.fmv.low }}" pattern="([0-9\,]+|[0-9\,]+\.\d+)" required>
+                                    <input type="text" class="form-control code-ui-input" id="raiseFmvLow{{@index}}" aria-describedby="raiseFmvHelp{{@index}}" value="{{ target.raise.fmv.low }}" pattern="([0-9,]+|[0-9,]+\.\d+)" required>
                                     <span class="input-group-text">to</span>
-                                    <input type="text" class="form-control code-ui-input" id="raiseFmvHigh{{@index}}" aria-describedby="raiseFmvHelp{{@index}}" value="{{ target.raise.fmv.high }}" pattern="([0-9\,]+|[0-9\,]+\.\d+)" required>
+                                    <input type="text" class="form-control code-ui-input" id="raiseFmvHigh{{@index}}" aria-describedby="raiseFmvHelp{{@index}}" value="{{ target.raise.fmv.high }}" pattern="([0-9,]+|[0-9,]+\.\d+)" required>
                                     <span class="input-group-text">USD</span>
                                 </div>
                                 <div id="raiseFmvHelp{{@index}}" class="form-text">Range of expected <a href="#info409a" class="info-409a-link">409A fair market values</a> after raise if one happens using <a href="#levelOfConfidence" class="level-of-confidence-link">range settings in simulation section</a>.</div>
@@ -197,9 +198,9 @@
                             <div class="mb-3">
                                 <label for="raiseDiluteLow{{@index}}" class="form-label">Raise dilution</label>
                                 <div class="input-group">
-                                    <input type="text" class="form-control code-ui-input" id="raiseDiluteLow{{@index}}" aria-describedby="raiseDiluteHelp{{@index}}" value="{{ target.raise.dilute.low }}" pattern="(100|\d{1,2})" min="0" max="100" required>
+                                    <input type="text" class="form-control code-ui-input" id="raiseDiluteLow{{@index}}" aria-describedby="raiseDiluteHelp{{@index}}" value="{{ target.raise.dilute.low }}" pattern="(100|\d{1,2})" required>
                                     <span class="input-group-text">to</span>
-                                    <input type="text" class="form-control code-ui-input" id="raiseDiluteHigh{{@index}}" aria-describedby="raiseDiluteHelp{{@index}}" value="{{ target.raise.dilute.high }}" pattern="(100|\d{1,2})" min="0" max="100" required>
+                                    <input type="text" class="form-control code-ui-input" id="raiseDiluteHigh{{@index}}" aria-describedby="raiseDiluteHelp{{@index}}" value="{{ target.raise.dilute.high }}" pattern="(100|\d{1,2})" required>
                                     <span class="input-group-text">%</span>
                                 </div>
                                 <div id="raiseDiluteHelp{{@index}}" class="form-text">Range of expected <a href="#infoDilution" class="info-dilution-link">dilution</a> of shares using <a href="#levelOfConfidence" class="level-of-confidence-link">range settings in simulation section</a> if a raise happens.</div>
@@ -207,9 +208,9 @@
                             <div class="mb-3">
                                 <label for="raiseDelayLow{{@index}}" class="form-label">Delay after raise</label>
                                 <div class="input-group">
-                                    <input type="text" class="form-control code-ui-input" id="raiseDelayLow{{@index}}" aria-describedby="raiseDelayHelp{{@index}}" value="{{ target.raise.delay.low }}" step="1" pattern="[0-9\,]+" min="0" required>
+                                    <input type="text" class="form-control code-ui-input" id="raiseDelayLow{{@index}}" aria-describedby="raiseDelayHelp{{@index}}" value="{{ target.raise.delay.low }}" pattern="[0-9,]+"  required>
                                     <span class="input-group-text">to</span>
-                                    <input type="text" class="form-control code-ui-input" id="raiseDelayHigh{{@index}}" aria-describedby="raiseDelayHelp{{@index}}" value="{{ target.raise.delay.high }}" step="1" pattern="[0-9\,]+" min="0" required>
+                                    <input type="text" class="form-control code-ui-input" id="raiseDelayHigh{{@index}}" aria-describedby="raiseDelayHelp{{@index}}" value="{{ target.raise.delay.high }}" pattern="[0-9,]+"  required>
                                 </div>
                                 <div id="raiseDelayHelp{{@index}}" class="form-text">Delay between raise if one happens to next state.</div>
                             </div>
@@ -231,7 +232,7 @@
                 <div class="mb-3">
                     <label for="ipoBuy" class="form-label">Percent to buy if IPO</label>
                     <div class="input-group">
-                        <input type="text" class="form-control code-ui-input" id="ipoBuy" aria-describedby="ipoBuyHelp" value="{{ variables.ipoBuy }}" step="1" pattern="(100|\d{1,2})" min="0" max="100" required>
+                        <input type="text" class="form-control code-ui-input" id="ipoBuy" aria-describedby="ipoBuyHelp" value="{{ variables.ipoBuy }}" pattern="(100|\d{1,2})" required>
                         <span class="input-group-text">%</span>
                     </div>
                     <div id="ipoBuyHelp" class="form-text">Percent of remaining shares to buy if there is an initial public offering. Input value from 0 to 100.</div>
@@ -239,7 +240,7 @@
                 <div class="mb-3">
                     <label for="sellBuy" class="form-label">Percent to buy if company sold</label>
                     <div class="input-group">
-                        <input type="text" class="form-control code-ui-input" id="sellBuy" aria-describedby="sellBuyHelp" value="{{ variables.sellBuy }}" step="1" pattern="(100|\d{1,2})" min="0" max="100" required>
+                        <input type="text" class="form-control code-ui-input" id="sellBuy" aria-describedby="sellBuyHelp" value="{{ variables.sellBuy }}" pattern="(100|\d{1,2})" required>
                         <span class="input-group-text">%</span>
                     </div>
                     <div id="sellBuyHelp" class="form-text">Percent of remaining shares to buy if the company is sold. Input value from 0 to 100.</div>
@@ -247,7 +248,7 @@
                 <div class="mb-3">
                     <label for="quitBuy" class="form-label">Percent to buy if quit</label>
                     <div class="input-group">
-                        <input type="text" class="form-control code-ui-input" id="quitBuy" aria-describedby="quitBuyHelp" value="{{ variables.sellBuy }}" step="1" pattern="(100|\d{1,2})" min="0" max="100" required>
+                        <input type="text" class="form-control code-ui-input" id="quitBuy" aria-describedby="quitBuyHelp" value="{{ variables.sellBuy }}" pattern="(100|\d{1,2})" required>
                         <span class="input-group-text">%</span>
                     </div>
                     <div id="quitBuyHelp" class="form-text">Percent of remaining shares to buy if you leave your job. Input value from 0 to 100.</div>
@@ -279,4 +280,4 @@
             </p>
         </details>
     </form>
-</div>
+    </div>
