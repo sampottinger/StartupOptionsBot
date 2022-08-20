@@ -1,4 +1,4 @@
-const DEFAULT_CODE = "[useLogNorm = 0 ipoBuy = 100 sellBuy = 90 quitBuy = 50 optionTax = 26 regularIncomeTax = 33 longTermTax = 20 waitToSell = 0.8 strikePrice = 1 totalGrant = 100 startVestingMonths = 10 immediatelyVest = 20 monthlyVest = 10 startFMV = 2 startTotalShares = 100000 rangeStd = 2 startMonthLow = 5 startMonthHigh = 15]{e_0.1: buy(80%) | c_0.1: ipo(500000000 - 1000000000 total) | c_0.4: sell(100000000 - 500000000 total) | c_else:raise(2 - 3 fmv, 10 - 20%, 12 - 24 months, {c_0.45: sell(200000000 - 700000000 total) | c_0.55: ipo(500000000 - 1500000000 total)} ) }";
+const DEFAULT_CODE = "[useLogNorm = 0 ipoBuy = 100 sellBuy = 90 quitBuy = 50 optionTax = 26 regularIncomeTax = 33 longTermTax = 20 waitToSell = 0.8 strikePrice = 1 totalGrant = 100 startVestingMonths = 10 immediatelyVest = 20 monthlyVest = 10 startFMV = 2 startTotalShares = 100000 rangeStd = 2 startMonthLow = 5 startMonthHigh = 15]{e_0.1: buy(80%) | c_0.1: ipo(500000000 - 1000000000 total) | c_0.4: sell(100000000 - 500000000 total) | c_else:raise(2 - 3 fmv diluting 10 - 20% wait 12 - 24 months then {c_0.45: sell(200000000 - 700000000 total) | c_0.55: ipo(500000000 - 1500000000 total)} ) }";
 
 const NUM_SIMULATIONS = 10000;
 
@@ -16,7 +16,7 @@ function getCodeFromUrl() {
 function pushCodeToUrl(code) {
     const startQueryString = window.location.search;
     const searchParams = new URLSearchParams(startQueryString);
-    searchParams.set("code", removeWhitespace(code));
+    searchParams.set("code", code);
     const newLocationBase = window.location.protocol + "//" + window.location.host;
     const newLocationPath = window.location.pathname + '?' + searchParams.toString();
     const newLocation = newLocationBase + newLocationPath;

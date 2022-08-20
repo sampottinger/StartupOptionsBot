@@ -69,7 +69,7 @@ QUnit.module("CodeDeserializer", function() {
 
         assert.ok(resultCompact.includes("c_0.1:fail()"));
         assert.ok(resultCompact.includes("c_0.9:fail()"));
-        assert.ok(resultCompact.includes("raise(0.3-0.4fmv,5-6%,7-8months"));
+        assert.ok(resultCompact.includes("raise(0.3-0.4fmvdiluting5-6%wait7-8months"));
     });
 
     QUnit.test("serialization to code", function(assert) {
@@ -107,7 +107,7 @@ QUnit.module("CodeDeserializer", function() {
         assert.ok(resultCompact.includes("[testa=1testb=2.3]"));
         assert.ok(resultCompact.includes("c_0.1:fail()"));
         assert.ok(resultCompact.includes("c_0.9:fail()"));
-        assert.ok(resultCompact.includes("raise(0.3-0.4fmv,5-6%,7-8months,{"));
+        assert.ok(resultCompact.includes("raise(0.3-0.4fmvdiluting5-6%wait7-8monthsthen{"));
     });
 
 });

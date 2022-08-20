@@ -14,7 +14,11 @@ START_PARAMS_: '(';
 
 END_PARAMS_: ')';
 
-COMMA_: ',';
+DILUTING_: 'd' 'i' 'l' 'u' 't' 'i' 'n' 'g';
+
+WAIT_: 'w' 'a' 'i' 't';
+
+THEN_: 't' 'h' 'e' 'n';
 
 DASH_: '-';
 
@@ -46,9 +50,9 @@ BUY_: 'b' 'u' 'y';
 
 QUIT_: 'q' 'u' 'i' 't';
 
-FLOAT_: [0-9]+ '.' [0-9]+;
+FLOAT_: [0-9,]+ '.' [0-9]+;
 
-INTEGER_: [0-9]+;
+INTEGER_: [0-9,]+;
 
 ELSE_: 'e' 'l' 's' 'e';
 
@@ -70,7 +74,7 @@ sell: SELL_ START_PARAMS_ low=number DASH_ high=number unit=units END_PARAMS_;
 
 percent: target=number PERCENT_;
 
-raise: RAISE_ START_PARAMS_ vlow=number DASH_ vhigh=number FMV_ COMMA_ dilutelow=number DASH_ dilutehigh=percent COMMA_ delaylow=number DASH_ delayhigh=number MONTHS_ COMMA_ next=branches END_PARAMS_;
+raise: RAISE_ START_PARAMS_ vlow=number DASH_ vhigh=number FMV_ DILUTING_ dilutelow=number DASH_ dilutehigh=percent WAIT_ delaylow=number DASH_ delayhigh=number MONTHS_ THEN_ next=branches END_PARAMS_;
 
 quit: QUIT_ START_PARAMS_ END_PARAMS_;
 
