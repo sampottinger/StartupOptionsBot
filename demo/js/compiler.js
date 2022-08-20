@@ -1,10 +1,10 @@
 function getCompiled(input) {
-    return applyVisitor(input, new CompileVisitor());
+    return applyVisitor(input.replaceAll(",", ""), new CompileVisitor());
 }
 
 
 function getSerialization(input) {
-    return applyVisitor(input, new SerializationVisitor());
+    return applyVisitor(input.replaceAll(",", ""), new SerializationVisitor());
 }
 
 
@@ -37,7 +37,7 @@ function visitProgram(input) {
 function getProgram(input) {
     const errors = [];
 
-    const chars = new toolkit.antlr4.InputStream(input);
+    const chars = new toolkit.antlr4.InputStream(input.replaceAll(",", ""));
     const lexer = new toolkit.StartUpOptionsBotLangLexer(chars);
     lexer.removeErrorListeners();
     lexer.addErrorListener({

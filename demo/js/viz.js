@@ -68,7 +68,7 @@ class VisualizationPresenter {
         
         const getData = () => {
             const data = details.map((x) => {
-                return {"x": x.getMonths(), "y": x.getProfit()};
+                return {"x": x.getMonths(), "y": x.getProfit(), "events": x.getEvents()};
             });
             return {
                 "datasets": [{
@@ -115,6 +115,32 @@ class VisualizationPresenter {
                                 display: true
                             }
                         }
+                    },
+                    onClick(event) {
+                        const points = chart.getElementsAtEventForMode(
+                            event,
+                            "nearest",
+                            {intersect: true},
+                            false
+                        );
+                        const firstPoint = points[0];
+                        const simNum = firstPoint.index;
+                        const value = chart.data.datasets[
+                            firstPoint.datasetIndex
+                        ].data[simNum];
+                        const messageInner = value["events"].map(
+                            (x) => {
+                                const months = Math.round(x["months"]);
+                                const event = x["event"];
+                                return "<li>" + months + " months: " + event + "</li>"
+                            }
+                        ).join("\n");
+                        
+                        const profit = Math.round(value["y"]);
+                        const message = "<ul>" + messageInner + "</ul> Profit: " + profit;
+                        vex.dialog.alert({
+                            unsafeMessage: "<b>Simulation " + simNum + ":<b> " + "\n" + message
+                        });
                     }
                 }
             };
@@ -122,7 +148,7 @@ class VisualizationPresenter {
 
         const canvasId = self._createCanvas(self._detailsContainerId, "details-chart");
 
-        new Chart(document.getElementById(canvasId), getConfig());
+        const chart = new Chart(document.getElementById(canvasId), getConfig());
     }
 
     _clearSummaryContainer() {

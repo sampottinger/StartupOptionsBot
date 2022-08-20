@@ -15,7 +15,8 @@ const SIMPLE_VARIABLES = [
     "startTotalShares",
     "startVestingMonths",
     "immediatelyVest",
-    "monthlyVest"
+    "monthlyVest",
+    "useLogNorm"
 ];
 
 const NUMBER_REGEX = /^\d+(\.\d+)?$/;
@@ -74,7 +75,8 @@ function parseSerializationFromUi(targetId) {
         if (element === null) {
             throw "Could not find " + target;
         }
-        return parseFloat(element.value);
+        const floatVal = parseFloat(element.value.replaceAll(",", ""));
+        return floatVal.toLocaleString("en-US");
     };
 
     const getDropdownValue = (target) => {
@@ -100,7 +102,8 @@ function parseSerializationFromUi(targetId) {
             "sellBuy": getSimpleNumber("sellBuy"),
             "quitBuy": getSimpleNumber("quitBuy"),
             "waitToSell": parseFloat(getDropdownValue("waitToSell")),
-            "rangeStd": parseFloat(getDropdownValue("rangeStd"))
+            "rangeStd": parseFloat(getDropdownValue("rangeStd")),
+            "useLogNorm": parseFloat(getDropdownValue("useLogNorm"))
         };
     };
 
@@ -225,12 +228,15 @@ class CodeGenUiUtil {
 
         const outputVariables = {};
         SIMPLE_VARIABLES.forEach((varName) => {
-            outputVariables[varName] = self._checkAndGetVar(inputVariables, varName);
+            outputVariables[varName] = self._formatNumber(
+                self._checkAndGetVar(inputVariables, varName)
+            );
         });
 
         const derived = {};
         derived["longTerm"] = outputVariables["waitToSell"] > 0.5;
         derived["highConfidence"] = outputVariables["rangeStd"] > 1.5;
+        derived["useLogNorm"] = outputVariables["useLogNorm"] > 0.5;
 
         const events = serialization["states"].map((x) => x["current"]);
         const simplifiedEvents = events.map((x) => self._simplifyEvent(x));
@@ -273,8 +279,8 @@ class CodeGenUiUtil {
             "quit": {"percent": 0},
             "buy": {"percent": 0, "amount": 0},
             "fail": {"percent": 0},
-            "sell": {"percent": 0, "amount": {"low": 0, "high": 0}, "shares": true},
-            "ipo": {"percent": 0, "amount": {"low": 0, "high": 0}, "shares": true},
+            "sell": {"percent": 0, "amount": {"low": 0, "high": 0}, "shares": false},
+            "ipo": {"percent": 0, "amount": {"low": 0, "high": 0}, "shares": false},
             "raise": {
                 "fmv": {"low": 0, "high": 0},
                 "dilute": {"low": 0, "high": 0},
@@ -293,23 +299,43 @@ class CodeGenUiUtil {
             },
             "sell": (x) => {
                 outputRecord["sell"]["percent"] = x["proba"] * 100;
-                outputRecord["sell"]["amount"]["low"] = x["target"]["low"];
-                outputRecord["sell"]["amount"]["high"] = x["target"]["high"];
+                outputRecord["sell"]["amount"]["low"] = self._formatNumber(
+                    x["target"]["low"]
+                );
+                outputRecord["sell"]["amount"]["high"] = self._formatNumber(
+                    x["target"]["high"]
+                );
                 outputRecord["sell"]["shares"] = x["target"]["units"] === "share";
             },
             "ipo": (x) => {
                 outputRecord["ipo"]["percent"] = x["proba"] * 100;
-                outputRecord["ipo"]["amount"]["low"] = x["target"]["low"];
-                outputRecord["ipo"]["amount"]["high"] = x["target"]["high"];
+                outputRecord["ipo"]["amount"]["low"] = self._formatNumber(
+                    x["target"]["low"]
+                );  
+                outputRecord["ipo"]["amount"]["high"] = self._formatNumber(
+                    x["target"]["high"]
+                );
                 outputRecord["ipo"]["shares"] = x["target"]["units"] === "share";
             },
             "raise": (x) => {
-                outputRecord["raise"]["fmv"]["low"] = x["target"]["fmvLow"];
-                outputRecord["raise"]["fmv"]["high"] = x["target"]["fmvHigh"];
-                outputRecord["raise"]["dilute"]["low"] = x["target"]["diluteLow"];
-                outputRecord["raise"]["dilute"]["high"] = x["target"]["diluteHigh"];
-                outputRecord["raise"]["delay"]["low"] = x["target"]["diluteLow"];
-                outputRecord["raise"]["delay"]["high"] = x["target"]["diluteHigh"];
+                outputRecord["raise"]["fmv"]["low"] = self._formatNumber(
+                    x["target"]["fmvLow"]
+                );
+                outputRecord["raise"]["fmv"]["high"] = self._formatNumber(
+                    x["target"]["fmvHigh"]
+                );
+                outputRecord["raise"]["dilute"]["low"] = self._formatNumber(
+                    x["target"]["diluteLow"]
+                );
+                outputRecord["raise"]["dilute"]["high"] = self._formatNumber(
+                    x["target"]["diluteHigh"]
+                );
+                outputRecord["raise"]["delay"]["low"] = self._formatNumber(
+                    x["target"]["delayLow"]
+                );
+                outputRecord["raise"]["delay"]["high"] = self._formatNumber(
+                    x["target"]["delayHigh"]
+                );
             }
         };
 
@@ -319,6 +345,11 @@ class CodeGenUiUtil {
         });
         
         return outputRecord;
+    }
+    
+    _formatNumber(target) {
+        const self = this;
+        return target.toLocaleString("en-US");
     }
 
     _getTemplate() {

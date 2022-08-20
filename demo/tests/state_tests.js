@@ -24,6 +24,7 @@ QUnit.module("SimulationState", function() {
         }
 
         const newState = new SimulationState();
+        newState.setValue("useLogNorm", 0);
         newState.setValue("ipoBuy", 100);
         newState.setValue("sellBuy", 90);
         newState.setValue("quitBuy", 50);
@@ -146,7 +147,7 @@ QUnit.module("SimulationState", function() {
             {"count": 67, "basis": 8}
         ]);
 
-        const expected = 34 * (12 - 1.1) + 67 * (12 - 1.1);
+        const expected = 34 * (12 - 5) + 67 * (12 - 8);
 
         assert.equal(proceeds, expected);
     });
@@ -207,11 +208,11 @@ QUnit.module("SimulationState", function() {
 
         assert.equal(history[0]["months"], 0);
         assert.equal(history[0]["count"], 100);
-        assert.ok(Math.abs(history[0]["basis"] - (100 * 1.2)) < 0.001);
+        assert.ok(Math.abs(history[0]["basis"] - 1.2) < 0.001);
 
         assert.equal(history[1]["months"], 23);
         assert.equal(history[1]["count"], 23);
-        assert.ok(Math.abs(history[1]["basis"] - (23 * 2.3)) < 0.001);
+        assert.ok(Math.abs(history[1]["basis"] - 2.3) < 0.001);
     });
 
     QUnit.test("get profit none", function(assert) {
@@ -238,14 +239,15 @@ QUnit.module("SimulationState", function() {
 
         const strikePaid = 123 * 1.1;
 
-        const proceedsPreTax = 123 * 4.5 - 123 * 1.1;
+        const proceedsPreTax = 100 * (4.5 - 1.2) + 23 * (4.5 - 2.3);
+        const income = 123 * 4.5;
         const longTermTax = proceedsPreTax * 0.2;
 
         const totalCosts = spreadTax + strikePaid + longTermTax;
-        const proceeds = proceedsPreTax - totalCosts;
+        const profit = income - totalCosts;
 
         newState.finalize();
-        assert.equal(newState.getProfit(), proceeds);
+        assert.equal(Math.round(newState.getProfit()), Math.round(profit));
     });
 
     QUnit.test("get profit short term", function(assert) {
@@ -267,17 +269,17 @@ QUnit.module("SimulationState", function() {
 
         const strikePaid = 123 * 1.1;
 
-        const proceedsPreTax1 = 100 * (4.5 - 1.1);
-        const proceedsPreTax2 = 23 * (4.5 - 1.1);
-        const proceedsPreTax = proceedsPreTax1 + proceedsPreTax2;
+        const proceedsPreTax1 = 100 * (4.5 - 1.2);
+        const proceedsPreTax2 = 23 * (4.5 - 2.3);
+        const totalIncome = 123 * 4.5;
         const longTermTax = proceedsPreTax1 * 0.2;
         const shortTermTax = proceedsPreTax2 * 0.33;
 
         const totalCosts = spreadTax + strikePaid + longTermTax + shortTermTax;
-        const proceeds = proceedsPreTax - totalCosts;
+        const profit = totalIncome - totalCosts;
 
         newState.finalize();
-        assert.ok(Math.abs(newState.getProfit() - proceeds) < 0.001);
+        assert.equal(Math.round(newState.getProfit()), Math.round(profit));
     });
 
     QUnit.test("get outcome", function(assert) {

@@ -1,9 +1,10 @@
 class SimulationResult {
 
-    constructor(months, profit) {
+    constructor(months, profit, events) {
         const self = this;
         self._months = months;
         self._profit = profit;
+        self._events = events;
     }
 
     getMonths() {
@@ -14,6 +15,11 @@ class SimulationResult {
     getProfit() {
         const self = this;
         return self._profit;
+    }
+    
+    getEvents() {
+        const self = this;
+        return self._events;
     }
 
 }
@@ -64,6 +70,7 @@ class SimulationState {
         self._assureValuePresent("longTermTax");
         self._assureValuePresent("waitToSell");
         self._assureValuePresent("rangeStd");
+        self._assureValuePresent("useLogNorm");
 
         // Grant info
         self._assureValuePresent("strikePrice");
@@ -186,14 +193,18 @@ class SimulationState {
         
         const spreadPerOption = self._fairMarketValue - self._strikePrice;
         const marginalSpread = numOptions * spreadPerOption;
-
-        self._totalSpread += marginalSpread;
+        const marginalSpreadSafe = marginalSpread < 0 ? 0 : marginalSpread;
+        
+        self._totalSpread += marginalSpreadSafe;
         self._numOptionsPurchased += numOptions;
+        
+        const spreadStr = Math.round(spreadPerOption * 100) / 100;
+        self.addEvent("Bought " + numOptions + " with spread " + spreadStr + " each.");
 
         self._purchaseHistory.push({
             "months": self._currentMonth,
             "count": numOptions,
-            "basis": numOptions * self._fairMarketValue
+            "basis": self._fairMarketValue
         });
     }
 
@@ -241,7 +252,12 @@ class SimulationState {
 
         const proceedsRegular = self._getProceedsPreTax(optionsRegularIncome);
         const proceedsLongTerm = self._getProceedsPreTax(optionsLongTerm);
-        const totalProceeds = proceedsRegular + proceedsLongTerm;
+        
+        // Determine total sale
+        const totalOptions = self._purchaseHistory.map(
+            (x) => x["count"]
+        ).reduce((a, b) => a + b, 0);
+        const totalSale = totalOptions * self._exitShare;
 
         // Sum up taxes
         const taxesRegular = proceedsRegular * self.getValue("regularIncomeTax") / 100;
@@ -250,9 +266,19 @@ class SimulationState {
 
         // Determine total spent on strike price
         const strikePaid = self._numOptionsPurchased * self.getValue("strikePrice");
+        
+        // Record
+        const message = [
+            "Sold " + Math.round(totalOptions),
+            " at " + Math.round(totalSale * 100) / 100,
+            " with taxes of " + Math.round((taxesRegular + taxesLongTerm) * 100) / 100,
+            " after tax on spread of " + Math.round(spreadTax * 100) / 100,
+            " for shares costing " + Math.round(strikePaid * 100) / 100
+        ].join("");
+        self.addEvent(message);
 
         // Determine profit
-        self._profit = totalProceeds - totalTaxes - strikePaid;
+        self._profit = totalSale - totalTaxes - strikePaid;
     }
 
     getProfit() {
@@ -281,7 +307,7 @@ class SimulationState {
         const profit = self.getProfit();
         const months = self.getDuration();
 
-        return new SimulationResult(months, profit);
+        return new SimulationResult(months, profit, self._events);
     }
 
     _getProceedsPreTax(options) {
@@ -291,11 +317,12 @@ class SimulationState {
             return 0;
         }
 
-        const proceedsPerShare = self._exitShare - self._strikePrice;
-
-        return options.map((x) => {
-            return x["count"] * proceedsPerShare;
+        const totalProfit = options.map((x) => {
+            const perShareProfit = self._exitShare - x["basis"];
+            return x["count"] * perShareProfit;
         }).reduce((a, b) => a + b);
+        
+        return totalProfit < 0 ? 0 : totalProfit;
     }
 
     _assureValuePresent(name) {

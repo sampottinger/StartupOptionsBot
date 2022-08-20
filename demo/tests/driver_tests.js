@@ -35,8 +35,8 @@ QUnit.module("Driver", function() {
         document.getElementById("uiNotSupported").style.display = "none";
         pushCodeToUrl(DEFAULT_CODE);
         showUiEditor("../templates/code_gen_ui.html");
-        assert.deepEqual(document.getElementById("uiEditor").style.display, "block");
         assert.deepEqual(document.getElementById("uiNotSupported").style.display, "none");
+        assert.deepEqual(document.getElementById("uiEditor").style.display, "block");
     });
 
     QUnit.test("generate UI from show UI editor", function(assert) {
@@ -73,8 +73,8 @@ QUnit.module("Driver", function() {
                 assert.equal(outsideDiv.getElementsByClassName("inner-event").length, 2);
 
                 const outputCode = removeWhitespace(getEditorCode());
-                assert.ok(outputCode.includes("totalGrant=123"));
-                assert.ok(outputCode.includes("c_0.55:ipo(2-3.5share)}"));
+                assert.ok(outputCode.includes("totalGrant=100"));
+                assert.ok(outputCode.includes("c_0.55:ipo(500,000,000"));
 
                 done();
             });

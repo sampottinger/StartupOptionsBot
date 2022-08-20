@@ -123,8 +123,8 @@ class CodeDeserializer {
         const diluteStr = diluteLow + "-" + diluteHigh + "%";
         const delayStr = delayLow + "-" + delayHigh + "months";
         
-        const components = [fmvStr, diluteStr, delayStr, nextBranchesStr];
-        const componentsStr = components.join(",");
+        const beforeThen = fmvStr + " diluting " + diluteStr + " wait " + delayStr;
+        const componentsStr = beforeThen + " then " + nextBranchesStr;
 
         return "raise(" + componentsStr + ")";
     }
