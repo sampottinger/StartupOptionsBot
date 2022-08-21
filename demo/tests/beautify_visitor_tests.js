@@ -11,4 +11,11 @@ QUnit.module("CompileVisitor", function() {
         assert.ok(visitor !== null);
     });
 
+    QUnit.test("beautify and read", function(assert) {
+        const result = getBeautified(EXAMPLE_PROGRAM_BEAUTIFY);
+        assert.equal(result.errors.length, 0);
+        const recompile = getCompiled(result.result);
+        assert.equal(recompile.errors.length, 0);
+    });
+
 });

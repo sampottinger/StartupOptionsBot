@@ -12,7 +12,7 @@ class BeautifyVisitor extends toolkit.StartUpOptionsBotLangVisitor {
     visitFail(ctx) {
         const self = this;
 
-        return "fail()";
+        return () => "fail()";
     }
 
     visitIpo(ctx) {
@@ -37,20 +37,23 @@ class BeautifyVisitor extends toolkit.StartUpOptionsBotLangVisitor {
         const delayLow = ctx.delaylow.accept(self);
         const delayHigh = ctx.delayhigh.accept(self);
 
-        const nextBranches = ctx.next.accept(self);
+        const nextBranchesFuture = ctx.next.accept(self);
 
-        const fmvSection = "raise(" + fmvLow + " - " + fmvHigh + " fmv";
-        const dilutingSection = " diluting " + diluteLow + " - " + diluteHigh + "%";
-        const delaySection = " wait " + delayLow + " - " + delayHigh + " months";
-        const thenSection = " then {\n" + nextBranches + "\n}";
+        return (depth) => {
+            const fmvSection = "raise(" + fmvLow + " - " + fmvHigh + " fmv";
+            const dilutingSection = " diluting " + diluteLow + " - " + diluteHigh;
+            const delaySection = " wait " + delayLow + " - " + delayHigh + " months";
+            const thenSection = " then {" + nextBranchesFuture(depth + 1) + "\n";
+            const thenTail = self._indent("})\n", depth);
 
-        return fmvSection + dilutingSection + delaySection + thenSection;
+            return fmvSection + dilutingSection + delaySection + thenSection + thenTail;
+        }
     }
 
     visitQuit(ctx) {
         const self = this;
 
-        return "quit()";
+        return () => "quit()";
     }
 
     visitBuy(ctx) {
@@ -58,7 +61,7 @@ class BeautifyVisitor extends toolkit.StartUpOptionsBotLangVisitor {
 
         const percentAmount = ctx.amount.accept(self);
 
-        return "buy(" + percentAmount + ")";
+        return () => "buy(" + percentAmount + ")";
     }
 
     visitPercent(ctx) {
@@ -89,23 +92,31 @@ class BeautifyVisitor extends toolkit.StartUpOptionsBotLangVisitor {
     visitBranch(ctx) {
         const self = this;
 
-        const chance = ctx.chance.accept(self);
-        const target = ctx.target.accept(self)[0];
-        return chance + ": " + target;
+        return (depth) => {
+            const chance = ctx.chance.accept(self);
+            const targetFuture = ctx.target.accept(self)[0];
+            const target = targetFuture(depth);
+            return chance + ": " + target;
+        };
     }
 
     visitBranches(ctx) {
         const self = this;
 
         const numChildren = ctx.getChildCount();
-        const outputChildrenStrs = []
+        const outputChildrenFutures = []
         for (let i = 1; i < numChildren; i += 2) {
             let curChild = ctx.getChild(i);
-            let parsedBranch = curChild.accept(self);
-            outputChildrenStrs.push(parsedBranch);
+            let parsedBranchFuture = curChild.accept(self);
+            outputChildrenFutures.push(parsedBranchFuture);
         }
 
-        return outputChildrenStrs.join("\n|");
+        return (depth) => {
+            const result = outputChildrenFutures.map(
+                (x) => x(depth)
+            ).join("\n" + self._indent("|", depth));
+            return "\n" + self._indent(result, depth);
+        }
     }
 
     visitName(ctx) {
@@ -143,7 +154,7 @@ class BeautifyVisitor extends toolkit.StartUpOptionsBotLangVisitor {
         const variables = ctx.header.accept(self);
         const states = ctx.body.accept(self);
 
-        return "[" + variables + "]\n{" + states + "}";
+        return "[" + variables + "]\n{" + states(1) + "}";
     }
 
     _createSellEvent(ctx, label) {
@@ -153,7 +164,15 @@ class BeautifyVisitor extends toolkit.StartUpOptionsBotLangVisitor {
         const high = ctx.high.accept(self);
         const units = ctx.unit.getText();
 
-        return label + "(" + low + " - " + high + " " + units + ")";
+        return () => label + "(" + low + " - " + high + " " + units + ")";
+    }
+
+    _indent(target, depth) {
+        let outputStr = "";
+        for (let i = 0; i < depth; i++) {
+            outputStr += "  ";
+        }
+        return outputStr + target;
     }
 
 }

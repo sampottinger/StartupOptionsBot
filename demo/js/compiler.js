@@ -8,6 +8,11 @@ function getSerialization(input) {
 }
 
 
+function getBeautified(input) {
+    return applyVisitor(input.replaceAll(",", ""), new BeautifyVisitor());
+}
+
+
 function applyVisitor(input, visitor) {
     const preVisitor = getProgram(input);
     if (preVisitor["errors"].length > 0) {
