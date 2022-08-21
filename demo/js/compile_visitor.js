@@ -10,7 +10,6 @@ class CompileVisitor extends toolkit.StartUpOptionsBotLangVisitor {
 
     visitPercent(ctx) {
         const self = this;
-
         return ctx.target.accept(self) / 100;
     }
 
@@ -41,7 +40,7 @@ class CompileVisitor extends toolkit.StartUpOptionsBotLangVisitor {
 
         const fmvLow = ctx.vlow.accept(self);
         const fmvHigh = ctx.vhigh.accept(self);
-        const diluteLow = ctx.dilutelow.accept(self);
+        const diluteLow = ctx.dilutelow.accept(self) / 100; // Quirk regarding percent sign.
         const diluteHigh = ctx.dilutehigh.accept(self);
         const delayLow = ctx.delaylow.accept(self);
         const delayHigh = ctx.delayhigh.accept(self);
