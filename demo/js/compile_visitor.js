@@ -47,6 +47,8 @@ class CompileVisitor extends toolkit.StartUpOptionsBotLangVisitor {
         const delayHigh = ctx.delayhigh.accept(self);
 
         const nextBranches = ctx.next.accept(self);
+        
+        console.log(diluteLow, diluteHigh);
 
         return (state) => {
             const rangeStd = state.getValue("rangeStd");
