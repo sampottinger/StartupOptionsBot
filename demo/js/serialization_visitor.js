@@ -31,7 +31,7 @@ class SerializationVisitor extends toolkit.StartUpOptionsBotLangVisitor {
 
         const fmvLow = ctx.vlow.accept(self);
         const fmvHigh = ctx.vhigh.accept(self);
-        const diluteLow = ctx.dilutelow.accept(self) / 100; // No percent sign
+        const diluteLow = ctx.dilutelow.accept(self);
         const diluteHigh = ctx.dilutehigh.accept(self);
         const delayLow = ctx.delaylow.accept(self);
         const delayHigh = ctx.delayhigh.accept(self);
