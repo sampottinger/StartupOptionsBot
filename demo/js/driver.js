@@ -46,7 +46,12 @@ function changeEditorVisibility(showCodeEditor, showUiEditor, showNotSupported) 
 
 
 function showCodeEditor() {
-    const code = getCodeFromUrl();
+    const codeRaw = getCodeFromUrl();
+    
+    const beautifyResult = getBeautified(codeRaw);
+    const beautifiedOk = beautifyResult.errors.length == 0
+    const code = beautifiedOk ? beautifyResult.result : codeRaw;
+    
     isUsingCodeEditor = true;
     changeEditorVisibility(true, false, false);
     document.getElementById("codeEditorInput").value = code;
