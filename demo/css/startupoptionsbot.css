@@ -126,6 +126,10 @@ header .subtitle {
     font-size: 15px;
 }
 
+.event-log {
+    font-size: 12px;
+}
+
 .mb-3 {
     margin-top: 1rem!important;
     margin-bottom: 2rem!important;
