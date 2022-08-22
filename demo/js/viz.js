@@ -12,12 +12,46 @@ class VisualizationPresenter {
     render(results) {
         const self = this;
         
+        self._renderTable(results);
+        
         self._clearDetailsContainer();
         self._renderDetailsContainer(results);
 
         self._clearSummaryContainer();
         const summarizedFrequencies = self._summarizeFrequencies(results);
         self._renderSummaryContainer(summarizedFrequencies);
+    }
+    
+    _renderTable(results) {
+        const self = this;
+        const profits = results.map((x) => x.getProfit()).sort();
+        
+        const roundAndFormat = (target) => {
+            const rounded = Math.round(target * 100) / 100;
+            return rounded.toLocaleString("en-US");
+        };
+        
+        const minProfit = roundAndFormat(Math.min(...profits));
+        const maxProfit = roundAndFormat(Math.max(...profits));
+        
+        const meanUnrounded = profits.reduce((a, b) => a + b) / profits.length;
+        const meanProfit = roundAndFormat(meanUnrounded);
+        
+        const medianIndexLow = Math.floor(profits.length / 2);
+        const medianIndexHigh = Math.ceil(profits.length / 2);
+        const medianLow = profits[medianIndexLow];
+        const medianHigh = profits[medianIndexHigh];
+        const medianProfit = roundAndFormat((medianLow + medianHigh) / 2);
+        
+        const minDisplay = document.getElementById("minDisplay");
+        const meanDisplay = document.getElementById("meanDisplay");
+        const medianDisplay = document.getElementById("medianDisplay");
+        const maxDisplay = document.getElementById("maxDisplay");
+        
+        minDisplay.innerHTML = minProfit;
+        meanDisplay.innerHTML = meanProfit;
+        medianDisplay.innerHTML = medianProfit;
+        maxDisplay.innerHTML = maxProfit;
     }
 
     _summarizeFrequencies(results) {
@@ -137,7 +171,10 @@ class VisualizationPresenter {
                         ).join("\n");
                         
                         const profit = Math.round(value["y"]);
-                        const message = "<ul>" + messageInner + "</ul> Profit: " + profit;
+                        const messageStart = "<ul class='event-log'>" + messageInner;
+                        const messageEnd = "</ul> Profit: " + profit;
+                        const message = messageStart + messageEnd;
+                        
                         vex.dialog.alert({
                             unsafeMessage: "<b>Simulation " + simNum + ":<b> " + "\n" + message
                         });

@@ -250,7 +250,25 @@ class CodeGenUiUtil {
             document.getElementById(targetId).innerHTML = result;
 
             self._associateValidChecks(targetId);
+            self._addInfoLinkListeners(targetId);
         }, (x) => console.log(x));
+    }
+    
+    _addInfoLinkListeners(targetId) {
+        const self = this;
+        const links = document.getElementsByClassName("info-link-code-ui");
+        if (links.length == 0) {
+            throw "No links.";
+        }
+        for (var i = 0; i < links.length; i++) {
+            const target = links.item(i);
+            target.addEventListener("click", (event) => {
+                const codeTarget = target.href.split("#")[1];
+                const code = document.getElementById(codeTarget).innerHTML;
+                vex.dialog.alert({unsafeMessage: code});
+                event.preventDefault();
+            });
+        }
     }
 
     _associateValidChecks() {
@@ -269,7 +287,7 @@ class CodeGenUiUtil {
                     target.classList.add("is-invalid");
                 }
             });
-        }      
+        }
     }
 
     _simplifyEvent(originalEvent) {

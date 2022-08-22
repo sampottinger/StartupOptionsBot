@@ -255,6 +255,12 @@ function runSimulations(numSimulations) {
 }
 
 
+function copyUrlToCb() {
+    navigator.clipboard.writeText(window.location.href);
+    vex.dialog.alert("Copied to clipboard.");
+}
+
+
 function init() {
     const disclaimerAgree = document.getElementById("disclaimerAgree");
     disclaimerAgree.addEventListener("click", () => {
@@ -282,5 +288,21 @@ function init() {
     runSimButton.addEventListener("click", () => {
         document.getElementById("outputs").style.display = "block";
         runSimulations();
+    });
+    
+    const shareButton = document.getElementById("shareButton");
+    shareButton.addEventListener("click", (event) => {
+        pushCurrentCodeToUrl();
+        const url = window.location.href;
+        const messagePrefix = "You can share or return to your work by going to: <br>";
+        const message = "<input class='form-control' type='text' value='" + url + "' readonly><br>";
+        const messageButton = "<button href='#' id='copyCbBtn' class='btn btn-outline-secondary'";
+        const messageClose = "onclick='copyUrlToCb()'>Copy to clipboard</button>";
+        
+        vex.dialog.alert({
+            unsafeMessage: messagePrefix + message + messageButton + messageClose
+        });
+        
+        event.preventDefault();
     });
 }

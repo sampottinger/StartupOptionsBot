@@ -56,14 +56,43 @@
                             <div class="intro">In addition to the UI editor, you can also program the simulation through a small <a href="#dsl" id="dslLink">domain specific language</a>.</div>
                             <textarea id="codeEditorInput" class="form-control"></textarea>
                         </div>
-                        <div id="uiNotSupported"></div>
+                        <div id="uiNotSupported">Whoops! It looks like there's either a code error or you ar using a lanugage feature not supported in the UI editor. Please use the code editor instead.</div>
                     </div>
                     <div id="simButtonHolder">
                         <a href="#outputs" id="runSimButton" class="btn btn-primary"><i class="bi bi-dice-3-fill"></i> Run Simulations</a>
+                        <a href="#outputs" id="shareButton" class="btn btn-outline-secondary"><i class="bi bi-box-arrow-up"></i> Share / Save</a>
                     </div>
                     <div id="outputs">
                         <div class="output-panel" id="runningSimDisplay"><i class="bi bi-hourglass-split"></i> Running please wait...</div>
                         <div class="output-panel" id="simOutputDisplay">
+                            <div id="outputTableContainer" class="subpanel">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Metric</th>
+                                            <th scope="col">Value</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>Min</td>
+                                            <td id="minDisplay"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Median</td>
+                                            <td id="medianDisplay"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Mean</td>
+                                            <td id="meanDisplay"></td>
+                                        </tr>
+                                        <tr>
+                                            <td>Max</td>
+                                            <td id="maxDisplay"></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
                             <div id="outputSummaryContainer" class="subpanel"></div>
                             <div id="outputDetailsContainer" class="subpanel"></div>
                         </div>
@@ -71,10 +100,54 @@
                 </div>
             </article>
             <footer>
-                Made by <a href="https://gleap.org">A Samuel Pottinger</a> and possibly other open source. <a href="https://github.com/sampottinger/incomegaps">Open source</a> using a number of <a href="https://github.com/sampottinger/incomegaps/blob/main/README.md#open-source">open source tools</a>. By using this site, you agree the <a href="https://github.com/sampottinger/incomegaps/blob/main/LICENSE">MIT license</a>. By using this page you agree to <a href="/terms.html">terms and conditions</a> as well as our <a href="privacy.html">privacy policy</a>. Views and opinions my own.
+                Made by <a href="https://gleap.org">A Samuel Pottinger</a> and possibly other open source. <a href="https://github.com/sampottinger/startupoptionsbot">Open source</a> using a number of <a href="https://github.com/sampottinger/startupoptionsbot/blob/main/README.md#open-source">open source tools</a>. By using this site, you agree the <a href="https://github.com/sampottinger/startupoptionsbot/blob/main/LICENSE">MIT license</a>. By using this page you agree to <a href="/terms.html">terms and conditions</a> as well as our <a href="privacy.html">privacy policy</a>. Views and opinions my own.
             </footer>
         </div>
     </body>
+    
+    <template id="infoFmv">
+        The fair market value (FMV) may impact the taxes you might pay when you purchase your options. Specifically, you may need to pay taxes on the "spread" or difference between your strike price and the FMV. <a target="_blank" href="https://every.to/p/what-should-you-do-with-your-options-during-a-downturn">Learn more about FMV and spread</a>.
+    </template>
+    
+    <template id="simulateFMVChanges">
+        The fair market value (FMV) may change over time. That said, this simulation only assumes changes between raise rounds. In other words, it assumes the FMV does not change year to year unless there is an additional round of funding. This simplification ignores some other outcomes like mergers and other major "material" events. <a target="_blank" href="https://capbase.com/when-do-i-need-a-409-a-valuation/">Learn more about 409a</a>.
+    </template>
+    
+    <template id="calculateFromPercentOwnership">
+        The simulation needs to know how much of the company you could own. The <a href="https://www.investopedia.com/terms/f/fullydilutedshares.asp" target="_blank">fully diluted shares</a> may change over time but, if you know your number of shares and (fully diluted) percent ownership, you can generally divide your number of options by your fully diluted percent ownership.
+    </template>
+    
+    <template id="taxSpread">
+        The taxes you pay on when you purchase your options depend on the options you received. <a href="https://every.to/p/what-should-you-do-with-your-options-during-a-downturn" target="_blank">NSOs are a simpler case to some extent</a>: they are generally taxed as ordinary income so you typically need to <a href="https://www.bankrate.com/taxes/tax-brackets/" target="_blank">know your tax bracket</a>. In contrast, <a href="https://manual.withcompound.com/chapters/stock-options-101" target="_blank">ISOs typically aren't taxed unless you pay alternative minimum tax</a> which gets a bit more complex and <a href="https://www.nerdwallet.com/article/taxes/alternative-minimum-tax-amt" target="_blank">has its own tax rates</a>.
+    </template>
+    
+    <template id="taxRegular">
+        This simulation assumes that your ordinary tax rates remain the same over time. That in mind, you need to <a href="https://www.bankrate.com/taxes/tax-brackets/" target="_blank">know your tax bracket</a> to understand the rate at which you would pay taxes on "ordinary" income. That said, this simulation also considers long term capital gains taxes.
+    </template>
+    
+    <template id="taxLongTerm">
+        If you hold on to your stock for more than a year, you may qualify for a lower "long term capital gains" tax rate. <a href="https://www.bankrate.com/investing/long-term-capital-gains-tax/" target="_blank">This has its own rates that are separate from ordinary income rates</a>.
+    </template>
+    
+    <template id="levelOfConfidence">
+        This simulation runs where the range represents either one or two standard deviations in a normal distribution from which random values are selected (this applies to normal distribution, alternatively see log normal option which is not typically enabled by default). In the high confidence case, the ranges are interpreted as two standard deviations. In the low confidence case, the ranges are interpreted as a single standard deviation.
+    </template>
+    
+    <template id="infoDilution">
+        The total number of shares may change over time with funding rounds, decreasing your overall ownership in the company. <a href="https://finerva.com/report/dilution-data-funding-rounds/" target="_blank">Learn more about dilutions</a>.
+    </template>
+    
+    <template id="logNormal">
+        In addition to the <a href="https://mathworld.wolfram.com/NormalDistribution.html" target="_blank">normal distribution</a>, the tool supports a <a target="_blank" href="https://mathworld.wolfram.com/LogNormalDistribution.html">log normal distribution</a>. That said, the mean and std are interpreted literally for normal distributions but, in contrast, the log normal uses mean = 0 and std = 0.5. One is subtracted from the result and this value is then multiplied by the standard deviation provided in the UI / code and the UI / code provided mean added.
+    </template>
+    
+    <template id="stockClasses">
+        Different stock comes with different features. Unfortunately, this can get quite complicated and company specific. This is referred to as <a href="https://www.upcounsel.com/classes-of-stock" target="_target">different "classes" of stocks</a>.
+    </template>
+    
+    <template id="mcmc">
+        <a href="https://www.ibm.com/cloud/learn/monte-carlo-simulation">Monte Carlo</a> refers to a statistical technique for running simulations in systems to generate a distribution of outcomes. This approach is used in many scenarios from <a href="https://gleap.org/static/special/mcmc-slime-mold/slime_mold.html">modeling natural systems</a> to <a href="https://www.anylogic.com/blog/monte-carlo-simulation-in-business/">business decision making</a>. Though other variables are used and this tool isn't technically using Markov Chain Monte Carlo, <a href="https://en.wikipedia.org/wiki/Markov_chain" target="_blank">Markov Chains</a> are used in systems where there are discrete states that one moves between and, for this tool, states refer to funding rounds.
+    </template>
 
     <script src="/third_party/d3.min.js"></script>
     <script src="/third_party/handlebars.min.js"></script>

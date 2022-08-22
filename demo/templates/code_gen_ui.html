@@ -7,7 +7,7 @@
                 <div class="mb-3">
                     <label for="totalGrant" class="form-label">Number of options</label>
                     <input type="text" class="form-control code-ui-input" id="totalGrant" aria-describedby="totalGrantHelp" value="{{ variables.totalGrant }}" pattern="[0-9,]+" required>
-                    <div id="totalGrantHelp" class="form-text">Total number of options granted.</div>
+                    <div id="totalGrantHelp" class="form-text">Total number of options granted.Note that this simulation does not <a href="#stockClasses" class="info-link-code-ui">consider different classes of stocks</a>.</div>
                 </div>
                 <div class="mb-3">
                     <label for="strikePrice" class="form-label">Strike price</label>
@@ -23,12 +23,12 @@
                         <span class="input-group-text">$</span>
                         <input type="text" class="form-control code-ui-input" id="strikePrice" aria-describedby="startFMVHelp" value="{{ variables.startFMV }}" pattern="([0-9,]+|[0-9,]+\.\d+)" required>
                     </div>
-                    <div id="startFMVHelp" class="form-text">Starting <a href="#info409a" class="info-409a-link">409A fair market value</a> per share. Note that this simulation will <a href="#simulateFMVChanges" id="simulateFMVChangesLink">simulate FMV changes</a> tied to new rounds.</div>
+                    <div id="startFMVHelp" class="form-text">Starting <a href="#infoFmv" class="info-409a-link info-link-code-ui">409A fair market value</a> per share. Note that this simulation will <a href="#simulateFMVChanges" id="simulateFMVChangesLink" class="info-link-code-ui">simulate FMV changes</a> tied to new rounds.</div>
                 </div>
                 <div class="mb-3">
                     <label for="startTotalShares" class="form-label">Start total shares</label>
                     <input type="text" class="form-control code-ui-input" id="startTotalShares" aria-describedby="startTotalSharesHelp" value="{{ variables.startTotalShares }}" pattern="[0-9,]+" required>
-                    <div id="startTotalSharesHelp" class="form-text">Starting fully diluted shares: shares you have plus shares you don't. You can also <a id="calculateFromPercentOwnershipLink" href="#calculateFromPercentOwnership">calculate this from your fully diluted percent ownership</a> in the company. Simulation will diluate shares with new raises.</div>
+                    <div id="startTotalSharesHelp" class="form-text">Starting fully diluted shares: shares you have plus shares you don't. You can also <a id="calculateFromPercentOwnershipLink" href="#calculateFromPercentOwnership" class="info-link-code-ui">calculate this from your fully diluted percent ownership</a> in the company. Simulation will diluate shares with new raises.</div>
                 </div>
             </p>
         </details>
@@ -63,7 +63,7 @@
                         <input type="text" class="form-control code-ui-input" id="optionTax" aria-describedby="optionTaxHelp" value="{{ variables.optionTax }}"pattern="(100|\d{1,2})" required>
                         <span class="input-group-text">%</span>
                     </div>
-                    <div id="optionTaxHelp" class="form-text">Effective tax rate on "spread" between your strike price and fair maket value. <a href="#taxSpread" id="taxSpreadLink">More info on taxes paid on spread</a>. Input value from 0 to 100.</div>
+                    <div id="optionTaxHelp" class="form-text">Effective tax rate on "spread" between your strike price and fair maket value. <a href="#taxSpread" id="taxSpreadLink" class="info-link-code-ui">More info on taxes paid on spread</a>. Input value from 0 to 100.</div>
                 </div>
                 <div class="mb-3">
                     <label for="regularIncomeTax" class="form-label">Effective regular income tax rate</label>
@@ -71,7 +71,7 @@
                         <input type="text" class="form-control code-ui-input" id="regularIncomeTax" aria-describedby="regularIncomeTaxHelp" value="{{ variables.regularIncomeTax }}" pattern="(100|\d{1,2})" required>
                         <span class="input-group-text">%</span>
                     </div>
-                    <div id="regularIncomeTaxHelp" class="form-text">Effective tax rate on short term gains / regular income. <a href="#taxRegular" id="taxRegularLink">More info on regular income taxes</a>. Input value from 0 to 100.</div>
+                    <div id="regularIncomeTaxHelp" class="form-text">Effective tax rate on short term gains / regular income. <a href="#taxRegular" id="taxRegularLink" class="info-link-code-ui">More info on regular income taxes</a>. Input value from 0 to 100.</div>
                 </div>
                 <div class="mb-3">
                     <label for="longTermTax" class="form-label">Effective long term tax rate</label>
@@ -79,7 +79,7 @@
                         <input type="text" class="form-control code-ui-input" id="longTermTax" aria-describedby="longTermTaxHelp" value="{{ variables.longTermTax }}" pattern="(100|\d{1,2})" required>
                         <span class="input-group-text">%</span>
                     </div>
-                    <div id="longTermTaxHelp" class="form-text">Effective tax rate on long term capital gains. <a href="#taxLongTerm" id="taxLongTermLink">More info on long term capital gains taxes</a>. Input value from 0 to 100.</div>
+                    <div id="longTermTaxHelp" class="form-text">Effective tax rate on long term capital gains. <a href="#taxLongTerm" id="taxLongTermLink" class="info-link-code-ui">More info on long term capital gains taxes</a>. Input value from 0 to 100.</div>
                 </div>
             </p>
         </details>
@@ -87,6 +87,9 @@
         <details id="statesDetails">
             <summary>States</summary>
             <p>
+                <p>
+                    This tool uses a series of states (where the term "state" comes from <a href="#mcmc" class="mcmc-link info-link-code-ui">Markov Chain Monte Carlo</a>, where this tool uses Monte Carlo). Each state corresponds to a fund raise round. The simulation will move to the next "state" each time it encounters a fund raise and will stop when there is some kind of "exit" event (like an IPO, the company sells, or the company fails). The first state is State 0.
+                </p>
                 <div class="first-event event-like">
                     <div class="mb-3">
                         <label for="startMonthLow" class="form-label">Delay till first state</label>
@@ -153,7 +156,7 @@
                                         <option value="total" {{#unless target.sell.shares}}selected{{/unless}}>total company USD value</option>
                                     </select>
                                 </div>
-                                <div id="sellHelp{{@index}}" class="form-text">Percent chance the company is sold / acquired at a particular value such that you can sell your shares at the given share value (or assuming the given total company value). Provide range of share values (see <a href="#levelOfConfidence" class="level-of-confidence-link">level of confidence</a>).</div>
+                                <div id="sellHelp{{@index}}" class="form-text">Percent chance the company is sold / acquired at a particular value such that you can sell your shares at the given share value (or assuming the given total company value). Provide range of share values (see <a href="#levelOfConfidence" class="level-of-confidence-link info-link-code-ui">level of confidence</a>).</div>
                             </div>
                         </div>
                         <div class="option">
@@ -170,7 +173,7 @@
                                         <option value="total" {{#unless this.ipo.shares}}selected{{/unless}}>total company USD value</option>
                                     </select>
                                 </div>
-                                <div id="ipoHelp{{@index}}" class="form-text">Percent chance the company has an initial public offering such that you can sell your shares at the given share value (or assuming the given total company value). Provide range of share values (see <a href="#levelOfConfidence" class="level-of-confidence-link">level of confidence</a>).</div>
+                                <div id="ipoHelp{{@index}}" class="form-text">Percent chance the company has an initial public offering. Note that the simulation assumes this is the price or valuation at which you can sell your shares but keep in mind there may be restrictions when shares can be sold which by change proceeds. Provide range of share values (see <a href="#levelOfConfidence" class="level-of-confidence-link info-link-code-ui">level of confidence</a>).</div>
                             </div>
                         </div>
                     </div>
@@ -193,7 +196,7 @@
                                     <input type="text" class="form-control code-ui-input" id="raiseFmvHigh{{@index}}" aria-describedby="raiseFmvHelp{{@index}}" value="{{ target.raise.fmv.high }}" pattern="([0-9,]+|[0-9,]+\.\d+)" required>
                                     <span class="input-group-text">USD</span>
                                 </div>
-                                <div id="raiseFmvHelp{{@index}}" class="form-text">Range of expected <a href="#info409a" class="info-409a-link">409A fair market values</a> after raise if one happens using <a href="#levelOfConfidence" class="level-of-confidence-link">range settings in simulation section</a>.</div>
+                                <div id="raiseFmvHelp{{@index}}" class="form-text">Range of expected <a href="#simulateFMVChanges" class="info-409a-link info-link-code-ui">409A fair market values</a> after raise if one happens using <a href="#levelOfConfidence" class="level-of-confidence-link info-link-code-ui">range settings in simulation section</a>.</div>
                             </div>
                             <div class="mb-3">
                                 <label for="raiseDiluteLow{{@index}}" class="form-label">Raise dilution</label>
@@ -203,7 +206,7 @@
                                     <input type="text" class="form-control code-ui-input" id="raiseDiluteHigh{{@index}}" aria-describedby="raiseDiluteHelp{{@index}}" value="{{ target.raise.dilute.high }}" pattern="(100|\d{1,2})" required>
                                     <span class="input-group-text">%</span>
                                 </div>
-                                <div id="raiseDiluteHelp{{@index}}" class="form-text">Range of expected <a href="#infoDilution" class="info-dilution-link">dilution</a> of shares using <a href="#levelOfConfidence" class="level-of-confidence-link">range settings in simulation section</a> if a raise happens.</div>
+                                <div id="raiseDiluteHelp{{@index}}" class="form-text">Range of expected <a href="#infoDilution" class="info-dilution-link info-link-code-ui">dilution</a> of shares using <a href="#levelOfConfidence" class="level-of-confidence-link info-link-code-ui">range settings in simulation section</a> if a raise happens.</div>
                             </div>
                             <div class="mb-3">
                                 <label for="raiseDelayLow{{@index}}" class="form-label">Delay after raise</label>
@@ -267,7 +270,7 @@
                         <option value="1" {{#unless derived.highConfidence}}selected{{/unless}}>Low confidence (ranges represent 68% of outcomes if normal).</option>
                         <option value="2" {{#if derived.highConfidence}}selected{{/if}}>High confidence (ranges represent 95% of outcomes if normal).</option>
                     </select>
-                    <div id="rangeStdHelp" class="form-text">Level of confidence you have in the ranges provided in the events section (like FMV, amount diluation, IPO share price etc). More <a href="#levelOfConfidence" class="level-of-confidence-link">info about level of confidence</a>.</div>
+                    <div id="rangeStdHelp" class="form-text">Level of confidence you have in the ranges provided in the events section (like FMV, amount diluation, IPO share price etc). More <a href="#levelOfConfidence" class="level-of-confidence-link info-link-code-ui">info about level of confidence</a>.</div>
                 </div>
                 <div class="mb-3">
                     <label for="useLogNorm" class="form-label">Company Value Distribution</label>
@@ -275,7 +278,7 @@
                         <option value="0" {{#unless derived.useLogNorm}}selected{{/unless}}>Normal Distribution</option>
                         <option value="1" {{#if derived.useLogNorm}}selected{{/if}}>Log Normal Distribution (use with caution)</option>
                     </select>
-                    <div id="useLogNormHelp" class="form-text">The type of distribution to use when simulating share or company value during sale or IPO. Though not recommended in most cases, <a href="">log normal is also supported</a>. In either case, this simulation does not <a href="">consider different classes of stocks</a>.
+                    <div id="useLogNormHelp" class="form-text">The type of distribution to use when simulating share or company value during sale or IPO. Though not recommended in most cases, <a href="#logNormal" class="info-link-code-ui">log normal is also supported</a>. In either case, this simulation does not <a href="#stockClasses" class="info-link-code-ui">consider different classes of stocks</a>.
                 </div>
             </p>
         </details>
