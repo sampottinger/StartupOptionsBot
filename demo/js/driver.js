@@ -301,7 +301,6 @@ function init() {
     });
     
     const fragment = window.location.hash;
-    console.log(fragment);
     if (fragment.startsWith("#code=")) {
         const code = unescape(fragment.replace("#code=", ""));
         pushCodeToState(code);
