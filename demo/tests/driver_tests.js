@@ -13,13 +13,13 @@ QUnit.module("Driver", function() {
     });
 
     QUnit.test("code to and from url", function(assert) {
-        pushCodeToUrl("test");
-        assert.deepEqual(getCodeFromUrl(), "test");
+        pushCodeToState("test");
+        assert.deepEqual(getCodeFromState(), "test");
     });
 
     QUnit.test("show code editor", function(assert) {
         document.getElementById("codeEditorInput").value = "";
-        pushCodeToUrl("test");
+        pushCodeToState("test");
         showCodeEditor();
         assert.deepEqual(document.getElementById("codeEditorInput").value, "test");
     });
@@ -33,14 +33,14 @@ QUnit.module("Driver", function() {
     QUnit.test("show UI editor supported", function(assert) {
         document.getElementById("uiEditor").style.display = "none";
         document.getElementById("uiNotSupported").style.display = "none";
-        pushCodeToUrl(DEFAULT_CODE);
+        pushCodeToState(DEFAULT_CODE);
         showUiEditor("../templates/code_gen_ui.html");
         assert.deepEqual(document.getElementById("uiNotSupported").style.display, "none");
         assert.deepEqual(document.getElementById("uiEditor").style.display, "block");
     });
 
     QUnit.test("generate UI from show UI editor", function(assert) {
-        pushCodeToUrl(DEFAULT_CODE);
+        pushCodeToState(DEFAULT_CODE);
         const done = assert.async();
         showUiEditor("../templates/code_gen_ui.html").then(() => {
             const outsideDiv = document.getElementById("codeUiBody");
@@ -52,7 +52,7 @@ QUnit.module("Driver", function() {
     QUnit.test("show UI editor not supported", function(assert) {
         document.getElementById("uiEditor").style.display = "none";
         document.getElementById("uiNotSupported").style.display = "none";
-        pushCodeToUrl("test");
+        pushCodeToState("test");
         showUiEditor("../templates/code_gen_ui.html");
         assert.deepEqual(document.getElementById("uiEditor").style.display, "none");
         assert.deepEqual(document.getElementById("uiNotSupported").style.display, "block");
@@ -64,7 +64,7 @@ QUnit.module("Driver", function() {
     });
 
     QUnit.test("cycleState", function(assert) {
-        pushCodeToUrl(DEFAULT_CODE);
+        pushCodeToState(DEFAULT_CODE);
         const done = assert.async();
         showUiEditor("../templates/code_gen_ui.html").then(() => {
 
@@ -82,7 +82,7 @@ QUnit.module("Driver", function() {
     });
 
     QUnit.test("add UI state", function(assert) {
-        pushCodeToUrl(DEFAULT_CODE);
+        pushCodeToState(DEFAULT_CODE);
         const done = assert.async();
         showUiEditor("../templates/code_gen_ui.html").then(() => {
             addUiState("../templates/code_gen_ui.html").then(() => {
@@ -94,7 +94,7 @@ QUnit.module("Driver", function() {
     });
 
     QUnit.test("remove UI state", function(assert) {
-        pushCodeToUrl(DEFAULT_CODE);
+        pushCodeToState(DEFAULT_CODE);
         const done = assert.async();
         showUiEditor("../templates/code_gen_ui.html").then(() => {
             removeUiState(1, "../templates/code_gen_ui.html").then(() => {
@@ -106,7 +106,7 @@ QUnit.module("Driver", function() {
     });
 
     QUnit.test("run simulations", function(assert) {
-        pushCodeToUrl(DEFAULT_CODE);
+        pushCodeToState(DEFAULT_CODE);
         const done = assert.async();
         
         document.getElementById("outputSummaryContainer").innerHTML = "";
