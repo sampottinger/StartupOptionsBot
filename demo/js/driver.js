@@ -216,7 +216,7 @@ function runSimulations(numSimulations) {
             pushCurrentCodeToUrl();
             const result = visitProgram(getCodeFromState());
             if (result.errors.length > 0) {
-                alert("Whoops! There's a coding error in your program: " + result.errors[0]);
+                vex.dialog.alert("Whoops! There's a coding error in your program: " + result.errors[0]);
                 cleanUpUi();
                 return;
             }
@@ -280,6 +280,7 @@ function init() {
     const runSimButton = document.getElementById("runSimButton");
     runSimButton.addEventListener("click", () => {
         document.getElementById("outputs").style.display = "block";
+        exampleNote.style.display = "none";
         runSimulations();
     });
     
@@ -300,11 +301,26 @@ function init() {
         event.preventDefault();
     });
     
+    const inlineUiEditLink = document.getElementById("inlineUiEditLink");
+    inlineUiEditLink.addEventListener("click", (event) => {
+        pushCurrentCodeToUrl();
+        showUiEditor();
+    });
+    
+    const inlineCodeEditLink = document.getElementById("inlineCodeEditLink");
+    inlineCodeEditLink.addEventListener("click", (event) => {
+        pushCurrentCodeToUrl();
+        showCodeEditor();
+    });
+    
     const fragment = window.location.hash;
+    const exampleNote = document.getElementById("exampleNote");
     if (fragment.startsWith("#code=")) {
         const code = unescape(fragment.replace("#code=", ""));
         pushCodeToState(code);
+        exampleNote.style.display = "none";
     } else {
         pushCodeToState(DEFAULT_CODE);
+        exampleNote.style.display = "inline-block";
     }
 }

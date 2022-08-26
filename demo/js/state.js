@@ -201,11 +201,13 @@ class SimulationState {
         const spreadStr = Math.round(spreadPerOption * 100) / 100;
         self.addEvent("Bought " + numOptions + " with spread " + spreadStr + " each.");
 
-        self._purchaseHistory.push({
-            "months": self._currentMonth,
-            "count": numOptions,
-            "basis": self._fairMarketValue
-        });
+        if (numOptions > 0) {
+            self._purchaseHistory.push({
+                "months": self._currentMonth,
+                "count": numOptions,
+                "basis": self._fairMarketValue
+            });
+        }
     }
 
     clearRemainingOptions() {

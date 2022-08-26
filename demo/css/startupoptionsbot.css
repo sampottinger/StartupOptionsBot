@@ -126,6 +126,11 @@ header .subtitle {
     font-size: 15px;
 }
 
+.editor-intro {
+    padding-bottom: 20px;
+    font-size: 12px;
+}
+
 .event-log {
     font-size: 12px;
 }

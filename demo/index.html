@@ -28,14 +28,14 @@
             <article id="toolSection">
                 <div id="disclaimerPanel">
                     <div>
-                        <div><span class="prefix"><i class="bi bi-exclamation-circle-fill"></i> Woah buddy.</span> We are talking money and probability. This is a free open source community project to demonstrate data science techniques. Please review and agree to the following below before continuing:</div>
+                        <div><span class="prefix"><i class="bi bi-exclamation-circle-fill"></i> Woah buddy.</span> We are talking money and probability. This is a free open source community project. Please review each linked document and agree before continuing:</div>
                         <ul>
-                            <li><a href="/disclaimer.html#website">You agree to our website disclaimer</a> in which, among other things, we have no liability of any kind as a result of using this website or its information. There may be bugs!</li>
+                            <li><a href="/disclaimer.html#website">You agree to our website disclaimer</a> in which, among other things, you agree to use this website at your own risk and we have no liability of any kind.</li>
                             <li><a href="/disclaimer.html#links">You agree to our external links disclaimer</a> in which, among other things, we have no liability of any kind for any third party websites linked from this website.</li>
-                            <li><a href="/disclaimer.html#financial">You agree to our financial and professional disclaimer</a> in which, among other things, we state we are not financial advisors, accountants, or attorneys and that this website does not provide financial advice. Consult a financial advisor.</li>
-                            <li><a href="/terms.html">You agree to our terms of service and privacy policy</a> in which, among other things, we affirm we do not use cookies plus the data you enter into this simulation stay in your browser and are not saved on our servers but different terms and privacy policies may be in place if you visit any other websites through the links on this site.</li>
+                            <li><a href="/disclaimer.html#financial">You agree to our financial and professional disclaimer</a> in which, among other things, we state we are not financial advisors, accountants, or attorneys and that this website does not provide financial advice. Consider consulting a financial advisor.</li>
+                            <li><a href="/terms.html">You agree to our terms of service and privacy policy</a> in which, among other things, we affirm that the simulation you build is not saved on our servers.</li>
                         </ul>
-                        <div class="btn-holder"><a href="#postDisclaimerPanel" class="btn btn-primary" id="disclaimerAgree">I have read and agree to the above.</a></div>
+                        <div class="btn-holder"><a href="#postDisclaimerPanel" class="btn btn-primary" id="disclaimerAgree">I agree to all</a></div>
                     </div>
                 </div>
                 <div id="postDisclaimerLoadingPanel">Please wait...</div>
@@ -50,10 +50,13 @@
                             </li>
                         </ul>
                         <div id="uiEditor">
+                            <div class="editor-intro">
+                                <span id="exampleNote">An example simulation has been loaded to help you get started.</span>
+                                You can design your simulation either through this UI-based wizard (recommended for most users) or through a domain specific language in the <a href="#codeEditor" id="inlineCodeEditLink">code editor</a>.</div>
                             <div id="codeUiBody"></div>
                         </div>
                         <div id="codeEditor">
-                            <div class="intro">In addition to the UI editor, you can also program the simulation through a small <a href="#dsl" id="dslLink">domain specific language</a>.</div>
+                            <div class="editor-intro">In addition to the <a href="#uiEditor" id="inlineUiEditLink">UI editor</a>, you can also program the simulation through a small <a href="#dsl" id="dslLink">domain specific language</a> with which you can define more complex simulations.</div>
                             <textarea id="codeEditorInput" class="form-control"></textarea>
                         </div>
                         <div id="uiNotSupported">Whoops! It looks like there's either a code error or you ar using a lanugage feature not supported in the UI editor. Please use the code editor instead.</div>
