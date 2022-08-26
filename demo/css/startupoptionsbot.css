@@ -139,6 +139,23 @@ header .subtitle {
     font-weight: bold;
 }
 
+.privacy-center {
+    text-align: center;
+}
+
+.privacy-section {
+    margin-bottom: 20px;
+    border-bottom: 1px solid black;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+.privacy-section .privacy-subsection {
+    border-top: 1px dotted black;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
 #disclaimersBody .button-holder {
     text-align: center;
     border-top: 1px solid black;
