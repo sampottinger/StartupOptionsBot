@@ -5,22 +5,13 @@ const NUM_SIMULATIONS = 10000;
 let isUsingCodeEditor = false;
 
 
-function getCodeFromUrl() {
-    const queryString = window.location.search;
-    const queryParams = new URLSearchParams(queryString);
-    const fromUrl = queryParams.get("code");
-    return fromUrl === null ? DEFAULT_CODE : fromUrl;
+function getCodeFromState() {
+    return document.getElementById("codeShadow").value.replace("code=", "");
 }
 
 
-function pushCodeToUrl(code) {
-    const startQueryString = window.location.search;
-    const searchParams = new URLSearchParams(startQueryString);
-    searchParams.set("code", code);
-    const newLocationBase = window.location.protocol + "//" + window.location.host;
-    const newLocationPath = window.location.pathname + '?' + searchParams.toString();
-    const newLocation = newLocationBase + newLocationPath;
-    window.history.pushState({"code": code}, "", newLocation);
+function pushCodeToState(code) {
+    document.getElementById("codeShadow").value = "code=" + code;
 }
 
 
@@ -46,7 +37,7 @@ function changeEditorVisibility(showCodeEditor, showUiEditor, showNotSupported) 
 
 
 function showCodeEditor() {
-    const codeRaw = getCodeFromUrl();
+    const codeRaw = getCodeFromState();
     
     const beautifyResult = getBeautified(codeRaw);
     const beautifiedOk = beautifyResult.errors.length == 0
@@ -60,7 +51,7 @@ function showCodeEditor() {
 
 function showUiEditor(templateUrl, targetId) {
     return new Promise((resolve) => {
-        const code = getCodeFromUrl();
+        const code = getCodeFromState();
         const serialization = getSerialization(code);
         const hasErrors = serialization.errors.length > 0;
         const isCodeUiSupported = !hasErrors && codeSupportedByUiEditor(serialization["result"]);
@@ -99,7 +90,7 @@ function cycleUiState(templateUrl) {
     
     const deserializer = new CodeDeserializer();
     const code = deserializer.serializationToCode(serialization);
-    pushCodeToUrl(code);
+    pushCodeToState(code);
 
     return showUiEditor(templateUrl);
 }
@@ -134,7 +125,7 @@ function addUiState(templateUrl) {
         
         const deserializer = new CodeDeserializer();
         const code = deserializer.serializationToCode(serialization);
-        pushCodeToUrl(code);
+        pushCodeToState(code);
     
         return showUiEditor(templateUrl).then(() => {
             makeFocusOnState(newIndex).then(() => {
@@ -152,7 +143,7 @@ function removeUiState(index, templateUrl) {
         
         const deserializer = new CodeDeserializer();
         const code = deserializer.serializationToCode(serialization);
-        pushCodeToUrl(code);
+        pushCodeToState(code);
     
         showUiEditor(templateUrl).then(() => {
             makeFocusOnState(index).then(() => {
@@ -192,7 +183,7 @@ function getEditorCode() {
 
 
 function pushCurrentCodeToUrl() {
-    pushCodeToUrl(getEditorCode());
+    pushCodeToState(getEditorCode());
 }
 
 
@@ -223,9 +214,9 @@ function runSimulations(numSimulations) {
     return new Promise((resolve, reject) => {
         setTimeout(() => {
             pushCurrentCodeToUrl();
-            const result = visitProgram(getCodeFromUrl());
+            const result = visitProgram(getCodeFromState());
             if (result.errors.length > 0) {
-                alert("Whoops! There's a coding error in your program: " + result.errors[0]);
+                vex.dialog.alert("Whoops! There's a coding error in your program: " + result.errors[0]);
                 cleanUpUi();
                 return;
             }
@@ -255,8 +246,10 @@ function runSimulations(numSimulations) {
 }
 
 
-function copyUrlToCb() {
-    navigator.clipboard.writeText(window.location.href);
+function copyCodeToCb() {
+    const code = getCodeFromState();
+    const saveUrl = "https://startupoptionsbot.com/#code=" + escape(code);
+    navigator.clipboard.writeText(saveUrl);
     vex.dialog.alert("Copied to clipboard.");
 }
 
@@ -287,17 +280,19 @@ function init() {
     const runSimButton = document.getElementById("runSimButton");
     runSimButton.addEventListener("click", () => {
         document.getElementById("outputs").style.display = "block";
+        exampleNote.style.display = "none";
         runSimulations();
     });
     
     const shareButton = document.getElementById("shareButton");
     shareButton.addEventListener("click", (event) => {
         pushCurrentCodeToUrl();
-        const url = window.location.href;
+        const code = getCodeFromState();
+        const saveUrl = "https://startupoptionsbot.com/#code=" + escape(code);
         const messagePrefix = "You can share or return to your work by going to: <br>";
-        const message = "<input class='form-control' type='text' value='" + url + "' readonly><br>";
+        const message = "<input class='form-control' type='text' value='" + saveUrl + "' readonly><br>";
         const messageButton = "<button href='#' id='copyCbBtn' class='btn btn-outline-secondary'";
-        const messageClose = "onclick='copyUrlToCb()'>Copy to clipboard</button>";
+        const messageClose = "onclick='copyCodeToCb()'>Copy to clipboard</button>";
         
         vex.dialog.alert({
             unsafeMessage: messagePrefix + message + messageButton + messageClose
@@ -305,4 +300,27 @@ function init() {
         
         event.preventDefault();
     });
+    
+    const inlineUiEditLink = document.getElementById("inlineUiEditLink");
+    inlineUiEditLink.addEventListener("click", (event) => {
+        pushCurrentCodeToUrl();
+        showUiEditor();
+    });
+    
+    const inlineCodeEditLink = document.getElementById("inlineCodeEditLink");
+    inlineCodeEditLink.addEventListener("click", (event) => {
+        pushCurrentCodeToUrl();
+        showCodeEditor();
+    });
+    
+    const fragment = window.location.hash;
+    const exampleNote = document.getElementById("exampleNote");
+    if (fragment.startsWith("#code=")) {
+        const code = unescape(fragment.replace("#code=", ""));
+        pushCodeToState(code);
+        exampleNote.style.display = "none";
+    } else {
+        pushCodeToState(DEFAULT_CODE);
+        exampleNote.style.display = "inline-block";
+    }
 }
