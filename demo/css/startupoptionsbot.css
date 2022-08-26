@@ -79,6 +79,10 @@ article #outputs .output-panel {
     border-top: 1px solid #C0C0C0;
 }
 
+article #outputs .output-panel h3 {
+    margin-top: 20px;
+}
+
 article #outputs .output-panel .subpanel {
     padding-top: 15px;
     padding-bottom: 15px;
@@ -128,7 +132,7 @@ header .subtitle {
 
 .editor-intro {
     padding-bottom: 20px;
-    font-size: 12px;
+    font-size: 13px;
 }
 
 .event-log {
