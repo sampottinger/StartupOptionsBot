@@ -280,7 +280,8 @@ class CodeGenUiUtil {
             const target = links.item(i);
             target.addEventListener("click", (event) => {
                 const codeTarget = target.href.split("#")[1];
-                const code = document.getElementById(codeTarget).innerHTML;
+                const codeInner = document.getElementById(codeTarget).innerHTML;
+                const code = "<div class='uiInfo'>" + codeInner + "</div>";
                 vex.dialog.alert({unsafeMessage: code});
                 event.preventDefault();
             });

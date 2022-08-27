@@ -190,3 +190,26 @@ header .subtitle {
     background-color: black;
     color: white;
 }
+
+
+@media (max-width: 700px) {
+    article #codeGenUiInner .input-group-text.wide-label {
+        display: none;
+    }
+    
+    #exampleNote {
+        display: block;
+        margin-bottom: 10px;
+    }
+    
+    article #codeGenUiInner .event-like {
+        margin-left: 0px;
+        margin-right: 0px;
+    }
+}
+
+@media (min-width: 700px) {
+    article #codeGenUiInner .input-group-text.narrow-label {
+        display: none;
+    }
+}

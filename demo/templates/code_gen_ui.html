@@ -40,17 +40,17 @@
                 <div class="mb-3">
                     <label for="startVestingMonths" class="form-label">Months till cliff</label>
                     <input type="text" class="form-control code-ui-input" id="startVestingMonths" aria-describedby="startVestingMonthsHelp" value="{{ variables.startVestingMonths }}" pattern="[0-9,]+"  required>
-                    <div id="startVestingMonthsHelp" class="form-text">Number of months until vesting starts.</div>
+                    <div id="startVestingMonthsHelp" class="form-text">Number of months until vesting starts. <a href="#cliff" class="info-link-code-ui">Learn more about cliffs.</a></div>
                 </div>
                 <div class="mb-3">
                     <label for="immediatelyVest" class="form-label">Immediately vest at cliff</label>
                     <input type="text" class="form-control code-ui-input" id="immediatelyVest" aria-describedby="immediatelyVestHelp" value="{{ variables.immediatelyVest }}" pattern="[0-9,]+" required>
-                    <div id="immediatelyVestHelp" class="form-text">Number of shares that will immedietly vest at cliff.</div>
+                    <div id="immediatelyVestHelp" class="form-text">Number of shares that will immedietly vest at cliff. <a href="#cliff" class="info-link-code-ui">Learn more about cliffs and vesting schedules</a>.</div>
                 </div>
                 <div class="mb-3">
                     <label for="monthlyVest" class="form-label">Monthly vest after cliff</label>
                     <input type="text" class="form-control code-ui-input" id="monthlyVest" aria-describedby="monthlyVestHelp" value="{{ variables.monthlyVest }}" pattern="[0-9,]+"  required>
-                    <div id="monthlyVestHelp" class="form-text">Number of shares vesting per month after cliff.</div>
+                    <div id="monthlyVestHelp" class="form-text">Number of shares vesting per month after cliff. <a href="#cliff" class="info-link-code-ui">Learn more about cliffs and vesting schedules</a>.</div>
                 </div>
             </p>
         </details>
@@ -183,9 +183,11 @@
                                 <label for="buyPercent{{@index}}" class="form-label">Buy</label>
                                 <div class="input-group">
                                     <input type="text" class="form-control code-ui-input" id="buyPercent{{@index}}" aria-describedby="buyHelp{{@index}}" value="{{ target.buy.percent }}" pattern="(100|\d{1,2})" required>
-                                    <span class="input-group-text">% chance of buying</span>
+                                    <span class="input-group-text wide-label">% chance of buying</span>
+                                    <span class="input-group-text narrow-label">% chance buy</span>
                                     <input type="text" class="form-control code-ui-input" id="buyAmount{{@index}}" aria-describedby="buyHelp{{@index}}" value="{{ target.buy.amount }}" pattern="(100|\d{1,2})" required>
-                                    <span class="input-group-text">% of your available options</span>
+                                    <span class="input-group-text wide-label">% of your available options</span>
+                                    <span class="input-group-text narrow-label">%</span>
                                 </div>
                                 <div id="buyHelp{{@index}}" class="form-text">Chance of you buying options (if you do not leave the company). This is the percent of your <a href="#yetPurchased" class="info-link-code-ui">yet to be purchased but vested options</a> at this stage.</div>
                             </div>
@@ -208,7 +210,8 @@
                                 <label for="sellPercent{{@index}}" class="form-label">Sell</label>
                                 <div class="input-group">
                                     <input type="text" class="form-control code-ui-input" id="sellPercent{{@index}}" aria-describedby="sellHelp{{@index}}" value="{{ target.sell.percent }}" pattern="(100|\d{1,2})" required>
-                                    <span class="input-group-text">% chance of selling at</span>
+                                    <span class="input-group-text wide-label">% chance of selling at</span>
+                                    <span class="input-group-text narrow-label">% at</span>
                                     <input type="text" class="form-control code-ui-input" id="sellAmountLow{{@index}}" aria-describedby="sellHelp{{@index}}" value="{{ target.sell.amount.low }}" pattern="([0-9,]+|[0-9,]+\.\d+)" required>
                                     <span class="input-group-text">to</span>
                                     <input type="text" class="form-control code-ui-input" id="sellAmountHigh{{@index}}" aria-describedby="sellHelp{{@index}}" value="{{ target.sell.amount.high }}" pattern="([0-9,]+|[0-9,]+\.\d+)" required>
@@ -225,7 +228,8 @@
                                 <label for="ipoPercent{{@index}}" class="form-label">IPO</label>
                                 <div class="input-group">
                                     <input type="text" class="form-control code-ui-input" id="ipoPercent{{@index}}" aria-describedby="ipoHelp{{@index}}" value="{{ target.ipo.percent }}" pattern="(100|\d{1,2})" required>
-                                    <span class="input-group-text">% chance of IPO at</span>
+                                    <span class="input-group-text wide-label">% chance of IPO at</span>
+                                    <span class="input-group-text narrow-label">% at</span>
                                     <input type="text" class="form-control code-ui-input" id="ipoAmountLow{{@index}}" aria-describedby="ipoHelp{{@index}}" value="{{ target.ipo.amount.low }}" pattern="([0-9,]+|[0-9,]+\.\d+)" required>
                                     <span class="input-group-text">to</span>
                                     <input type="text" class="form-control code-ui-input" id="ipoAmountHigh{{@index}}" aria-describedby="ipoHelp{{@index}}" value="{{ target.ipo.amount.high }}" pattern="([0-9,]+|[0-9,]+\.\d+)" required>

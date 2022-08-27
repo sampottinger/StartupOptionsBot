@@ -60,7 +60,7 @@
                             <div class="editor-intro">In addition to the <a href="#uiEditor" id="inlineUiEditLink">UI editor</a>, you can also program the simulation through a small <a href="https://github.com/sampottinger/StartupOptionsBot/blob/main/language.md" id="dslLink">domain specific language</a> with which you can define more complex simulations.</div>
                             <textarea id="codeEditorInput" class="form-control"></textarea>
                         </div>
-                        <div id="uiNotSupported">Whoops! It looks like there's either a code error or you ar using a lanugage feature not supported in the UI editor. Please use the code editor instead.</div>
+                        <div id="uiNotSupported">Whoops! It looks like there's either a code error or you are using a lanugage feature not supported in the UI editor. Please use the code editor instead.</div>
                     </div>
                     <div id="simButtonHolder">
                         <a href="#outputs" id="runSimButton" class="btn btn-primary"><i class="bi bi-dice-3-fill"></i> Run Simulations</a>
@@ -123,15 +123,15 @@
     </template>
     
     <template id="taxSpread">
-        The taxes you pay on when you purchase your options depend on the options you received. <a href="https://every.to/p/what-should-you-do-with-your-options-during-a-downturn" target="_blank">NSOs are a simpler case to some extent</a>: they are generally taxed as ordinary income so you typically need to <a href="https://www.bankrate.com/taxes/tax-brackets/" target="_blank">know your tax bracket</a>. In contrast, <a href="https://manual.withcompound.com/chapters/stock-options-101" target="_blank">ISOs typically aren't taxed unless you pay alternative minimum tax</a> which gets a bit more complex and <a href="https://www.nerdwallet.com/article/taxes/alternative-minimum-tax-amt" target="_blank">has its own tax rates</a>.
+        The taxes you may pay on when you purchase your options depend on the options you received. <a href="https://every.to/p/what-should-you-do-with-your-options-during-a-downturn" target="_blank">NSOs are a simpler case to some extent</a>: they are generally taxed as ordinary income so you typically need to <a href="https://www.bankrate.com/taxes/tax-brackets/" target="_blank">know your tax bracket</a>. In contrast, <a href="https://manual.withcompound.com/chapters/stock-options-101" target="_blank">ISOs may not be taxed unless you pay alternative minimum tax</a> which gets a bit more complex and <a href="https://www.nerdwallet.com/article/taxes/alternative-minimum-tax-amt" target="_blank">has its own tax rates</a>.
     </template>
     
     <template id="taxRegular">
-        This simulation assumes that your ordinary tax rates remain the same over time. That in mind, you need to <a href="https://www.bankrate.com/taxes/tax-brackets/" target="_blank">know your tax bracket</a> to understand the rate at which you would pay taxes on "ordinary" income. That said, this simulation also considers long term capital gains taxes.
+        This simulation assumes that ordinary tax rates remain the same over time. That in mind, you need to <a href="https://www.bankrate.com/taxes/tax-brackets/" target="_blank">know your tax bracket</a> to understand the rate at which you would pay taxes on "ordinary" income.
     </template>
     
     <template id="taxLongTerm">
-        If you hold on to your stock for a longer period of time, you may qualify for a different "long term capital gains" tax rate. <a href="https://www.bankrate.com/investing/long-term-capital-gains-tax/" target="_blank">This has its own rates that are separate from ordinary income rates</a>. This simulation assumes the required period to qualify for long term capital gains is one year from option exercise.
+        If one holds on to stock for a longer period of time, they may qualify for a different "long term capital gains" tax rate. <a href="https://www.bankrate.com/investing/long-term-capital-gains-tax/" target="_blank">This has its own rates that are separate from ordinary income rates</a>. This simulation assumes the required period to qualify for long term capital gains is one year from option exercise.
     </template>
     
     <template id="levelOfConfidence">
@@ -141,7 +141,7 @@
     </template>
     
     <template id="infoDilution">
-        The total number of shares may change over time with funding rounds, decreasing your overall ownership in the company. <a href="https://finerva.com/report/dilution-data-funding-rounds/" target="_blank">Learn more about dilutions</a>.
+        The total number of shares may change over time with funding rounds, potentially decreasing your overall ownership in the company. <a href="https://finerva.com/report/dilution-data-funding-rounds/" target="_blank">Learn more about dilutions</a>.
     </template>
     
     <template id="logNormal">
@@ -187,6 +187,10 @@
     
     <template id="quitOptions">
         Often, employees have a limited window in which to exercise after leaving a company but additional options will not continue to vest. That said, as with most things related to options, your specific situation and choices may vary depending on the company. <a target="_blank" href="https://darrowwealthmanagement.com/blog/what-happens-to-stock-options-if-i-leave-the-company/">Learn more about what happens when you leave</a>.
+    </template>
+    
+    <template id="cliff">
+        Typically there will be some delay before options start vesting. The date when vesting starts is the "cliff" and sometimes a larger number of shares will vest then compared to what one typically sees periodically vest after the cliff. <a href="https://carta.com/blog/equity-101-stock-option-basics/#vesting" target="_blank">Learn more about vesting schedules</a>.
     </template>
     
     <input id="codeShadow" type="hidden">
