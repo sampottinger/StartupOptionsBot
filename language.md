@@ -78,6 +78,7 @@ Branches contain multiple actions in the following form:
 ```
 {
     actor_probability: action
+    | actor_probability: action
 }
 ```
 
@@ -96,6 +97,40 @@ Probabilities
 Probabilities are represented as "finite" probabilities or "else".
 
  - **Finite**: Finite probabilities should be expressed as 0 to 1 with 0 being (essentially) zero probability and 1 being 100% probability. Probabilities below 0.0001 are treated as zero.
- - **Else**: If all probabilities for an actor on a state add up to less than 1, an else probability is chosen if available. If there are multiple else branches, one is chosen at random with equal probability of selection.
+ - **else**: If all probabilities for an actor on a state add up to less than 1, an else probability is chosen if available. If there are multiple else branches, one is chosen at random with equal probability of selection.
 
-If probabilities add up to more than 1, an error is generated (with some tollerance for floating point imprecision). If probabilities add up to less than 1, an `else` branch is chosen if one of the other branches with a finite probability is not selected. Note that only up to one action is chosen per actor per branches set for each simulation.
+If probabilities add up to more than 1, an error is generated (with some tollerance for floating point imprecision). If probabilities add up to less than 1, an `else` branch is chosen if one of the other branches with a finite probability is not selected. Note that only up to one action is chosen per actor per branches set for each simulation (mutually exclusive actions).
+
+<br>
+
+Actions
+-------------------------------------------------------------------------------
+The simulation starts in state 0 and then moves to the next state for each raise. In other words, each state represents a round of funding with some delay between. The simulation ends (reaches a terminal state) when there is an exit event (fail, IPO, sell). Note that simulations do not consider options which vest after IPO or sale. [See more about states](https://en.wikipedia.org/wiki/Markov_chain). The following actions are available:
+
+ - **fail()**: Takes no arguments and assumes company share value becomes effecively zero. Will not consider [different classes of stocks](https://www.upcounsel.com/classes-of-stock). Example: `fail()`.
+ - **sell([low] - [high] [units])**: The company sells or merges with another company such that stocks can be sold afterwards. The range is two numbers separated by a dash followed by units of either "total" (total company value) or "share" (per share value). Example: `sell(500,000,000 - 1,000,000,000 total)`.
+ - **ipo([low] - [high] [units])**: The company has an initial public offering such that stocks can be sold afterwards. The range at which shares can be sold is two numbers separated by a dash followed by units of either "total" (total company value) or "share" (per share value). Example: `ipo(500,000,000 - 1,000,000,000 total)`. Note that this assumes the price at which shraes can acutally be sold after [lockup period](https://www.ipohub.org/ipo-lockups-overview-and-exceptions) or equivalent.
+ - **raise([low] - [high] fmv diluting [low] - [high]% wait [low] - [high] months then { branches })**: The company does a new fund raise, moving into the provided set of branches. The first range defines the new [FMV](https://every.to/p/what-should-you-do-with-your-options-during-a-downturn), percent of [dilution](https://finerva.com/report/dilution-data-funding-rounds/) (0 - 100 values), wait until next state in months (months before next branches evaluated), and then a new set of branches. Those branches will only be visited if the raise happens. Example: `raise(2 - 3 fmv diluting 10 - 20% wait 12 - 24 months then {...})`.
+ - **quit()**: Action in which the employee is simulated to have left their position. Assumes no [acceleration](https://www.cooleygo.com/what-are-single-and-double-trigger-acceleration-and-how-do-they-work/). Example: `quit()`.
+ - **buy([amount]%)**: Simulates employee exercising a certain percent of "available" options. Available here means options which have vested but not yet exercised. Example: `buy(10%)`.
+
+Commas are allowed (and ignored) for parameter values as desired for readability.
+
+<br>
+
+Example
+-------------------------------------------------------------------------------
+Below is a simple example simulation:
+
+```
+[totalGrant=100 strikePrice=1 startFMV=1 startTotalShares=100,000 startVestingMonths=10 immediatelyVest=20 monthlyVest=10 optionTax=26 regularIncomeTax=33 longTermTax=20 startMonthLow=5 startMonthHigh=15 ipoBuy=100 sellBuy=90 quitBuy=90 waitToSell=0 rangeStd=2 useLogNorm=0]
+{
+  e_0.1: buy(80%)
+  |c_0.4: sell(100,000,000 - 500,000,000 share)
+  |c_0.1: ipo(500,000,000 - 1,000,000,000 total)
+  |c_else: raise(2 - 3 fmv diluting 10 - 20% wait 12 - 24 months then {
+    c_0.45: sell(200,000,000 - 700,000,000 total)
+    |c_0.55: ipo(500,000,000 - 1,500,000,000 total)
+  })
+}
+```
