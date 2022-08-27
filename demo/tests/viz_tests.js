@@ -50,7 +50,6 @@ QUnit.module("VizTest", function() {
         const dataset = makeSampleDataset();
         const summary = presenter._summarizeFrequencies(dataset);
         assert.equal(summary.length, 10);
-        console.log(summary[7]["profit"]);
         assert.ok(Math.abs(summary[7]["profit"] - 7.5) < 0.001);
         assert.ok(Math.abs(summary[7]["count"] - 18.1818) < 1);
     });
