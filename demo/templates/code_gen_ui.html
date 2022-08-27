@@ -1,13 +1,14 @@
 <div id="codeGenUiInner">
     <form novalidate>
         <div class="intro">Please click into the sections below before clicking run when ready.</div>
+        
         <details>
             <summary>Grant</summary>
             <p>
                 <div class="mb-3">
                     <label for="totalGrant" class="form-label">Number of options</label>
                     <input type="text" class="form-control code-ui-input" id="totalGrant" aria-describedby="totalGrantHelp" value="{{ variables.totalGrant }}" pattern="[0-9,]+" required>
-                    <div id="totalGrantHelp" class="form-text">Total number of options granted.Note that this simulation does not <a href="#stockClasses" class="info-link-code-ui">consider different classes of stocks</a>.</div>
+                    <div id="totalGrantHelp" class="form-text">Total number of options granted. Note that this simulation does not <a href="#stockClasses" class="info-link-code-ui">consider different classes of stocks</a>.</div>
                 </div>
                 <div class="mb-3">
                     <label for="strikePrice" class="form-label">Strike price</label>
@@ -63,7 +64,7 @@
                         <input type="text" class="form-control code-ui-input" id="optionTax" aria-describedby="optionTaxHelp" value="{{ variables.optionTax }}"pattern="(100|\d{1,2})" required>
                         <span class="input-group-text">%</span>
                     </div>
-                    <div id="optionTaxHelp" class="form-text">Effective tax rate on "spread" between your strike price and fair maket value. <a href="#taxSpread" id="taxSpreadLink" class="info-link-code-ui">More info on taxes paid on spread</a>. Input value from 0 to 100.</div>
+                    <div id="optionTaxHelp" class="form-text">Effective tax rate on "spread" between your strike price and fair maket value from options. <a href="#taxSpread" id="taxSpreadLink" class="info-link-code-ui">More info on taxes paid on spread</a>. Input value from 0 to 100. Note <a href="#otherTax" class="info-link-code-ui">state, local, and other taxes may apply to spread</a>.</div>
                 </div>
                 <div class="mb-3">
                     <label for="regularIncomeTax" class="form-label">Effective regular income tax rate</label>
@@ -71,7 +72,7 @@
                         <input type="text" class="form-control code-ui-input" id="regularIncomeTax" aria-describedby="regularIncomeTaxHelp" value="{{ variables.regularIncomeTax }}" pattern="(100|\d{1,2})" required>
                         <span class="input-group-text">%</span>
                     </div>
-                    <div id="regularIncomeTaxHelp" class="form-text">Effective tax rate on short term gains / regular income. <a href="#taxRegular" id="taxRegularLink" class="info-link-code-ui">More info on regular income taxes</a>. Input value from 0 to 100.</div>
+                    <div id="regularIncomeTaxHelp" class="form-text">Effective tax rate on short term gains / regular income from options. <a href="#taxRegular" id="taxRegularLink" class="info-link-code-ui">More info on regular income taxes</a>. Input value from 0 to 100. Note there may be <a href="#otherTax" class="info-link-code-ui">other taxes which need to be included for short term gains</a>.</div>
                 </div>
                 <div class="mb-3">
                     <label for="longTermTax" class="form-label">Effective long term tax rate</label>
@@ -79,13 +80,73 @@
                         <input type="text" class="form-control code-ui-input" id="longTermTax" aria-describedby="longTermTaxHelp" value="{{ variables.longTermTax }}" pattern="(100|\d{1,2})" required>
                         <span class="input-group-text">%</span>
                     </div>
-                    <div id="longTermTaxHelp" class="form-text">Effective tax rate on long term capital gains. <a href="#taxLongTerm" id="taxLongTermLink" class="info-link-code-ui">More info on long term capital gains taxes</a>. Input value from 0 to 100.</div>
+                    <div id="longTermTaxHelp" class="form-text">Effective tax rate on long term capital gains from options. <a href="#taxLongTerm" id="taxLongTermLink" class="info-link-code-ui">More info on long term capital gains taxes</a>. Input value from 0 to 100. Note there may be <a href="#otherTax" class="info-link-code-ui">other taxes which need to be included for long term capital gains.</a></div>
+                </div>
+            </p>
+        </details>
+        
+        <details>
+            <summary>Strategy</summary>
+            <p>
+                <div class="mb-3">
+                    <label for="ipoBuy" class="form-label">Percent to buy if IPO</label>
+                    <div class="input-group">
+                        <input type="text" class="form-control code-ui-input" id="ipoBuy" aria-describedby="ipoBuyHelp" value="{{ variables.ipoBuy }}" pattern="(100|\d{1,2})" required>
+                        <span class="input-group-text">%</span>
+                    </div>
+                    <div id="ipoBuyHelp" class="form-text">Percent of remaining shares to buy if there is an initial public offering. Input value from 0 to 100. Note that this assumes no <a href="#acceleration" class="info-link-code-ui">acceleration</a> and <a href="#notYetVested" class="info-link-code-ui">will not simulate buying options which vest after IPO</a>.</div>
+                </div>
+                <div class="mb-3">
+                    <label for="sellBuy" class="form-label">Percent to buy if company sold</label>
+                    <div class="input-group">
+                        <input type="text" class="form-control code-ui-input" id="sellBuy" aria-describedby="sellBuyHelp" value="{{ variables.sellBuy }}" pattern="(100|\d{1,2})" required>
+                        <span class="input-group-text">%</span>
+                    </div>
+                    <div id="sellBuyHelp" class="form-text">Percent of remaining shares to buy if the company is sold. Input value from 0 to 100. Note that this assumes no <a href="#acceleration" class="info-link-code-ui">acceleration</a> and <a href="#notYetVested" class="info-link-code-ui">will not simulate buying options which vest after sale</a>.</div>
+                </div>
+                <div class="mb-3">
+                    <label for="quitBuy" class="form-label">Percent to buy if quit</label>
+                    <div class="input-group">
+                        <input type="text" class="form-control code-ui-input" id="quitBuy" aria-describedby="quitBuyHelp" value="{{ variables.sellBuy }}" pattern="(100|\d{1,2})" required>
+                        <span class="input-group-text">%</span>
+                    </div>
+                    <div id="quitBuyHelp" class="form-text">Percent of remaining shares to buy if you leave your job. Input value from 0 to 100. Note that this assumes no <a href="#acceleration" class="info-link-code-ui">acceleration</a> and <a href="#quitOptions" class="info-link-code-ui">no opportunity to purchase stocks not yet vested</a>.</div>
+                </div>
+                <div class="mb-3">
+                    <label for="waitToSell" class="form-label">Tax optimization</label>
+                    <select class="form-select" id="waitToSell" aria-describedby="waitToSellHelp">
+                        <option value="0" {{#unless derived.longTerm}}selected{{/unless}}>Sell options as soon as possible.</option>
+                        <option value="1" {{#if derived.longTerm}}selected{{/if}}>Sell after all options are long term capital gains.</option>
+                    </select>
+                    <div id="waitToSellHelp" class="form-text">Strategy to use to reduce tax rate. Simulation supports either selling all options right away or <a href="#taxLongTerm" class="info-link-code-ui">waiting to sell in order to gain potentially favorable tax rates</a>.</div>
+                </div>
+            </p>
+        </details>
+        
+        <details>
+            <summary>Simulation</summary>
+                <div class="mb-3">
+                    <label for="rangeStd" class="form-label">Range confidence</label>
+                    <select class="form-select" id="rangeStd" aria-describedby="rangeStdHelp">
+                        <option value="1" {{#if derived.lowConfidence}}selected{{/if}}>Low confidence</option>
+                        <option value="2" {{#if derived.moderateConfidence}}selected{{/if}}>Moderate confidence (recommended)</option>
+                        <option value="3" {{#if derived.highConfidence}}selected{{/if}}>High confidence</option>
+                    </select>
+                    <div id="rangeStdHelp" class="form-text">Level of confidence you have in the ranges provided in the events section (like FMV, amount diluation, IPO share price etc). More <a href="#levelOfConfidence" class="level-of-confidence-link info-link-code-ui">info about level of confidence</a>.</div>
+                </div>
+                <div class="mb-3">
+                    <label for="useLogNorm" class="form-label">Company Value Distribution</label>
+                    <select class="form-select" id="useLogNorm" aria-describedby="useLogNormHelp">
+                        <option value="0" {{#unless derived.useLogNorm}}selected{{/unless}}>Normal Distribution (recommended)</option>
+                        <option value="1" {{#if derived.useLogNorm}}selected{{/if}}>Log Normal Distribution (use with caution)</option>
+                    </select>
+                    <div id="useLogNormHelp" class="form-text">The type of distribution to use when simulating share or company value during sale or IPO. Though not recommended in most cases, <a href="#logNormal" class="info-link-code-ui">log normal is also supported</a>. In either case, this simulation does not <a href="#stockClasses" class="info-link-code-ui">consider different classes of stocks</a>.
                 </div>
             </p>
         </details>
 
         <details id="statesDetails">
-            <summary>States</summary>
+            <summary>Events</summary>
             <p>
                 <p>
                     Each state corresponds to a fund raise round (term "state" comes from <a href="#mcmc" class="mcmc-link info-link-code-ui">Markov Chain Monte Carlo</a>). The simulation will progress through these states <a href="#simStop" class="info-link-code-ui">until encountering an exit</a> (sale, IPO, etc).
@@ -126,7 +187,7 @@
                                     <input type="text" class="form-control code-ui-input" id="buyAmount{{@index}}" aria-describedby="buyHelp{{@index}}" value="{{ target.buy.amount }}" pattern="(100|\d{1,2})" required>
                                     <span class="input-group-text">% of your available options</span>
                                 </div>
-                                <div id="buyHelp{{@index}}" class="form-text">Chance of you buying the given percent of your options. This is the percent of your <a href="#yetPurchased" class="info-link-code-ui">yet to be purchased but vested options</a> at this stage.</div>
+                                <div id="buyHelp{{@index}}" class="form-text">Chance of you buying options (if you do not leave the company). This is the percent of your <a href="#yetPurchased" class="info-link-code-ui">yet to be purchased but vested options</a> at this stage.</div>
                             </div>
                         </div>
                     </div>
@@ -156,7 +217,7 @@
                                         <option value="total" {{#unless target.sell.shares}}selected{{/unless}}>total company USD value</option>
                                     </select>
                                 </div>
-                                <div id="sellHelp{{@index}}" class="form-text">Percent chance the company is sold / acquired at a particular value. This is the <a href="#sellPrice" class="info-link-code-ui">value at which you can sell your shares</a>. Provide range of share values (see <a href="#levelOfConfidence" class="level-of-confidence-link info-link-code-ui">level of confidence</a>).</div>
+                                <div id="sellHelp{{@index}}" class="form-text">Percent chance the company is sold / acquired at a particular value. This is the <a href="#sellPrice" class="info-link-code-ui">value at which you can sell your shares</a>. Provide range of values (see <a href="#levelOfConfidence" class="level-of-confidence-link info-link-code-ui">level of confidence</a>).</div>
                             </div>
                         </div>
                         <div class="option">
@@ -173,7 +234,7 @@
                                         <option value="total" {{#unless this.ipo.shares}}selected{{/unless}}>total company USD value</option>
                                     </select>
                                 </div>
-                                <div id="ipoHelp{{@index}}" class="form-text">Percent chance the company has an initial public offering. Note that the simulation assumes this is <a href="#sellPrice" class="info-link-code-ui">the value at which you can sell your shares</a> but keep in mind there may be <a href="#sellPrice" class="info-link-code-ui">restrictions on when shares can be sold</a> which may change proceeds. Provide range of share values (see <a href="#levelOfConfidence" class="level-of-confidence-link info-link-code-ui">level of confidence</a>).</div>
+                                <div id="ipoHelp{{@index}}" class="form-text">Percent chance the company has an initial public offering. Note that the simulation assumes this is <a href="#sellPrice" class="info-link-code-ui">the value at which you can sell your shares</a> but keep in mind there may be <a href="#sellPrice" class="info-link-code-ui">restrictions on when shares can be sold</a> which may change proceeds. Provide range of values (see <a href="#levelOfConfidence" class="level-of-confidence-link info-link-code-ui">level of confidence</a>).</div>
                             </div>
                         </div>
                     </div>
@@ -186,7 +247,7 @@
                                     <input type="text" class="form-control code-ui-input" id="raisePercent{{@index}}" aria-describedby="raisePercentHelp{{@index}}" value="else" disabled>
                                     <span class="input-group-text">%</span>
                                 </div>
-                                <div id="raisePercentHelp{{@index}}" class="form-text">Percent chance the company has a fund raise. This is read only, it is 100% minus the probability of failing, selling, or having an IPO. If there is a raise, the simulation will go to the next state. Otherwise, it will terminate.</div>
+                                <div id="raisePercentHelp{{@index}}" class="form-text">Percent chance the company has a fund raise. This is 100% minus the probability of failing, selling, or having an IPO. If there is a raise, the simulation will go to the next state. Otherwise, it will terminate.</div>
                             </div>
                             <div class="mb-3">
                                 <label for="raiseFmvLow{{@index}}" class="form-label">Raise FMV</label>
@@ -215,7 +276,7 @@
                                     <span class="input-group-text">to</span>
                                     <input type="text" class="form-control code-ui-input" id="raiseDelayHigh{{@index}}" aria-describedby="raiseDelayHelp{{@index}}" value="{{ target.raise.delay.high }}" pattern="[0-9,]+"  required>
                                 </div>
-                                <div id="raiseDelayHelp{{@index}}" class="form-text">Delay between raise if one happens to next state.</div>
+                                <div id="raiseDelayHelp{{@index}}" class="form-text">Delay between the raise and the next state.</div>
                             </div>
                         </div>
                     </div>
@@ -229,58 +290,5 @@
             </p>
         </details>
 
-        <details>
-            <summary>Simulation</summary>
-            <p>
-                <div class="mb-3">
-                    <label for="ipoBuy" class="form-label">Percent to buy if IPO</label>
-                    <div class="input-group">
-                        <input type="text" class="form-control code-ui-input" id="ipoBuy" aria-describedby="ipoBuyHelp" value="{{ variables.ipoBuy }}" pattern="(100|\d{1,2})" required>
-                        <span class="input-group-text">%</span>
-                    </div>
-                    <div id="ipoBuyHelp" class="form-text">Percent of remaining shares to buy if there is an initial public offering. Input value from 0 to 100. Note that this assumes no <a href="#acceleration" class="info-link-code-ui">acceleration</a> and <a href="#notYetVested" class="info-link-code-ui">will not simulate buying options which vest after IPO</a>.</div>
-                </div>
-                <div class="mb-3">
-                    <label for="sellBuy" class="form-label">Percent to buy if company sold</label>
-                    <div class="input-group">
-                        <input type="text" class="form-control code-ui-input" id="sellBuy" aria-describedby="sellBuyHelp" value="{{ variables.sellBuy }}" pattern="(100|\d{1,2})" required>
-                        <span class="input-group-text">%</span>
-                    </div>
-                    <div id="sellBuyHelp" class="form-text">Percent of remaining shares to buy if the company is sold. Input value from 0 to 100. Note that this assumes no <a href="#acceleration" class="info-link-code-ui">acceleration</a> and <a href="#notYetVested" class="info-link-code-ui">will not simulate buying options which vest after sale</a>.</div>
-                </div>
-                <div class="mb-3">
-                    <label for="quitBuy" class="form-label">Percent to buy if quit</label>
-                    <div class="input-group">
-                        <input type="text" class="form-control code-ui-input" id="quitBuy" aria-describedby="quitBuyHelp" value="{{ variables.sellBuy }}" pattern="(100|\d{1,2})" required>
-                        <span class="input-group-text">%</span>
-                    </div>
-                    <div id="quitBuyHelp" class="form-text">Percent of remaining shares to buy if you leave your job. Input value from 0 to 100. Note that this assumes no <a href="#acceleration" class="info-link-code-ui">acceleration</a>.</div>
-                </div>
-                <div class="mb-3">
-                    <label for="waitToSell" class="form-label">Tax optimization</label>
-                    <select class="form-select" id="waitToSell" aria-describedby="waitToSellHelp">
-                        <option value="0" {{#unless derived.longTerm}}selected{{/unless}}>Sell options as soon as possible.</option>
-                        <option value="1" {{#if derived.longTerm}}selected{{/if}}>Sell after all options are long term capital gains.</option>
-                    </select>
-                    <div id="waitToSellHelp" class="form-text">Strategy to use to reduce tax rate. Simulation supports either selling all options right away or waiting to sell after holding for 1 year.</div>
-                </div>
-                <div class="mb-3">
-                    <label for="rangeStd" class="form-label">Range confidence</label>
-                    <select class="form-select" id="rangeStd" aria-describedby="rangeStdHelp">
-                        <option value="1" {{#unless derived.highConfidence}}selected{{/unless}}>Low confidence (ranges represent 68% of outcomes if normal).</option>
-                        <option value="2" {{#if derived.highConfidence}}selected{{/if}}>High confidence (ranges represent 95% of outcomes if normal).</option>
-                    </select>
-                    <div id="rangeStdHelp" class="form-text">Level of confidence you have in the ranges provided in the events section (like FMV, amount diluation, IPO share price etc). More <a href="#levelOfConfidence" class="level-of-confidence-link info-link-code-ui">info about level of confidence</a>.</div>
-                </div>
-                <div class="mb-3">
-                    <label for="useLogNorm" class="form-label">Company Value Distribution</label>
-                    <select class="form-select" id="useLogNorm" aria-describedby="useLogNormHelp">
-                        <option value="0" {{#unless derived.useLogNorm}}selected{{/unless}}>Normal Distribution</option>
-                        <option value="1" {{#if derived.useLogNorm}}selected{{/if}}>Log Normal Distribution (use with caution)</option>
-                    </select>
-                    <div id="useLogNormHelp" class="form-text">The type of distribution to use when simulating share or company value during sale or IPO. Though not recommended in most cases, <a href="#logNormal" class="info-link-code-ui">log normal is also supported</a>. In either case, this simulation does not <a href="#stockClasses" class="info-link-code-ui">consider different classes of stocks</a>.
-                </div>
-            </p>
-        </details>
     </form>
     </div>

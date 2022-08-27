@@ -28,7 +28,7 @@
             <article id="toolSection">
                 <div id="disclaimerPanel">
                     <div>
-                        <div><span class="prefix"><i class="bi bi-exclamation-circle-fill"></i> Woah buddy.</span> This is a free and open source community project. We are talking money and can't guarantee accuracy or results. Please agree to each of these linked documents before continuing:</div>
+                        <div><span class="prefix"><i class="bi bi-exclamation-circle-fill"></i> Woah buddy.</span> This is a free and open source community project. That said, we are talking money (<a id="usNoticeLink" href="#usNotice">for the USA</a>) and can't guarantee accuracy or results. Please agree to each of the following before continuing:</div>
                         <ul>
                             <li>This is an open source project freely available under <a target="_blank" href="/license.txt">the MIT license</a>.</li>
                             <li><a target="_blank" href="/terms.html">Privacy policy</a> in which, among other things, we affirm that the simulation you build is not saved on our servers.</li>
@@ -131,11 +131,13 @@
     </template>
     
     <template id="taxLongTerm">
-        If you hold on to your stock for more than a year, you may qualify for a lower "long term capital gains" tax rate. <a href="https://www.bankrate.com/investing/long-term-capital-gains-tax/" target="_blank">This has its own rates that are separate from ordinary income rates</a>.
+        If you hold on to your stock for a longer period of time, you may qualify for a different "long term capital gains" tax rate. <a href="https://www.bankrate.com/investing/long-term-capital-gains-tax/" target="_blank">This has its own rates that are separate from ordinary income rates</a>. This simulation assumes the required period to qualify for long term capital gains is one year from option exercise.
     </template>
     
     <template id="levelOfConfidence">
-        This simulation runs where the range represents either one or two standard deviations in a normal distribution from which random values are selected (this applies to normal distribution, alternatively see log normal option which is not typically enabled by default). In the high confidence case, the ranges are interpreted as two standard deviations. In the low confidence case, the ranges are interpreted as a single standard deviation.
+        <p>This simulation runs where the ranges represent some number of standard deviations in a normal distribution from which random values are selected.</p>
+        <p>In the moderate confidence case, the ranges are interpreted as two standard deviations. In the low confidence case, the ranges are interpreted as a single standard deviation. Finally, in the high confidence case, the ranges are interpreted as three standard deviations.</p>
+        <p>Note that this applies to normal distribution, alternatively see log normal option which is not typically enabled by default.</p>
     </template>
     
     <template id="infoDilution">
@@ -147,7 +149,7 @@
     </template>
     
     <template id="stockClasses">
-        Different stock comes with different features. Unfortunately, this can get quite complicated and company specific. This is referred to as <a href="https://www.upcounsel.com/classes-of-stock" target="_target">different "classes" of stocks</a>.
+        Different stock comes with different features. This is referred to as <a href="https://www.upcounsel.com/classes-of-stock" target="_target">different "classes" of stocks</a> Unfortunately, this can get quite complicated and company-specific so this simulation does not simulate different classes.
     </template>
     
     <template id="mcmc">
@@ -155,7 +157,7 @@
     </template>
     
     <template id="acceleration">
-        <a target="_blank" href="https://www.cooleygo.com/what-are-single-and-double-trigger-acceleration-and-how-do-they-work/">Acceleration</a> refers to situations where some or all ones options will vest sooner due to one or more events. This gets pretty complex and company-specific so the simluation does not attempt to consider it. Instead, the simulation only assumes a regular vesting schedule without accelerations. This simulation assumes you do not purchase additional shares after an exit (or after you've left your position).
+        <a target="_blank" href="https://www.cooleygo.com/what-are-single-and-double-trigger-acceleration-and-how-do-they-work/">Acceleration</a> refers to situations where some or all ones options will vest sooner due to one or more events. This gets pretty complex and company-specific so the simulation does not attempt to consider it. Instead, the simulation only assumes a regular vesting schedule without accelerations.
     </template>
     
     <template id="notYetVested">
@@ -163,7 +165,8 @@
     </template>
     
     <template id="sellPrice">
-        This simulation asks you to estimate the stock price or the overall value of the company at the point when you can actually sell your stocks. After an exit (IPO, sale, etc), the stock price may go up or down before you can actually sell. In particular, some (or even many) companies impose a <a href="https://www.ipohub.org/ipo-lockups-overview-and-exceptions" target="_blank">period of time (sometimes called a "lockup")</a> when you cannot sell your stocks. This can have an impact on the actual price at which you can sell.
+        <p>This simulation asks you to estimate the stock price or the overall value of the company at the point when you can actually sell your stocks.</p>
+        <p>Why the distinction? After an exit (IPO, sale, etc), the stock price may go up or down before you can actually sell. In particular, some (or even many) companies impose a <a href="https://www.ipohub.org/ipo-lockups-overview-and-exceptions" target="_blank">period of time (sometimes called a "lockup")</a> when you cannot sell your stocks. This can have an impact on the actual price at which you can sell.</p>
     </template>
     
     <template id="simStop">
@@ -172,6 +175,18 @@
     
     <template id="yetPurchased">
         Consider the number of options vested so far. A subset or all of those options have not yet been exercised or purchased. This simulation asks you to estimate what percent of those options which are not yet exercised but are available (vested) you would want to purchase.
+    </template>
+    
+    <template id="otherTax">
+        This simulation assumes you are entering the effective overall rate on your options. In addition to possible federal taxes, note that this may include state taxes or others depending on your specific situation.
+    </template>
+    
+    <template id="usNotice">
+        This simulation is designed with the US in mind. This open source project welcomes users from outside the US and they may be able to simluate for other countries with modifications to the inputs or <a target="_blank" href="https://github.com/sampottinger/startupoptionsbot">code</a>. That said, due to resource limitations, this project does not make it an objective to support users outside the US.
+    </template>
+    
+    <template id="quitOptions">
+        Often, employees have a limited window in which to exercise after leaving a company but additional options will not continue to vest. That said, as with most things related to options, your specific situation and choices may vary depending on the company. <a target="_blank" href="https://darrowwealthmanagement.com/blog/what-happens-to-stock-options-if-i-leave-the-company/">Learn more about what happens when you leave</a>.
     </template>
     
     <input id="codeShadow" type="hidden">

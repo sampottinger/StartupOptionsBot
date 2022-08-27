@@ -49,7 +49,8 @@ QUnit.module("codeSupportedByEditor", function() {
                 {
                     "current": actions
                 }
-            ]
+            ],
+            "variables": {"rangeStd": 2}
         };
     }
 
@@ -79,6 +80,24 @@ QUnit.module("codeSupportedByEditor", function() {
         });
         assert.ok(codeSupportedByUiEditor(serialization));
     });
+    
+    QUnit.test("not supported std", function(assert) {
+        const actions = makeSerializationActions();
+        const serialization = makeSerialization(actions);
+        addNewState(serialization, {
+            "proba": "100",
+            "isElse": false,
+            "target": {
+                "action": "buy",
+                "amount": {
+                    "low": 9,
+                    "high": 10
+                }
+            }
+        });
+        serialization["variables"]["rangeStd"] = 1.5;
+        assert.ok(!codeSupportedByUiEditor(serialization));
+    });
 
     QUnit.test("is supported empty", function(assert) {
         const testInput = {
@@ -86,7 +105,10 @@ QUnit.module("codeSupportedByEditor", function() {
                 {
                     "current": []
                 }
-            ]
+            ],
+            "variables": {
+                "rangeStd": 2
+            }
         };
 
         assert.ok(codeSupportedByUiEditor(testInput));
@@ -172,7 +194,7 @@ QUnit.module("CodeGenUiUtil", function() {
             "regularIncomeTax": 31,
             "longTermTax": 22,
             "waitToSell": 0.1,
-            "rangeStd": 1.9,
+            "rangeStd": 2,
             "startMonthLow": 12,
             "startMonthHigh": 24,
             "strikePrice": 0.12,
