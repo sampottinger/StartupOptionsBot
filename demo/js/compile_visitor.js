@@ -74,6 +74,7 @@ class CompileVisitor extends toolkit.StartUpOptionsBotLangVisitor {
             
             state.buyOptions(numOptions);
             state.clearRemainingOptions();
+            state.addEvent("Quit job.");            
 
             return state;
         };
