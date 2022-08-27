@@ -411,7 +411,6 @@ class CodeGenUiUtil {
         const candidateValue = "" + target[name];
 
         if (self._isNumber(candidateValue)) {
-            console.log(candidateValue, self._formatNumber(candidateValue));
             return self._formatNumber(parseFloat(candidateValue));
         } else {
             throw "Not a number for " + name;
