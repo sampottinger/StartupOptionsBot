@@ -1,6 +1,6 @@
 DSL Definition
 ===============================================================================
-Though StartUpOptionsBot.com provides a UI to build simulations, one can also use a small programming language (called a [domain specific language](https://tomassetti.me/domain-specific-languages/#what_are_dsls)). In some cases, it may provide a better user experience or allow the definition of more complex or narrowly tailored simluations.
+Though StartUpOptionsBot.com provides a UI to build simulations, one can also use a small programming language (called a [domain specific language](https://tomassetti.me/domain-specific-languages/#what_are_dsls)). In some cases, it may provide a better user experience or allow the definition of more complex (or more narrowly tailored) simulations.
 
 <br>
 
