@@ -98,7 +98,7 @@ function parseSerializationFromUi(targetId) {
         return {
             "totalGrant": getSimpleNumber("totalGrant"),
             "strikePrice": getSimpleNumber("strikePrice"),
-            "startFMV": getSimpleNumber("strikePrice"),
+            "startFMV": getSimpleNumber("startFMV"),
             "startTotalShares": getSimpleNumber("startTotalShares"),
             "startVestingMonths": getSimpleNumber("startVestingMonths"),
             "immediatelyVest": getSimpleNumber("immediatelyVest"),
@@ -238,9 +238,7 @@ class CodeGenUiUtil {
 
         const outputVariables = {};
         SIMPLE_VARIABLES.forEach((varName) => {
-            outputVariables[varName] = self._formatNumber(
-                self._checkAndGetVar(inputVariables, varName)
-            );
+            outputVariables[varName] = self._checkAndGetVar(inputVariables, varName);
         });
         
         const isCloseTo = (candidate, target) => {
@@ -409,11 +407,12 @@ class CodeGenUiUtil {
         if (target[name] === undefined) {
             throw "Missing " + name;
         }
-
+        
         const candidateValue = "" + target[name];
 
         if (self._isNumber(candidateValue)) {
-            return candidateValue;
+            console.log(candidateValue, self._formatNumber(candidateValue));
+            return self._formatNumber(parseFloat(candidateValue));
         } else {
             throw "Not a number for " + name;
         }

@@ -60,6 +60,7 @@ class SimulationState {
             throw "Already set up.";
         }
         self._setUp = true;
+        self._quit = false;
 
         // Misc required vars
         self._assureValuePresent("ipoBuy");
@@ -106,6 +107,17 @@ class SimulationState {
 
         const delay = getNormVal(startMonthLow, startMonthHigh, true, self.getValue("rangeStd"));
         self.delay(delay);
+    }
+    
+    quit() {
+        const self = this;
+        if (self._quit) {
+            return;
+        }
+        
+        self._quit = true;
+        self.clearRemainingOptions();
+        self.addEvent("Left job.");
     }
 
     addEvent(description) {
@@ -199,9 +211,10 @@ class SimulationState {
         self._numOptionsPurchased += numOptions;
         
         const spreadStr = Math.round(spreadPerOption * 100) / 100;
-        self.addEvent("Bought " + numOptions + " with spread " + spreadStr + " each.");
 
         if (numOptions > 0) {
+            self.addEvent("Bought " + numOptions + " with spread " + spreadStr + " each.");
+            
             self._purchaseHistory.push({
                 "months": self._currentMonth,
                 "count": numOptions,
@@ -239,8 +252,10 @@ class SimulationState {
             const lastPurchaseMonths = lastPurchase["months"];
             const monthsSincePurchase = self._currentMonth - lastPurchaseMonths;
             const monthsToDelay = 12 - monthsSincePurchase;
-            self.delay(monthsToDelay);
-            self.addEvent("Wait to sell for long term gains tax.");
+            if (monthsToDelay > 0) {
+                self.addEvent("Wait to sell for long term gains tax.");
+                self.delay(monthsToDelay);
+            }
         }
 
         // Determine proceeds by type

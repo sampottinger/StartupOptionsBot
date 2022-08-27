@@ -44,7 +44,7 @@ class BeautifyVisitor extends toolkit.StartUpOptionsBotLangVisitor {
             const dilutingSection = " diluting " + diluteLow + " - " + diluteHigh;
             const delaySection = " wait " + delayLow + " - " + delayHigh + " months";
             const thenSection = " then {" + nextBranchesFuture(depth + 1) + "\n";
-            const thenTail = self._indent("})\n", depth);
+            const thenTail = self._indent("})", depth);
 
             return fmvSection + dilutingSection + delaySection + thenSection + thenTail;
         }
@@ -154,7 +154,7 @@ class BeautifyVisitor extends toolkit.StartUpOptionsBotLangVisitor {
         const variables = ctx.header.accept(self);
         const states = ctx.body.accept(self);
 
-        return "[" + variables + "]\n{" + states(1) + "}";
+        return "[" + variables + "]\n{" + states(1) + "\n}";
     }
 
     _createSellEvent(ctx, label) {
