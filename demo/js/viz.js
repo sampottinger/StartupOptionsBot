@@ -88,8 +88,16 @@ class VisualizationPresenter {
         const total = flatOutputs.map((x) => x["count"]).reduce((a, b) => a + b);
 
         return flatOutputs.map((x) => {
-            return {"profit": x["profit"], "count": x["count"] / total * 100};
+            return {
+                "profit": self._formatNumber(x["profit"]),
+                "count": x["count"] / total * 100
+            };
         });
+    }
+
+    _formatNumber(target) {
+        const self = this;
+        return target.toLocaleString("en-US");
     }
 
     _clearDetailsContainer() {
