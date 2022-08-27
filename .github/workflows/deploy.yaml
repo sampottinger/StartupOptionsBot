@@ -10,7 +10,7 @@ on:
 jobs:
   upload_files:
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
-    environment: main
+    environment: Deploy
     runs-on: ubuntu-latest
     name: Build and upload files
     steps:
