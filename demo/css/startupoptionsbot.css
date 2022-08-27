@@ -193,6 +193,11 @@ header .subtitle {
 
 
 @media (max-width: 700px) {
+    article #codeGenUiInner .event-like {
+        margin-left: 0px;
+        margin-right: 0px;
+    }
+    
     article #codeGenUiInner .input-group-text.wide-label {
         display: none;
     }
@@ -200,11 +205,6 @@ header .subtitle {
     #exampleNote {
         display: block;
         margin-bottom: 10px;
-    }
-    
-    article #codeGenUiInner .event-like {
-        margin-left: 0px;
-        margin-right: 0px;
     }
 }
 

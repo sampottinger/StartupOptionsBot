@@ -147,7 +147,8 @@
 
         <details id="statesDetails">
             <summary>Events</summary>
-            <p>
+            <p class="events">
+                
                 <p>
                     Each state corresponds to a fund raise round (term "state" comes from <a href="#mcmc" class="mcmc-link info-link-code-ui">Markov Chain Monte Carlo</a>). The simulation will progress through these states <a href="#simStop" class="info-link-code-ui">until encountering an exit</a> (sale, IPO, etc).
                 </p>
@@ -211,16 +212,16 @@
                                 <div class="input-group">
                                     <input type="text" class="form-control code-ui-input" id="sellPercent{{@index}}" aria-describedby="sellHelp{{@index}}" value="{{ target.sell.percent }}" pattern="(100|\d{1,2})" required>
                                     <span class="input-group-text wide-label">% chance of selling at</span>
-                                    <span class="input-group-text narrow-label">% at</span>
+                                    <span class="input-group-text narrow-label">% chance at</span>
+                                    <select aria-describedby="sellHelp{{@index}}" class="form-select" id="sellUnits{{@index}}">
+                                        <option value="share" {{#if target.sell.shares}}selected{{/if}}>share value of</option>
+                                        <option value="total" {{#unless target.sell.shares}}selected{{/unless}}>company value of</option>
+                                    </select>
                                     <input type="text" class="form-control code-ui-input" id="sellAmountLow{{@index}}" aria-describedby="sellHelp{{@index}}" value="{{ target.sell.amount.low }}" pattern="([0-9,]+|[0-9,]+\.\d+)" required>
                                     <span class="input-group-text">to</span>
                                     <input type="text" class="form-control code-ui-input" id="sellAmountHigh{{@index}}" aria-describedby="sellHelp{{@index}}" value="{{ target.sell.amount.high }}" pattern="([0-9,]+|[0-9,]+\.\d+)" required>
-                                    <select aria-describedby="sellHelp{{@index}}" class="form-select" id="sellUnits{{@index}}">
-                                        <option value="share" {{#if target.sell.shares}}selected{{/if}}>USD per share</option>
-                                        <option value="total" {{#unless target.sell.shares}}selected{{/unless}}>total company USD value</option>
-                                    </select>
                                 </div>
-                                <div id="sellHelp{{@index}}" class="form-text">Percent chance the company is sold / acquired at a particular value. This is the <a href="#sellPrice" class="info-link-code-ui">value at which you can sell your shares</a>. Provide range of values (see <a href="#levelOfConfidence" class="level-of-confidence-link info-link-code-ui">level of confidence</a>).</div>
+                                <div id="sellHelp{{@index}}" class="form-text">Percent chance the company is sold / acquired at this state. This is the <a href="#levelOfConfidence" class="info-link-code-ui">range of values</a> at which you can <a href="#sellPrice" class="info-link-code-ui">actually sell your shares</a>. Note <a href="#companyOrShare" class="info-link-code-ui">difference between company and share value</a>.</div>
                             </div>
                         </div>
                         <div class="option">
@@ -229,16 +230,16 @@
                                 <div class="input-group">
                                     <input type="text" class="form-control code-ui-input" id="ipoPercent{{@index}}" aria-describedby="ipoHelp{{@index}}" value="{{ target.ipo.percent }}" pattern="(100|\d{1,2})" required>
                                     <span class="input-group-text wide-label">% chance of IPO at</span>
-                                    <span class="input-group-text narrow-label">% at</span>
+                                    <span class="input-group-text narrow-label">% chance at</span>
+                                    <select aria-describedby="ipoHelp{{@index}}" class="form-select" id="ipoUnits{{@index}}">
+                                        <option value="share" {{#if this.ipo.shares}}selected{{/if}}>share value of</option>
+                                        <option value="total" {{#unless this.ipo.shares}}selected{{/unless}}>company value of</option>
+                                    </select>
                                     <input type="text" class="form-control code-ui-input" id="ipoAmountLow{{@index}}" aria-describedby="ipoHelp{{@index}}" value="{{ target.ipo.amount.low }}" pattern="([0-9,]+|[0-9,]+\.\d+)" required>
                                     <span class="input-group-text">to</span>
                                     <input type="text" class="form-control code-ui-input" id="ipoAmountHigh{{@index}}" aria-describedby="ipoHelp{{@index}}" value="{{ target.ipo.amount.high }}" pattern="([0-9,]+|[0-9,]+\.\d+)" required>
-                                    <select aria-describedby="ipoHelp{{@index}}" class="form-select" id="ipoUnits{{@index}}">
-                                        <option value="share" {{#if this.ipo.shares}}selected{{/if}}>USD per share</option>
-                                        <option value="total" {{#unless this.ipo.shares}}selected{{/unless}}>total company USD value</option>
-                                    </select>
                                 </div>
-                                <div id="ipoHelp{{@index}}" class="form-text">Percent chance the company has an initial public offering. Note that the simulation assumes this is <a href="#sellPrice" class="info-link-code-ui">the value at which you can sell your shares</a> but keep in mind there may be <a href="#sellPrice" class="info-link-code-ui">restrictions on when shares can be sold</a> which may change proceeds. Provide range of values (see <a href="#levelOfConfidence" class="level-of-confidence-link info-link-code-ui">level of confidence</a>).</div>
+                                <div id="ipoHelp{{@index}}" class="form-text">Percent chance the company has an initial public offering at this state. The simulation assumes this is this is the <a href="#levelOfConfidence" class="info-link-code-ui">range of values</a> at which you can <a href="#sellPrice" class="info-link-code-ui">actually sell your shares</a>. Note <a href="#companyOrShare" class="info-link-code-ui">difference between company and share value</a>.</div>
                             </div>
                         </div>
                     </div>

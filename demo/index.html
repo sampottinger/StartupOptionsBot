@@ -135,9 +135,9 @@
     </template>
     
     <template id="levelOfConfidence">
-        <p>This simulation runs where the ranges represent some number of standard deviations in a normal distribution from which random values are selected.</p>
-        <p>In the moderate confidence case, the ranges are interpreted as two standard deviations. In the low confidence case, the ranges are interpreted as a single standard deviation. Finally, in the high confidence case, the ranges are interpreted as three standard deviations.</p>
-        <p>Note that this applies to normal distribution, alternatively see log normal option which is not typically enabled by default.</p>
+        <p>Values are randomly selected from ranges of possible values. These ranges define some distribution from which values are drawn.
+        <p>In the moderate confidence case, the ranges are interpreted as defining two standard deviations above and below the mean. In the low confidence case: one single standard deviation. In the high confidence case:  three standard deviations.</p>
+        <p>Note that this applies to normal distribution. Alternatively, see log normal option (not typically enabled by default).</p>
     </template>
     
     <template id="infoDilution">
@@ -191,6 +191,10 @@
     
     <template id="cliff">
         Typically there will be some delay before options start vesting. The date when vesting starts is the "cliff" and sometimes a larger number of shares will vest then compared to what one typically sees periodically vest after the cliff. <a href="https://carta.com/blog/equity-101-stock-option-basics/#vesting" target="_blank">Learn more about vesting schedules</a>.
+    </template>
+    
+    <template id="companyOrShare">
+        Share value refers to the value per individual share (in USD). In contrast, company value is the overall company value (share value * number of shares in USD).
     </template>
     
     <input id="codeShadow" type="hidden">
