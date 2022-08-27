@@ -88,8 +88,9 @@ class VisualizationPresenter {
         const total = flatOutputs.map((x) => x["count"]).reduce((a, b) => a + b);
 
         return flatOutputs.map((x) => {
+            const displayProfit = x["profit"] + bucketSize / 2;
             return {
-                "profit": self._formatNumber(x["profit"]),
+                "profit": self._formatNumber(displayProfit),
                 "count": x["count"] / total * 100
             };
         });
