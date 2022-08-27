@@ -22,6 +22,11 @@ const SIMPLE_VARIABLES = [
 const NUMBER_REGEX = /^\d+(\.\d+)?$/;
 
 
+function isCloseTo(candidate, target) {
+    return Math.abs(candidate - target) < 0.01;
+}
+
+
 function codeSupportedByUiEditor(serialization) {
     const hasFinalOrRaiseElse = (event, i) => {
         const options = event["current"];
@@ -61,7 +66,12 @@ function codeSupportedByUiEditor(serialization) {
 
     const unsupportedState = (event, i) => !raiseCompatible(event, i) || hasMultiAction(event);
     
-    return serialization["states"].filter(unsupportedState).length == 0;
+    const allStatesSupported = serialization["states"].filter(unsupportedState).length == 0;
+    
+    const std = serialization["variables"]["rangeStd"];
+    const confidenceSupported = isCloseTo(std, 1) || isCloseTo(std, 2) || isCloseTo(std, 3);
+    
+    return allStatesSupported && confidenceSupported;
 }
 
 
@@ -232,10 +242,16 @@ class CodeGenUiUtil {
                 self._checkAndGetVar(inputVariables, varName)
             );
         });
+        
+        const isCloseTo = (candidate, target) => {
+            return Math.abs(candidate - target) < 0.01;
+        }
 
         const derived = {};
         derived["longTerm"] = outputVariables["waitToSell"] > 0.5;
-        derived["highConfidence"] = outputVariables["rangeStd"] > 1.5;
+        derived["lowConfidence"] = isCloseTo(outputVariables["rangeStd"], 1);
+        derived["moderateConfidence"] = isCloseTo(outputVariables["rangeStd"], 2);
+        derived["highConfidence"] = isCloseTo(outputVariables["rangeStd"], 3);
         derived["useLogNorm"] = outputVariables["useLogNorm"] > 0.5;
 
         const events = serialization["states"].map((x) => x["current"]);
@@ -264,7 +280,8 @@ class CodeGenUiUtil {
             const target = links.item(i);
             target.addEventListener("click", (event) => {
                 const codeTarget = target.href.split("#")[1];
-                const code = document.getElementById(codeTarget).innerHTML;
+                const codeInner = document.getElementById(codeTarget).innerHTML;
+                const code = "<div class='uiInfo'>" + codeInner + "</div>";
                 vex.dialog.alert({unsafeMessage: code});
                 event.preventDefault();
             });

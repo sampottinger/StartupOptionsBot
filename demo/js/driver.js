@@ -1,4 +1,4 @@
-const DEFAULT_CODE = "[useLogNorm = 0 ipoBuy = 100 sellBuy = 90 quitBuy = 50 optionTax = 26 regularIncomeTax = 33 longTermTax = 20 waitToSell = 0.8 strikePrice = 1 totalGrant = 100 startVestingMonths = 10 immediatelyVest = 20 monthlyVest = 10 startFMV = 2 startTotalShares = 100000 rangeStd = 2 startMonthLow = 5 startMonthHigh = 15]{e_0.1: buy(80%) | c_0.1: ipo(500,000,000 - 1,000,000,000 total) | c_0.4: sell(100,000,000 - 500,000,000 total) | c_else:raise(2 - 3 fmv diluting 10 - 20% wait 12 - 24 months then {c_0.45: sell(200,000,000 - 700,000,000 total) | c_0.55: ipo(500,000,000 - 1,500,000,000 total)} ) }";
+const DEFAULT_CODE = "[useLogNorm = 0 ipoBuy = 100 sellBuy = 90 quitBuy = 50 optionTax = 26 regularIncomeTax = 33 longTermTax = 20 waitToSell = 0 strikePrice = 1 totalGrant = 100 startVestingMonths = 10 immediatelyVest = 20 monthlyVest = 10 startFMV = 2 startTotalShares = 100000 rangeStd = 2 startMonthLow = 5 startMonthHigh = 15]{e_0.1: buy(80%) | c_0.1: ipo(500,000,000 - 1,000,000,000 total) | c_0.4: sell(100,000,000 - 500,000,000 total) | c_else:raise(2 - 3 fmv diluting 10 - 20% wait 12 - 24 months then {c_0.45: sell(200,000,000 - 700,000,000 total) | c_0.55: ipo(500,000,000 - 1,500,000,000 total)} ) }";
 
 const NUM_SIMULATIONS = 10000;
 
@@ -311,6 +311,13 @@ function init() {
     inlineCodeEditLink.addEventListener("click", (event) => {
         pushCurrentCodeToUrl();
         showCodeEditor();
+    });
+    
+    const usNoticeLink = document.getElementById("usNoticeLink");
+    usNoticeLink.addEventListener("click", (event) => {
+        const usNoticeInner = document.getElementById("usNotice").innerHTML;
+        vex.dialog.alert({unsafeMessage: usNoticeInner});
+        event.preventDefault();
     });
     
     const fragment = window.location.hash;

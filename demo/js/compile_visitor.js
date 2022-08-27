@@ -74,6 +74,7 @@ class CompileVisitor extends toolkit.StartUpOptionsBotLangVisitor {
             
             state.buyOptions(numOptions);
             state.clearRemainingOptions();
+            state.addEvent("Quit job.");            
 
             return state;
         };
@@ -150,6 +151,9 @@ class CompileVisitor extends toolkit.StartUpOptionsBotLangVisitor {
 
         const chooseBranch = (branches, elseBranches) => {
             const chosenProba = d3.randomUniform(0, 1)();
+            if (chosenProba < 0.00000001) {
+                return chooseElse(elseBranches);
+            }
 
             const accumulations = [];
             let acc = 0;
