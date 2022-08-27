@@ -73,8 +73,7 @@ class CompileVisitor extends toolkit.StartUpOptionsBotLangVisitor {
             const numOptions = percentOptionsBuy * optionsAvailable;
             
             state.buyOptions(numOptions);
-            state.clearRemainingOptions();
-            state.addEvent("Quit job.");            
+            state.quit();        
 
             return state;
         };
