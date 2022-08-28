@@ -1,14 +1,36 @@
+/**
+ * Logic for rendering information displays which describe the results from a set of simulations.
+ *
+ * @license MIT
+ */
+
 const NUM_BUCKETS = 20;
 
 
+/**
+ * Object which renders information displays describing a set of simulations.
+ */
 class VisualizationPresenter {
 
+    /**
+     * Create a new information display presenter.
+     *
+     * @param summaryContainerId - The ID for the container in which a simulation set summary
+     *      should be rendered.
+     * @param detailsContainerId - The ID for the container in which a simulation set detailed
+     *      visualization should be rendered.
+     */
     constructor(summaryContainerId, detailsContainerId) {
         const self = this;
         self._summaryContainerId = summaryContainerId;
         self._detailsContainerId = detailsContainerId;
     }
 
+    /**
+     * Render information displays describing the results from a set of simulations.
+     *
+     * @param results - Array of SimulationResults.
+     */
     render(results) {
         const self = this;
         
@@ -22,6 +44,11 @@ class VisualizationPresenter {
         self._renderSummaryContainer(summarizedFrequencies);
     }
     
+    /**
+     * Render the summary table.
+     *
+     * @param results - Array of SimulationResults.
+     */
     _renderTable(results) {
         const self = this;
         const profits = results.map((x) => x.getProfit()).sort();
@@ -73,6 +100,12 @@ class VisualizationPresenter {
         maxDisplay.innerHTML = maxProfit;
     }
 
+    /**
+     * Create the data structure for a histogram.
+     *
+     * @param results - Array of SimulationResults.
+     * @returns Array of objects with properties profit and count.
+     */
     _summarizeFrequencies(results) {
         const self = this;
 
@@ -115,11 +148,19 @@ class VisualizationPresenter {
         });
     }
 
+    /**
+     * Clear the HTML of the container in which the detailed visualizations should be rendered.
+     */
     _clearDetailsContainer() {
         const self = this;
         document.getElementById(self._detailsContainerId).innerHTML = "";
     }
 
+    /**
+     * Render the detailed visualizations (histogram, scatter plot).
+     *
+     * @param details - Array of SimulationResults.
+     */
     _renderDetailsContainer(details) {
         const self = this;
         
@@ -212,11 +253,19 @@ class VisualizationPresenter {
         const chart = new Chart(document.getElementById(canvasId), getConfig());
     }
 
+    /**
+     * Clear the HTML of the container into which the summary table will be rendered.
+     */
     _clearSummaryContainer() {
         const self = this;
         document.getElementById(self._summaryContainerId).innerHTML = "";
     }
 
+    /**
+     * Render the summary table.
+     *
+     * @param summaries - Array of objects with properties profit and count.
+     */
     _renderSummaryContainer(summaries) {
         const self = this;
         
@@ -278,6 +327,12 @@ class VisualizationPresenter {
         new Chart(document.getElementById(canvasId), getConfig());
     }
 
+    /**
+     * Create the canvas for a chart js visualization.
+     *
+     * @param outsideId - The ID of the containing element.
+     * @param chartClass - The class to add to the canvas element.
+     */
     _createCanvas(outsideId, chartClass) {
         const self = this;
         const canvasId = outsideId + "Canvas";

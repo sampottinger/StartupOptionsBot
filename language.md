@@ -84,7 +84,7 @@ Branches contain multiple actions in the following form:
 
 Each action has an actor and a probability associated with it:
 
- - **actor**: Actor must be `c` for company or `e` for employee. 
+ - **actor**: Actor must be `c` for company or `e` for employee.
  - **probability**: This is a value from 0 to 1 or `else` which represents the probability an action will happen for an actor. See probabilities.
  - **action**: This is the action to be taken if the branch is selected for the actor. See actions.
 

@@ -1,5 +1,21 @@
+/**
+ * Logic to convert code to a structured primitive and plain old JS object serialization.
+ *
+ * @license MIT
+ */
+
+
+/**
+ * ANTLR visitor which generates a serialized form of a program.
+ */
 class SerializationVisitor extends toolkit.StartUpOptionsBotLangVisitor {
 
+    /**
+     * Serialize a number.
+     *
+     * @param ctx - The ANTLR context.
+     * @returns Parsed number.
+     */
     visitNumber(ctx) {
         const self = this;
 
@@ -8,24 +24,48 @@ class SerializationVisitor extends toolkit.StartUpOptionsBotLangVisitor {
         return isFloat ? parseFloat(targetStr) : parseInt(targetStr);
     }
 
+    /**
+     * Serialize a fail action.
+     *
+     * @param ctx - The ANTLR context.
+     * @returns Plain JS object describing the action.
+     */
     visitFail(ctx) {
         const self = this;
 
         return {"action": "fail"};
     }
-
+    
+    /**
+     * Serialize an IPO action.
+     *
+     * @param ctx - The ANTLR context.
+     * @returns Plain JS object describing the action.
+     */
     visitIpo(ctx) {
         const self = this;
 
         return self._createSellEvent(ctx, "ipo");
     }
 
+    /**
+     * Serialize a sell action.
+     *
+     * @param ctx - The ANTLR context.
+     * @returns Plain JS object describing the action.
+     */
     visitSell(ctx) {
         const self = this;
 
         return self._createSellEvent(ctx, "sell");
     }
 
+    /**
+     * Serialize a raise action.
+     *
+     * @param ctx - The ANTLR context.
+     * @returns Plain JS object describing the action.
+     */
     visitRaise(ctx) {
         const self = this;
 
@@ -50,12 +90,24 @@ class SerializationVisitor extends toolkit.StartUpOptionsBotLangVisitor {
         };
     }
 
+    /**
+     * Serialize a quit action.
+     *
+     * @param ctx - The ANTLR context.
+     * @returns Plain JS object describing the action.
+     */
     visitQuit(ctx) {
         const self = this;
 
         return {"action": "quit"};
     }
 
+    /**
+     * Serialize a buy action.
+     *
+     * @param ctx - The ANTLR context.
+     * @returns Plain JS object describing the action.
+     */
     visitBuy(ctx) {
         const self = this;
 
@@ -64,11 +116,23 @@ class SerializationVisitor extends toolkit.StartUpOptionsBotLangVisitor {
         return {"action": "buy", "percentAmount": percentAmount};
     }
 
+    /**
+     * Serialize a percentage.
+     *
+     * @param ctx - The ANTLR context.
+     * @returns Plain number.
+     */
     visitPercent(ctx) {
         const self = this;
         return ctx.target.accept(self);
     }
 
+    /**
+     * Serialize a probability value.
+     *
+     * @param ctx - The ANTLR context.
+     * @returns Plain JS object describing the probability value.
+     */
     visitProbval(ctx) {
         const self = this;
 
@@ -81,6 +145,12 @@ class SerializationVisitor extends toolkit.StartUpOptionsBotLangVisitor {
         }
     }
 
+    /**
+     * Serialize a probability (probability value and actor).
+     *
+     * @param ctx - The ANTLR context.
+     * @returns Plain JS object describing the probability.
+     */
     visitProbability(ctx) {
         const self = this;
 
@@ -89,6 +159,12 @@ class SerializationVisitor extends toolkit.StartUpOptionsBotLangVisitor {
         return retObj;
     }
 
+    /**
+     * Serialize a branch (probability and action).
+     *
+     * @param ctx - The ANTLR context.
+     * @returns Plain JS object describing the branch.
+     */
     visitBranch(ctx) {
         const self = this;
 
@@ -97,6 +173,12 @@ class SerializationVisitor extends toolkit.StartUpOptionsBotLangVisitor {
         return retObj;
     }
 
+    /**
+     * Serialize a set of branches (possible probabilities and actions).
+     *
+     * @param ctx - The ANTLR context.
+     * @returns Plain JS object describing the branches set.
+     */
     visitBranches(ctx) {
         const self = this;
 
@@ -122,12 +204,24 @@ class SerializationVisitor extends toolkit.StartUpOptionsBotLangVisitor {
         return current.concat(next);
     }
 
+    /**
+     * Serialize the name of a variable in a variable assignment.
+     *
+     * @param ctx - The ANTLR context.
+     * @returns Plain string.
+     */
     visitName(ctx) {
         const self = this;
 
         return ctx.getChild(0).getText();
     }
 
+    /**
+     * Serialize a variable assignment.
+     *
+     * @param ctx - The ANTLR context.
+     * @returns Plain JS object describing the assignment.
+     */
     visitAssignment(ctx) {
         const self = this;
 
@@ -137,6 +231,12 @@ class SerializationVisitor extends toolkit.StartUpOptionsBotLangVisitor {
         return {"key": target, "value": value};
     }
 
+    /**
+     * Serialize a set of variable assignments.
+     *
+     * @param ctx - The ANTLR context.
+     * @returns Plain JS object describing the assignments.
+     */
     visitAssignments(ctx) {
         const self = this;
 
@@ -151,6 +251,12 @@ class SerializationVisitor extends toolkit.StartUpOptionsBotLangVisitor {
         return assignments;
     }
 
+    /**
+     * Serialize an entire program.
+     *
+     * @param ctx - The ANTLR context.
+     * @returns Plain JS object describing the entire program.
+     */
     visitProgram(ctx) {
         const self = this;
 
@@ -163,6 +269,13 @@ class SerializationVisitor extends toolkit.StartUpOptionsBotLangVisitor {
         };
     }
 
+    /**
+     * Create a serialization of an exit event.
+     *
+     * @param ctx - The ANTLR context.
+     * @param label - The name or type of the exit.
+     * @returns JS object serialization.
+     */
     _createSellEvent(ctx, label) {
         const self = this;
 
