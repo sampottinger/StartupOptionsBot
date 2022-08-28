@@ -227,20 +227,37 @@ function runSimulations(numSimulations) {
                 program(newState);
                 return newState.getResult();
             };
+            
+            const finish = () => {
+                const vizPresenter = new VisualizationPresenter(
+                    "outputSummaryContainer",
+                    "outputDetailsContainer"
+                );
+    
+                vizPresenter.render(outcomes);
+                cleanUpUi();
+                resolve();
+            };
     
             const outcomes = [];
-            for (let i = 0; i < numSimulations; i++) {
-                outcomes.push(runProgram());
-            }
-    
-            const vizPresenter = new VisualizationPresenter(
-                "outputSummaryContainer",
-                "outputDetailsContainer"
-            );
-
-            vizPresenter.render(outcomes);
-            cleanUpUi();
-            resolve();
+            const numRunDisplay = document.getElementById("numRunDisplay");
+            let i = 0;
+            const runSimBatch = () => {
+                for (let subsetI = 0; subsetI < 100; subsetI++) {
+                    outcomes.push(runProgram());
+                    i++;
+                }
+                numRunDisplay.innerHTML = formatNumber(i);
+                setTimeout(() => {
+                    if (i >= numSimulations) {
+                        finish();
+                    } else {
+                        runSimBatch();
+                    }
+                }, 10);
+            };
+            runSimBatch();
+            
         }, 100);
     });
 }
