@@ -3,14 +3,14 @@ const FULL_PROGRAM = "[useLogNorm = 0 ipoBuy = 100 sellBuy = 90 quitBuy = 50 opt
 QUnit.module("SimTest", function() {
 
     QUnit.test("Make example program", function(assert) {
-        const result = visitProgram(FULL_PROGRAM);
-        const program = result["program"];
+        const result = getCompiled(FULL_PROGRAM);
+        const program = result["result"];
         assert.ok(program !== null);
     });
 
     QUnit.test("Run example program", function(assert) {
-        const result = visitProgram(FULL_PROGRAM);
-        const program = result["program"];
+        const result = getCompiled(FULL_PROGRAM);
+        const program = result["result"];
 
         runProgram = () => {
             const newState = new SimulationState();

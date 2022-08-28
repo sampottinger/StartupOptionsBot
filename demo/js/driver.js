@@ -214,13 +214,13 @@ function runSimulations(numSimulations) {
     return new Promise((resolve, reject) => {
         setTimeout(() => {
             pushCurrentCodeToUrl();
-            const result = visitProgram(getCodeFromState());
+            const result = getCompiled(getCodeFromState());
             if (result.errors.length > 0) {
                 vex.dialog.alert("Whoops! There's a coding error in your program: " + result.errors[0]);
                 cleanUpUi();
                 return;
             }
-            const program = result["program"];
+            const program = result["result"];
     
             const runProgram = () => {
                 const newState = new SimulationState();
