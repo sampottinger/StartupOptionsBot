@@ -253,11 +253,19 @@ class VisualizationPresenter {
         const chart = new Chart(document.getElementById(canvasId), getConfig());
     }
 
+    /**
+     * Clear the HTML of the container into which the summary table will be rendered.
+     */
     _clearSummaryContainer() {
         const self = this;
         document.getElementById(self._summaryContainerId).innerHTML = "";
     }
 
+    /**
+     * Render the summary table.
+     *
+     * @param summaries - Array of objects with properties profit and count.
+     */
     _renderSummaryContainer(summaries) {
         const self = this;
         
@@ -319,6 +327,12 @@ class VisualizationPresenter {
         new Chart(document.getElementById(canvasId), getConfig());
     }
 
+    /**
+     * Create the canvas for a chart js visualization.
+     *
+     * @param outsideId - The ID of the containing element.
+     * @param chartClass - The class to add to the canvas element.
+     */
     _createCanvas(outsideId, chartClass) {
         const self = this;
         const canvasId = outsideId + "Canvas";
