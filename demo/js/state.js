@@ -210,10 +210,11 @@ class SimulationState {
         self._totalSpread += marginalSpreadSafe;
         self._numOptionsPurchased += numOptions;
         
-        const spreadStr = Math.round(spreadPerOption * 100) / 100;
+        const spreadStr = formatNumber(Math.round(spreadPerOption * 100) / 100);
 
         if (numOptions > 0) {
-            self.addEvent("Bought " + numOptions + " with spread " + spreadStr + " each.");
+            const numOptionsStr = formatNumber(numOptions);
+            self.addEvent("Bought " + numOptionsStr + " with spread " + spreadStr + " each.");
             
             self._purchaseHistory.push({
                 "months": self._currentMonth,
@@ -285,12 +286,17 @@ class SimulationState {
         const strikePaid = self._numOptionsPurchased * self.getValue("strikePrice");
         
         // Record
+        const totalStr = formatNumber(formatNumber(Math.round(totalOptions)));
+        const saleStr = formatNumber(formatNumber(Math.round(totalSale * 100) / 100));
+        const taxesStr = formatNumber(Math.round((taxesRegular + taxesLongTerm) * 100) / 100);
+        const spreadStr = formatNumber(Math.round(spreadTax * 100) / 100);
+        const strikePaidStr = formatNumber(Math.round(strikePaid * 100) / 100);
         const message = [
-            "Sold " + Math.round(totalOptions),
-            " at " + Math.round(totalSale * 100) / 100,
-            " with taxes of " + Math.round((taxesRegular + taxesLongTerm) * 100) / 100,
-            " after tax on spread of " + Math.round(spreadTax * 100) / 100,
-            " for shares costing " + Math.round(strikePaid * 100) / 100
+            "Sold " + totalStr,
+            " at " + saleStr,
+            " with taxes of " + taxesStr,
+            " after tax on spread of " + spreadStr,
+            " for shares costing " + strikePaidStr
         ].join("");
         self.addEvent(message);
 
