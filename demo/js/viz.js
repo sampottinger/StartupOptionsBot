@@ -31,18 +31,26 @@ class VisualizationPresenter {
             return rounded.toLocaleString("en-US");
         };
         
-        const minProfit = roundAndFormat(Math.min(...profits));
-        const maxProfit = roundAndFormat(Math.max(...profits));
+        const addDollarSign = (target) => {
+            if (target < 0) {
+                return "-$" + Math.abs(target);
+            } else {
+                return "$" + target;
+            }
+        };
+        
+        const minProfit = addDollarSign(roundAndFormat(Math.min(...profits)));
+        const maxProfit = addDollarSign(roundAndFormat(Math.max(...profits)));
         const numSims = profits.length;
         
         const meanUnrounded = profits.reduce((a, b) => a + b) / numSims;
-        const meanProfit = roundAndFormat(meanUnrounded);
+        const meanProfit = addDollarSign(roundAndFormat(meanUnrounded));
         
         const medianIndexLow = Math.floor(profits.length / 2);
         const medianIndexHigh = Math.ceil(profits.length / 2);
         const medianLow = profits[medianIndexLow];
         const medianHigh = profits[medianIndexHigh];
-        const medianProfit = roundAndFormat((medianLow + medianHigh) / 2);
+        const medianProfit = addDollarSign(roundAndFormat((medianLow + medianHigh) / 2));
         
         const percentProfitRaw = profits.filter((x) => x > 0).length / numSims;
         const percentProfit = (Math.round(percentProfitRaw * 1000) / 10) + "%";

@@ -67,7 +67,7 @@
                         <a href="#outputs" id="shareButton" class="btn btn-outline-secondary"><i class="bi bi-box-arrow-up"></i> Share / Save</a>
                     </div>
                     <div id="outputs">
-                        <div class="output-panel" id="runningSimDisplay"><i class="bi bi-hourglass-split"></i> Running please wait...</div>
+                        <div class="output-panel" id="runningSimDisplay"><i class="bi bi-hourglass-split"></i> Running please wait... (<span id="numRunDisplay">0</span> simulations complete)</div>
                         <div class="output-panel" id="simOutputDisplay">
                             <h3>Post-tax outcomes</h3>
                             <div id="outputTableContainer" class="subpanel">
@@ -75,7 +75,7 @@
                                     <thead>
                                         <tr>
                                             <th scope="col">Statistic</th>
-                                            <th scope="col">Profit</th>
+                                            <th scope="col">Value</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -214,17 +214,17 @@
     <script>vex.defaultOptions.className = "vex-theme-os"</script>
     
     <script src="/js/startupoptionsbotlang.js?version=202208281"></script>
-    <script src="/js/shared.js?version=202208281"></script>
-    <script src="/js/rand_util.js?version=202208281"></script>
-    <script src="/js/compiler.js?version=202208281"></script>
-    <script src="/js/state.js?version=202208281"></script>
-    <script src="/js/compile_visitor.js?version=202208281"></script>
-    <script src="/js/serialization_visitor.js?version=202208281"></script>
-    <script src="/js/beautify_visitor.js?version=202208281"></script>
-    <script src="/js/deserialization_util.js?version=202208281"></script>
-    <script src="/js/code_gen_ui.js?version=202208281"></script>
-    <script src="/js/viz.js?version=202208281"></script>
-    <script src="/js/driver.js?version=202208281"></script>
+    <script src="/js/shared.js?version=202208282"></script>
+    <script src="/js/rand_util.js?version=202208282"></script>
+    <script src="/js/compiler.js?version=202208282"></script>
+    <script src="/js/state.js?version=202208282"></script>
+    <script src="/js/compile_visitor.js?version=202208282"></script>
+    <script src="/js/serialization_visitor.js?version=202208282"></script>
+    <script src="/js/beautify_visitor.js?version=202208282"></script>
+    <script src="/js/deserialization_util.js?version=202208282"></script>
+    <script src="/js/code_gen_ui.js?version=202208282"></script>
+    <script src="/js/viz.js?version=202208282"></script>
+    <script src="/js/driver.js?version=202208282"></script>
 
     <script>init();</script>
 
