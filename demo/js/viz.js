@@ -27,30 +27,31 @@ class VisualizationPresenter {
         const profits = results.map((x) => x.getProfit()).sort();
         
         const roundAndFormat = (target) => {
-            const rounded = Math.round(target * 100) / 100;
-            return rounded.toLocaleString("en-US");
+            
         };
         
         const addDollarSign = (target) => {
+            const rounded = Math.round(target * 100) / 100;
             if (target < 0) {
-                return "-$" + Math.abs(target);
+                const absStr = Math.abs(rounded).toLocaleString("en-US");
+                return "-$" + absStr;
             } else {
-                return "$" + target;
+                return "$" + rounded.toLocaleString("en-US");
             }
         };
         
-        const minProfit = addDollarSign(roundAndFormat(Math.min(...profits)));
-        const maxProfit = addDollarSign(roundAndFormat(Math.max(...profits)));
+        const minProfit = addDollarSign(Math.min(...profits));
+        const maxProfit = addDollarSign(Math.max(...profits));
         const numSims = profits.length;
         
         const meanUnrounded = profits.reduce((a, b) => a + b) / numSims;
-        const meanProfit = addDollarSign(roundAndFormat(meanUnrounded));
+        const meanProfit = addDollarSign(meanUnrounded);
         
         const medianIndexLow = Math.floor(profits.length / 2);
         const medianIndexHigh = Math.ceil(profits.length / 2);
         const medianLow = profits[medianIndexLow];
         const medianHigh = profits[medianIndexHigh];
-        const medianProfit = addDollarSign(roundAndFormat((medianLow + medianHigh) / 2));
+        const medianProfit = addDollarSign((medianLow + medianHigh) / 2);
         
         const percentProfitRaw = profits.filter((x) => x > 0).length / numSims;
         const percentProfit = (Math.round(percentProfitRaw * 1000) / 10) + "%";
