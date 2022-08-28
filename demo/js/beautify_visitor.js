@@ -13,7 +13,7 @@ class BeautifyVisitor extends toolkit.StartUpOptionsBotLangVisitor {
     /**
      * Format a number, putting it into en-US locale format.
      *
-     * @param ctx ANTLR context.
+     * @param ctx  - ANTLR context.
      * @returns String representation of the number.
      */
     visitNumber(ctx) {
@@ -28,7 +28,7 @@ class BeautifyVisitor extends toolkit.StartUpOptionsBotLangVisitor {
     /**
      * Format a fail action.
      *
-     * @param ctx ANTLR context.
+     * @param ctx  - ANTLR context.
      * @returns Function which formats the function given indent level.
      */
     visitFail(ctx) {
@@ -40,7 +40,7 @@ class BeautifyVisitor extends toolkit.StartUpOptionsBotLangVisitor {
     /**
      * Format an initial public offering action.
      *
-     * @param ctx ANTLR context.
+     * @param ctx  - ANTLR context.
      * @returns Function which formats the function given indent level.
      */
     visitIpo(ctx) {
@@ -52,7 +52,7 @@ class BeautifyVisitor extends toolkit.StartUpOptionsBotLangVisitor {
     /**
      * Format a sell action.
      *
-     * @param ctx ANTLR context.
+     * @param ctx  - ANTLR context.
      * @returns Function which formats the function given indent level.
      */
     visitSell(ctx) {
@@ -67,7 +67,7 @@ class BeautifyVisitor extends toolkit.StartUpOptionsBotLangVisitor {
      * Format an action for a fund raise event, indenting the branches listed and recursively
      * beautifying.
      *
-     * @param ctx ANTLR context.
+     * @param ctx  - ANTLR context.
      * @returns Function which formats the function given indent level.
      */
     visitRaise(ctx) {
@@ -96,7 +96,7 @@ class BeautifyVisitor extends toolkit.StartUpOptionsBotLangVisitor {
     /**
      * Format a quit action.
      *
-     * @param ctx ANTLR context.
+     * @param ctx  - ANTLR context.
      * @returns Function which formats the function given indent level.
      */
     visitQuit(ctx) {
@@ -108,7 +108,7 @@ class BeautifyVisitor extends toolkit.StartUpOptionsBotLangVisitor {
     /**
      * Format a buy action.
      *
-     * @param ctx ANTLR context.
+     * @param ctx  - ANTLR context.
      * @returns Function which formats the function given indent level.
      */
     visitBuy(ctx) {
@@ -122,7 +122,7 @@ class BeautifyVisitor extends toolkit.StartUpOptionsBotLangVisitor {
     /**
      * Format a percent value by putting a % character at the end.
      *
-     * @param ctx ANTLR context.
+     * @param ctx  - ANTLR context.
      * @returns String with the percent sign.
      */
     visitPercent(ctx) {
@@ -133,7 +133,7 @@ class BeautifyVisitor extends toolkit.StartUpOptionsBotLangVisitor {
     /**
      * Format a probability which can be a number or "else" keyword.
      *
-     * @param ctx ANTLR context.
+     * @param ctx  - ANTLR context.
      * @returns The probability value as a string which may be "else" keyword.
      */
     visitProbval(ctx) {
@@ -151,7 +151,7 @@ class BeautifyVisitor extends toolkit.StartUpOptionsBotLangVisitor {
     /**
      * Format a probability.
      *
-     * @param ctx ANTLR context.
+     * @param ctx  - ANTLR context.
      * @returns Formatted probability in actor_probability format.
      */
     visitProbability(ctx) {
@@ -168,7 +168,7 @@ class BeautifyVisitor extends toolkit.StartUpOptionsBotLangVisitor {
      * Format a single branch (possible action with probability) which is one of many branches that
      * the simulation may select.
      *
-     * @param ctx ANTLR context.
+     * @param ctx  - ANTLR context.
      * @returns Function returning the probability followed by a colon followed by a formatted
      *      potential action when given the indentation depth.
      */
@@ -186,7 +186,7 @@ class BeautifyVisitor extends toolkit.StartUpOptionsBotLangVisitor {
     /**
      * Format a branches set.
      *
-     * @param ctx ANTLR context.
+     * @param ctx  - ANTLR context.
      * @returns Function which, given starting indentation, returns formatted set of branches with
      *      recursive indentation.
      */
@@ -212,7 +212,7 @@ class BeautifyVisitor extends toolkit.StartUpOptionsBotLangVisitor {
     /**
      * Format a variable name as part of a variable assignment. 
      *
-     * @param ctx ANTLR context.
+     * @param ctx  - ANTLR context.
      * @returns Formatted variable name as a string.
      */
     visitName(ctx) {
@@ -224,7 +224,7 @@ class BeautifyVisitor extends toolkit.StartUpOptionsBotLangVisitor {
     /**
      * Format a variable assignment.
      *
-     * @param ctx ANTLR context.
+     * @param ctx  - ANTLR context.
      * @returns Formatted variable assignment as a string.
      */
     visitAssignment(ctx) {
@@ -239,7 +239,7 @@ class BeautifyVisitor extends toolkit.StartUpOptionsBotLangVisitor {
     /**
      * Format a set of variable assignments.
      *
-     * @param ctx ANTLR context.
+     * @param ctx  - ANTLR context.
      * @returns Formatted variable assignments without square braces.
      */
     visitAssignments(ctx) {
@@ -259,7 +259,7 @@ class BeautifyVisitor extends toolkit.StartUpOptionsBotLangVisitor {
     /**
      * Format an entire program.
      *
-     * @param ctx ANTLR context.
+     * @param ctx  - ANTLR context.
      * @returns String fully formatted program.
      */
     visitProgram(ctx) {
@@ -274,7 +274,7 @@ class BeautifyVisitor extends toolkit.StartUpOptionsBotLangVisitor {
     /**
      * Format an exit event (IPO, sell).
      *
-     * @param ctx ANTLR context.
+     * @param ctx  - ANTLR context.
      * @returns Function taking an indentation depth and returning string formatted action.
      */
     _createSellEvent(ctx, label) {
@@ -290,8 +290,8 @@ class BeautifyVisitor extends toolkit.StartUpOptionsBotLangVisitor {
     /**
      * Indent a string.
      *
-     * @param target The string to indent.
-     * @param depth The indentation level.
+     * @param target - The string to indent.
+     * @param depth - The indentation level.
      * @returns Target string with indentation (as spaces) prepended.
      */
     _indent(target, depth) {

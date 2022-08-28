@@ -36,9 +36,9 @@ const NUMBER_REGEX = /^\d+(\.\d+)?$/;
 /**
  * Determine if two numbers are within a threshold from each other.
  *
- * @param candidate The first number to compare.
- * @param target The second number to compare.
- * @param threshold The maximum allowed difference. Will default to 0.01.
+ * @param candidate - The first number to compare.
+ * @param target - The second number to compare.
+ * @param threshold - The maximum allowed difference. Will default to 0.01.
  * @returns True if the difference between target and candidate is below threshold otherwise false.
  */
 function isCloseTo(candidate, target, threshold) {
@@ -52,7 +52,7 @@ function isCloseTo(candidate, target, threshold) {
 /**
  * Determine if the provided code can be edited by the UI editor.
  *
- * @param serialization The serialization of the code that may be edited by the UI.
+ * @param serialization - The serialization of the code that may be edited by the UI.
  * @returns True if suppored and false if uses code features not supported by the UI.
  */
 function codeSupportedByUiEditor(serialization) {
@@ -106,7 +106,7 @@ function codeSupportedByUiEditor(serialization) {
 /**
  * Parse a serialized form of a program from a UI editor / wizard.
  *
- * @param targetId The ID containing the UI editor from which a serialized program should be built.
+ * @param targetId - The ID containing the UI editor from which a serialized program should be built.
  * @returns Serialized form of a simulation program.
  */
 function parseSerializationFromUi(targetId) {
@@ -265,7 +265,7 @@ class CodeGenUiUtil {
     /**
      * Build a utility which fills in programs into newly rendered UI editors.
      *
-     * @param templateUrl URL of the handlebars template to use to render a UI editor.
+     * @param templateUrl - URL of the handlebars template to use to render a UI editor.
      */
     constructor(templateUrl) {
         const self = this;
@@ -276,8 +276,8 @@ class CodeGenUiUtil {
     /**
      * Render a new UI editor.
      *
-     * @param targetId The ID of the container into which the new UI editor should be rendered.
-     * @param serialization The serialized form of the program that should be filled into the newly
+     * @param targetId - The ID of the container into which the new UI editor should be rendered.
+     * @param serialization - The serialized form of the program that should be filled into the newly
      *      rendered editor.
      * @returns Promise which resolves after the UI editor is rendered.
      */
@@ -321,7 +321,7 @@ class CodeGenUiUtil {
     /**
      * Add event listeners which show help text within the code editor.
      *
-     * @param targetId The ID in which the editor has been rendered.
+     * @param targetId - The ID in which the editor has been rendered.
      */
     _addInfoLinkListeners(targetId) {
         const self = this;
@@ -366,7 +366,7 @@ class CodeGenUiUtil {
     /**
      * Simplify a serialized form of an event (aka state) for easier rendering in Handlebars.
      *
-     * @param originalEvent The event serialziation to simplify.
+     * @param originalEvent - The event serialziation to simplify.
      * @returns Simplified serialization for Handlebars.
      */
     _simplifyEvent(originalEvent) {
@@ -489,7 +489,7 @@ class CodeGenUiUtil {
     /**
      * Determine if a string contains a number interpretable by the code editor.
      *
-     * @param target String which may contain a number.
+     * @param target - String which may contain a number.
      * @returns True if target represents an interpretable number and false otherwise.
      */
     _isNumber(target) {

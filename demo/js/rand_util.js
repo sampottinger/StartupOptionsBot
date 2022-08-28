@@ -8,8 +8,8 @@
 /**
  * Build a function which returns a value sampled from a normal distribution.
  *
- * @param mean The mean value of the normal distribution to be sampled.
- * @param std The standard deviation of the normal distribution to be sampled.
+ * @param mean - The mean value of the normal distribution to be sampled.
+ * @param std - The standard deviation of the normal distribution to be sampled.
  * @returns Function which, when called, returns a random value.
  */
 function buildNorm(mean, std) {
@@ -20,8 +20,8 @@ function buildNorm(mean, std) {
 /**
  * Build a function which returns a value sampled from a log normal distribution.
  *
- * @param mean The mean value of the distribution to be sampled.
- * @param std The standard deviation of the distribution to be sampled.
+ * @param mean - The mean value of the distribution to be sampled.
+ * @param std - The standard deviation of the distribution to be sampled.
  * @returns Function which, when called, returns a random value. Note that the log normal
  *      distribution sampled has an inner mean = 0 and inner std = 0.5. The resulting value has
  *      one subtracted and the result is multiplied by the parameter std and the parameter mean
@@ -39,14 +39,15 @@ function buildLogNorm(mean, std) {
 /**
  * Get a random value selected from a normal or log normal distribution.
  *
- * @param low The low end of the range.
- * @param high The high end of the range.
- * @param mustBePositive If true, negative values will be returned as zero. If false, negative
+ * @param low - The low end of the range.
+ * @param high - The high end of the range.
+ * @param mustBePositive - If true, negative values will be returned as zero. If false, negative
  *      values will be returned.
- * @param rangeStd How many standard deviations (+/- around the mean) the range made by high and
+ * @param rangeStd - How many standard deviations (+/- around the mean) the range made by high and
  *      low represent in the distribution.
- * @param useLogNorm True if log norm should be used (see buildLogNorm) and false if normal
+ * @param useLogNorm - True if log norm should be used (see buildLogNorm) and false if normal
  *      distribution should be used.
+ * @returns Random value
  */
 function getNormVal(low, high, mustBePositive, rangeStd, useLogNorm) {
     if (useLogNorm === undefined) {

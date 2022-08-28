@@ -14,7 +14,7 @@ class CompileVisitor extends toolkit.StartUpOptionsBotLangVisitor {
     /**
      * Parse a number from a string to a JS floating point number.
      *
-     * @param ctx ANTLR context.
+     * @param ctx - ANTLR context.
      * @returns Parsed number with commas ignored.
      */
     visitNumber(ctx) {
@@ -28,7 +28,7 @@ class CompileVisitor extends toolkit.StartUpOptionsBotLangVisitor {
     /**
      * Interpret a percent as a JS floating point number.
      *
-     * @param ctx ANTLR context.
+     * @param ctx - ANTLR context.
      * @returns Percent as a number between 0 - 1.
      */
     visitPercent(ctx) {
@@ -39,7 +39,7 @@ class CompileVisitor extends toolkit.StartUpOptionsBotLangVisitor {
     /**
      * Geneate a function which indicates the company failed.
      *
-     * @param ctx ANTLR context.
+     * @param ctx - ANTLR context.
      * @returns Function which, given a state object, will report a company fail.
      */
     visitFail(ctx) {
@@ -55,7 +55,7 @@ class CompileVisitor extends toolkit.StartUpOptionsBotLangVisitor {
     /**
      * Geneate a function which indicates the company had an IPO.
      *
-     * @param ctx ANTLR context.
+     * @param ctx - ANTLR context.
      * @returns Function which, given a state object, will report a company IPO.
      */
     visitIpo(ctx) {
@@ -67,7 +67,7 @@ class CompileVisitor extends toolkit.StartUpOptionsBotLangVisitor {
     /**
      * Geneate a function which indicates the company was sold.
      *
-     * @param ctx ANTLR context.
+     * @param ctx - ANTLR context.
      * @returns Function which, given a state object, will report a company sale.
      */
     visitSell(ctx) {
@@ -79,7 +79,7 @@ class CompileVisitor extends toolkit.StartUpOptionsBotLangVisitor {
     /**
      * Geneate a function which indicates the company had a fund raise.
      *
-     * @param ctx ANTLR context.
+     * @param ctx - ANTLR context.
      * @returns Function which, given a state object, will report a fund raise and execute the
      *      branches included.
      */
@@ -115,7 +115,7 @@ class CompileVisitor extends toolkit.StartUpOptionsBotLangVisitor {
     /**
      * Geneate a function which indicates the employee quit.
      *
-     * @param ctx ANTLR context.
+     * @param ctx - ANTLR context.
      * @returns Function which, given a state object, will report the employee quit.
      */
     visitQuit(ctx) {
@@ -136,7 +136,7 @@ class CompileVisitor extends toolkit.StartUpOptionsBotLangVisitor {
     /**
      * Geneate a function which indicates the employee exercised options.
      *
-     * @param ctx ANTLR context.
+     * @param ctx - ANTLR context.
      * @returns Function which, given a state, will report an exercise.
      */
     visitBuy(ctx) {
@@ -157,7 +157,7 @@ class CompileVisitor extends toolkit.StartUpOptionsBotLangVisitor {
     /**
      * Generate a structured representation of a probability value.
      *
-     * @param ctx ANTLR context.
+     * @param ctx - ANTLR context.
      * @returns Object with an isElse property. If isElse is false, a proba property will be
      *      incldued which has a floating point value.
      */
@@ -176,7 +176,7 @@ class CompileVisitor extends toolkit.StartUpOptionsBotLangVisitor {
     /**
      * Generate a structured representation of a probability.
      *
-     * @param ctx ANTLR context.
+     * @param ctx - ANTLR context.
      * @returns Object with an isElse property. If isElse is false, a proba property will be
      *      incldued which has a floating point value. It will also include a isCompany property
      *      that is a boolean indicating if the actor is company or employee.
@@ -192,7 +192,7 @@ class CompileVisitor extends toolkit.StartUpOptionsBotLangVisitor {
     /**
      * Visit a single branch out of a set of possible branches the simulation can take.
      *
-     * @param ctx ANTLR context.
+     * @param ctx - ANTLR context.
      * @returns Object which has probability and actor information whose target property contains
      *      the action for this branch.
      */
@@ -207,7 +207,7 @@ class CompileVisitor extends toolkit.StartUpOptionsBotLangVisitor {
     /**
      * Visit a set of branches.
      *
-     * @param ctx ANTLR context.
+     * @param ctx - ANTLR context.
      * @returns Function which, taking a state object, will randomly choose and execute the action
      *      of a branch within this set.
      */
@@ -290,7 +290,7 @@ class CompileVisitor extends toolkit.StartUpOptionsBotLangVisitor {
     /**
      * Visit the variable name as part of a variable assignment.
      *
-     * @param ctx ANTLR context.
+     * @param ctx - ANTLR context.
      * @returns String variable name.
      */
     visitName(ctx) {
@@ -302,7 +302,7 @@ class CompileVisitor extends toolkit.StartUpOptionsBotLangVisitor {
     /**
      * Visit a single variable assignment.
      *
-     * @param ctx ANTLR context.
+     * @param ctx - ANTLR context.
      * @returns Function which, given a state object, will register the value of the given
      *      variable in that state object.
      */
@@ -321,7 +321,7 @@ class CompileVisitor extends toolkit.StartUpOptionsBotLangVisitor {
     /**
      * Visit a set of variables.
      *
-     * @param ctx ANTLR context.
+     * @param ctx - ANTLR context.
      * @returns Function which, given a state object, will register the value of the given
      *      variables in that state object.
      */
@@ -347,7 +347,7 @@ class CompileVisitor extends toolkit.StartUpOptionsBotLangVisitor {
     /**
      * Visit a whole program.
      *
-     * @param ctx ANTLR context.
+     * @param ctx - ANTLR context.
      * @returns Function which, taking a state object, will execute a simulation in that state.
      */
     visitProgram(ctx) {
@@ -368,9 +368,9 @@ class CompileVisitor extends toolkit.StartUpOptionsBotLangVisitor {
     /**
      * Visit an exit event (IPO, sell).
      *
-     * @param ctx ANTLR context.
-     * @param label The human readable name of the event (IPO, sell).
-     * @param buyVariable The variable describing the exercise behavior for the employee for this
+     * @param ctx - ANTLR context.
+     * @param label - The human readable name of the event (IPO, sell).
+     * @param buyVariable - The variable describing the exercise behavior for the employee for this
      *      event.
      * @returns Function taking a state object and executing an exit event in that state.
      */

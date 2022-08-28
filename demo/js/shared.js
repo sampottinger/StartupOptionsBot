@@ -10,7 +10,7 @@ const toolkit = StartUpOptionsBotLang.getToolkit();
 /**
  * Format a number as en-US locale string.
  *
- * @param target The number to format.
+ * @param target - The number to format.
  * @returns Formatted string.
  */
 function formatNumber(target) {
