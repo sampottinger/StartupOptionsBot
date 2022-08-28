@@ -33,8 +33,9 @@ class VisualizationPresenter {
         
         const minProfit = roundAndFormat(Math.min(...profits));
         const maxProfit = roundAndFormat(Math.max(...profits));
+        const numSims = profits.length;
         
-        const meanUnrounded = profits.reduce((a, b) => a + b) / profits.length;
+        const meanUnrounded = profits.reduce((a, b) => a + b) / numSims;
         const meanProfit = roundAndFormat(meanUnrounded);
         
         const medianIndexLow = Math.floor(profits.length / 2);
@@ -43,14 +44,23 @@ class VisualizationPresenter {
         const medianHigh = profits[medianIndexHigh];
         const medianProfit = roundAndFormat((medianLow + medianHigh) / 2);
         
+        const percentProfitRaw = profits.filter((x) => x > 0).length / numSims;
+        const percentProfit = (Math.round(percentProfitRaw * 1000) / 10) + "%";
+        const millionPercentRaw = profits.filter((x) => x > 1000000).length / numSims;
+        const millionPercent = (Math.round(millionPercentRaw * 1000) / 10) + "%";
+        
         const minDisplay = document.getElementById("minDisplay");
+        const lossDisplay = document.getElementById("lossDisplay");
         const meanDisplay = document.getElementById("meanDisplay");
         const medianDisplay = document.getElementById("medianDisplay");
+        const millionDisplay = document.getElementById("millionDisplay");
         const maxDisplay = document.getElementById("maxDisplay");
         
         minDisplay.innerHTML = minProfit;
+        profitDisplay.innerHTML = percentProfit;
         meanDisplay.innerHTML = meanProfit;
         medianDisplay.innerHTML = medianProfit;
+        millionDisplay.innerHTML = millionPercent;
         maxDisplay.innerHTML = maxProfit;
     }
 
