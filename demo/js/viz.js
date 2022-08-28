@@ -43,14 +43,24 @@ class VisualizationPresenter {
         const medianHigh = profits[medianIndexHigh];
         const medianProfit = roundAndFormat((medianLow + medianHigh) / 2);
         
+        const numSims = profits.length;
+        const percentLossRaw = profits.filter((x) => x < 0).length / numSims;
+        const percentLoss = Math.round(percentLossRaw * 1000) / 10;
+        const millionPercentRaw = profits.filter((x) => x > 1000000).length / numSims;
+        const millionPercent = Math.round(millionPercentRaw * 1000) / 10;
+        
         const minDisplay = document.getElementById("minDisplay");
+        const lossDisplay = document.getElementById("lossDisplay");
         const meanDisplay = document.getElementById("meanDisplay");
         const medianDisplay = document.getElementById("medianDisplay");
+        const millionDisplay = document.getElementById("millionDisplay");
         const maxDisplay = document.getElementById("maxDisplay");
         
         minDisplay.innerHTML = minProfit;
+        lossDisplay.innerHTML = percentLoss;
         meanDisplay.innerHTML = meanProfit;
         medianDisplay.innerHTML = medianProfit;
+        millionDisplay.innerHTML = millionPercent;
         maxDisplay.innerHTML = maxProfit;
     }
 
