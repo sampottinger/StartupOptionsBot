@@ -1,3 +1,14 @@
+/**
+ * Logic to generate a program from a UI editor or load a program into a UI editor.
+ *
+ * Logic to generate a program from a UI editor or load a program into a UI editor. Note that this
+ * specifically takes the serialized form of a program to fill in a UI editor or builds a
+ * serialized form of of a program from a UI editor. The serialization can be converted to
+ * code via serialization_visitor and deserialization_util.
+ *
+ * @license MIT
+ */
+
 const SIMPLE_VARIABLES = [
     "ipoBuy",
     "sellBuy",
@@ -22,11 +33,28 @@ const SIMPLE_VARIABLES = [
 const NUMBER_REGEX = /^\d+(\.\d+)?$/;
 
 
-function isCloseTo(candidate, target) {
-    return Math.abs(candidate - target) < 0.01;
+/**
+ * Determine if two numbers are within a threshold from each other.
+ *
+ * @param candidate The first number to compare.
+ * @param target The second number to compare.
+ * @param threshold The maximum allowed difference. Will default to 0.01.
+ * @returns True if the difference between target and candidate is below threshold otherwise false.
+ */
+function isCloseTo(candidate, target, threshold) {
+    if (threshold === undefined) {
+        threshold = 0.01;
+    }
+    return Math.abs(candidate - target) < threshold;
 }
 
 
+/**
+ * Determine if the provided code can be edited by the UI editor.
+ *
+ * @param serialization The serialization of the code that may be edited by the UI.
+ * @returns True if suppored and false if uses code features not supported by the UI.
+ */
 function codeSupportedByUiEditor(serialization) {
     const hasFinalOrRaiseElse = (event, i) => {
         const options = event["current"];
@@ -75,6 +103,12 @@ function codeSupportedByUiEditor(serialization) {
 }
 
 
+/**
+ * Parse a serialized form of a program from a UI editor / wizard.
+ *
+ * @param targetId The ID containing the UI editor from which a serialized program should be built.
+ * @returns Serialized form of a simulation program.
+ */
 function parseSerializationFromUi(targetId) {
     if (targetId === undefined) {
         targetId = "codeUiBody";
@@ -223,14 +257,30 @@ function parseSerializationFromUi(targetId) {
 }
 
 
+/**
+ * Utility to render a UI editor.
+ */
 class CodeGenUiUtil {
 
+    /**
+     * Build a utility which fills in programs into newly rendered UI editors.
+     *
+     * @param templateUrl URL of the handlebars template to use to render a UI editor.
+     */
     constructor(templateUrl) {
         const self = this;
         self._templateUrl = templateUrl;
         self._template = null;
     }
 
+    /**
+     * Render a new UI editor.
+     *
+     * @param targetId The ID of the container into which the new UI editor should be rendered.
+     * @param serialization The serialized form of the program that should be filled into the newly
+     *      rendered editor.
+     * @returns Promise which resolves after the UI editor is rendered.
+     */
     render(targetId, serialization) {
         const self = this;
 
@@ -268,6 +318,11 @@ class CodeGenUiUtil {
         }, (x) => console.log(x));
     }
     
+    /**
+     * Add event listeners which show help text within the code editor.
+     *
+     * @param targetId The ID in which the editor has been rendered.
+     */
     _addInfoLinkListeners(targetId) {
         const self = this;
         const links = document.getElementsByClassName("info-link-code-ui");
@@ -286,6 +341,9 @@ class CodeGenUiUtil {
         }
     }
 
+    /**
+     * Associate event listeners to check for invalid user input.
+     */
     _associateValidChecks() {
         const self = this;
         const inputs = document.getElementsByClassName("code-ui-input");
@@ -305,6 +363,12 @@ class CodeGenUiUtil {
         }
     }
 
+    /**
+     * Simplify a serialized form of an event (aka state) for easier rendering in Handlebars.
+     *
+     * @param originalEvent The event serialziation to simplify.
+     * @returns Simplified serialization for Handlebars.
+     */
     _simplifyEvent(originalEvent) {
         const self = this;
         
@@ -380,6 +444,11 @@ class CodeGenUiUtil {
         return outputRecord;
     }
 
+    /**
+     * Load the Handlebars template for the code editor UI.
+     *
+     * @returns Promise which resolves to a compiled Handlebars template.
+     */
     _getTemplate() {
         const self = this;
         return new Promise((resolve, reject) => {
@@ -396,6 +465,11 @@ class CodeGenUiUtil {
         });
     }
 
+    /**
+     * Check that a variable is defined in the serialization and return its value formatted .
+     *
+     * @returns Formatted value if found. Will raise exception otherwise.
+     */
     _checkAndGetVar(target, name) {
         const self = this;
 
@@ -412,6 +486,12 @@ class CodeGenUiUtil {
         }
     }
 
+    /**
+     * Determine if a string contains a number interpretable by the code editor.
+     *
+     * @param target String which may contain a number.
+     * @returns True if target represents an interpretable number and false otherwise.
+     */
     _isNumber(target) {
         const self = this;
         return NUMBER_REGEX.test(target);
