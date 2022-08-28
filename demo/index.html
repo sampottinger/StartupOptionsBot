@@ -67,7 +67,10 @@
                         <a href="#outputs" id="shareButton" class="btn btn-outline-secondary"><i class="bi bi-box-arrow-up"></i> Share / Save</a>
                     </div>
                     <div id="outputs">
-                        <div class="output-panel" id="runningSimDisplay"><i class="bi bi-hourglass-split"></i> Running please wait... (<span id="numRunDisplay">0</span> simulations complete)</div>
+                        <div class="output-panel" id="runningSimDisplay">
+                            <div><i class="bi bi-hourglass-split"></i> Running please wait...</div>
+                            <div>(<span id="numRunDisplay">0</span> simulations complete)</div>
+                        </div>
                         <div class="output-panel" id="simOutputDisplay">
                             <h3>Post-tax outcomes</h3>
                             <div id="outputTableContainer" class="subpanel">
@@ -84,7 +87,7 @@
                                             <td id="minDisplay"></td>
                                         </tr>
                                         <tr>
-                                            <td>Percent with profit</td>
+                                            <td>Simulations with profit</td>
                                             <td id="profitDisplay"></td>
                                         </tr>
                                         <tr>
@@ -96,7 +99,7 @@
                                             <td id="meanDisplay"></td>
                                         </tr>
                                         <tr>
-                                            <td>Percent over 1 million</td>
+                                            <td>Simulations over 1 million</td>
                                             <td id="millionDisplay"></td>
                                         </tr>
                                         <tr>
