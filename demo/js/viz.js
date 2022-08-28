@@ -100,15 +100,10 @@ class VisualizationPresenter {
         return flatOutputs.map((x) => {
             const displayProfit = x["profit"] + bucketSize / 2;
             return {
-                "profit": self._formatNumber(displayProfit),
+                "profit": formatNumber(displayProfit),
                 "count": x["count"] / total * 100
             };
         });
-    }
-
-    _formatNumber(target) {
-        const self = this;
-        return target.toLocaleString("en-US");
     }
 
     _clearDetailsContainer() {
@@ -149,7 +144,7 @@ class VisualizationPresenter {
                             callbacks: {
                                 label: (context) => {
                                     const months = Math.round(context.parsed.x);
-                                    const profit = Math.round(context.parsed.y);
+                                    const profit = formatNumber(Math.round(context.parsed.y));
                                     return months + " months to profit of " + profit;
                                 }
                             }
@@ -191,11 +186,12 @@ class VisualizationPresenter {
                         
                         const profit = Math.round(value["y"]);
                         const messageStart = "<ul class='event-log'>" + messageInner;
-                        const messageEnd = "</ul> Profit: " + profit;
+                        const messageEnd = "</ul> Profit: " + formatNumber(profit);
                         const message = messageStart + messageEnd;
+                        const simNumStr = formatNumber(simNum);
                         
                         vex.dialog.alert({
-                            unsafeMessage: "<b>Simulation " + simNum + ":<b> " + "\n" + message
+                            unsafeMessage: "<b>Simulation " + simNumStr + ":<b> " + "\n" + message
                         });
                     }
                 }

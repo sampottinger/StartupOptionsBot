@@ -265,7 +265,7 @@ class CompileVisitor extends toolkit.StartUpOptionsBotLangVisitor {
             const optionsAvailable = state.getOptionsAvailable();
             const numOptions = optionsAvailable * percentOptionsBuy;
 
-            const valStr = Math.round(generatedValue * 100) / 100;
+            const valStr = formatNumber(Math.round(generatedValue * 100) / 100);
             state.addEvent("Company " + label + "! New value: " + valStr);
 
             if (isValue) {
