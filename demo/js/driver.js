@@ -1,3 +1,9 @@
+/**
+ * High level logic for running StartupOptionsBot.com
+ *
+ * @license MIT
+ */
+
 const DEFAULT_CODE = "[useLogNorm = 0 ipoBuy = 100 sellBuy = 90 quitBuy = 50 optionTax = 26 regularIncomeTax = 33 longTermTax = 20 waitToSell = 0 strikePrice = 1 totalGrant = 200 startVestingMonths = 10 immediatelyVest = 20 monthlyVest = 10 startFMV = 2 startTotalShares = 100000 rangeStd = 2 startMonthLow = 5 startMonthHigh = 15]{e_0.1: buy(80%) | c_0.1: ipo(500,000,000 - 1,000,000,000 total) | c_0.4: sell(100,000,000 - 500,000,000 total) | c_else:raise(2 - 3 fmv diluting 10 - 20% wait 12 - 24 months then {c_0.1: fail() | c_0.4: sell(200,000,000 - 700,000,000 total) | c_0.5: ipo(500,000,000 - 1,500,000,000 total)} ) }";
 
 const NUM_SIMULATIONS = 10000;
@@ -5,16 +11,33 @@ const NUM_SIMULATIONS = 10000;
 let isUsingCodeEditor = false;
 
 
+/**
+ * Get the current code loaded into the tool.
+ *
+ * @returns String code.
+ */
 function getCodeFromState() {
     return document.getElementById("codeShadow").value.replace("code=", "");
 }
 
 
+/**
+ * Set the current code loaded into the tool.
+ *
+ * @param code - The latest code to reflect in the tool
+ */
 function pushCodeToState(code) {
     document.getElementById("codeShadow").value = "code=" + code;
 }
 
 
+/**
+ * Change which editor is visible to the user.
+ *
+ * @param showCodeEditor - Boolean flag indicating if the free text code editor should be shown.
+ * @param showUiEditor - Boolean flag indicating if the UI wizard should be shown.
+ * @param showNotSupported - Boolean flag indicating if the not supported warning should be shown.
+ */
 function changeEditorVisibility(showCodeEditor, showUiEditor, showNotSupported) {
     document.getElementById("codeEditor").style.display = showCodeEditor ? "block" : "none";
     document.getElementById("uiEditor").style.display = showUiEditor ? "block" : "none";
@@ -36,6 +59,9 @@ function changeEditorVisibility(showCodeEditor, showUiEditor, showNotSupported) 
 }
 
 
+/**
+ * Show the free text code editor.
+ */
 function showCodeEditor() {
     const codeRaw = getCodeFromState();
     
@@ -49,6 +75,14 @@ function showCodeEditor() {
 }
 
 
+/**
+ * Show the UI editor / UI wizard for generating code.
+ *
+ * @param templateUrl - The full URL to the Handlebars template to use for the UI editor. If not
+ *      given, will use a default.
+ * @param targetId - The ID of the container in which the UI editor should be rendered.
+ * @returns Promise which resolves after the UI editor has been rendered.
+ */
 function showUiEditor(templateUrl, targetId) {
     return new Promise((resolve) => {
         const code = getCodeFromState();
@@ -80,11 +114,24 @@ function showUiEditor(templateUrl, targetId) {
 }
 
 
+/**
+ * Remove whitespace from code.
+ *
+ * @param target - The code from which whitespace should be removed.
+ * @returns The code without whitespace.
+ */
 function removeWhitespace(target) {
     return target.replaceAll(/\s/ig, "");
 }
 
 
+/**
+ * Re-render the UI editor even if it is currently rendered.
+ *
+ * @param templateUrl - The full URL to the Handlebars template to use for the UI editor. If not
+ *      given, will use a default.
+ * @returns Promise which resolves when render done.
+ */
 function cycleUiState(templateUrl) {
     const serialization = parseSerializationFromUi();
     
@@ -96,6 +143,12 @@ function cycleUiState(templateUrl) {
 }
 
 
+/**
+ * Scroll to an MCMC state.
+ *
+ * @param index - Index of the state (MCMC state).
+ * @returns Promise which resolves after the scroll and focus has been requested.
+ */
 function makeFocusOnState(index) {
     return new Promise((resolve) => {
         const targetId = "event" + index;
@@ -110,6 +163,13 @@ function makeFocusOnState(index) {
 }
 
 
+/**
+ * Add a new MCMC state to the structure of the simulation.
+ *
+ * @param templateUrl - The URL at which the Handlebars template can be found. If not given, a
+ *      default will be used.
+ * @returns Promise which is resolved when rendered.
+ */
 function addUiState(templateUrl) {
     return new Promise((resolve) => {
         const serialization = parseSerializationFromUi();
@@ -136,6 +196,13 @@ function addUiState(templateUrl) {
 }
 
 
+/**
+ * Remove an MCMC state from the structure of the simulation.
+ *
+ * @param templateUrl - The URL at which the Handlebars template can be found. If not given, a
+ *      default will be used.
+ * @returns Promise which is resolved when rendered.
+ */
 function removeUiState(index, templateUrl) {
     const future = (resolve) => {
         const serialization = parseSerializationFromUi();
@@ -165,6 +232,11 @@ function removeUiState(index, templateUrl) {
 }
 
 
+/**
+ * Get the code in the current editor.
+ *
+ * @returns Code in the currently selected editor.
+ */
 function getEditorCode() {
     const getFromUiEditor = () => {
         const serialization = parseSerializationFromUi();
@@ -182,11 +254,20 @@ function getEditorCode() {
 }
 
 
-function pushCurrentCodeToUrl() {
+/**
+ * Load the current editor code into the tool.
+ */
+function pushCurrentCode() {
     pushCodeToState(getEditorCode());
 }
 
 
+/**
+ * Load the current tool code into the currently selected editor.
+ * 
+ * @param templateUrl - The full URL to the Handlebars template to use for the UI editor. If not
+ *      given, will use a default.
+ */
 function loadCodeToEditors(templateUrl) {
     if (isUsingCodeEditor) {
         showCodeEditor();
@@ -196,6 +277,12 @@ function loadCodeToEditors(templateUrl) {
 }
 
 
+/**
+ * Run simulations using the code currently loaded into the tool.
+ *
+ * @param numSimulations - The number of simulations to run using the current code. If not given,
+ *      will use a default.
+ */
 function runSimulations(numSimulations) {
     document.getElementById("simButtonHolder").style.display = "none";
     document.getElementById("runningSimDisplay").style.display = "block";
@@ -213,7 +300,7 @@ function runSimulations(numSimulations) {
 
     return new Promise((resolve, reject) => {
         setTimeout(() => {
-            pushCurrentCodeToUrl();
+            pushCurrentCode();
             const result = getCompiled(getCodeFromState());
             if (result.errors.length > 0) {
                 vex.dialog.alert("Whoops! There's a coding error in your program: " + result.errors[0]);
@@ -263,6 +350,9 @@ function runSimulations(numSimulations) {
 }
 
 
+/**
+ * Copy a URL embedding the current tool code to the user clipboard.
+ */
 function copyCodeToCb() {
     const code = getCodeFromState();
     const saveUrl = "https://startupoptionsbot.com/#code=" + escape(code);
@@ -271,6 +361,9 @@ function copyCodeToCb() {
 }
 
 
+/**
+ * Initialize the tool with basic event listeners.
+ */
 function init() {
     const disclaimerAgree = document.getElementById("disclaimerAgree");
     disclaimerAgree.addEventListener("click", () => {
@@ -284,13 +377,13 @@ function init() {
 
     const uiEditorLink = document.getElementById("uiEditorLink");
     uiEditorLink.addEventListener("click", () => {
-        pushCurrentCodeToUrl();
+        pushCurrentCode();
         showUiEditor();
     });
 
     const codeEditorLink = document.getElementById("codeEditorLink");
     codeEditorLink.addEventListener("click", () => {
-        pushCurrentCodeToUrl();
+        pushCurrentCode();
         showCodeEditor();
     });
 
@@ -303,7 +396,7 @@ function init() {
     
     const shareButton = document.getElementById("shareButton");
     shareButton.addEventListener("click", (event) => {
-        pushCurrentCodeToUrl();
+        pushCurrentCode();
         const code = getCodeFromState();
         const saveUrl = "https://startupoptionsbot.com/#code=" + escape(code);
         const messagePrefix = "You can share or return to your work by going to: <br>";
@@ -320,13 +413,13 @@ function init() {
     
     const inlineUiEditLink = document.getElementById("inlineUiEditLink");
     inlineUiEditLink.addEventListener("click", (event) => {
-        pushCurrentCodeToUrl();
+        pushCurrentCode();
         showUiEditor();
     });
     
     const inlineCodeEditLink = document.getElementById("inlineCodeEditLink");
     inlineCodeEditLink.addEventListener("click", (event) => {
-        pushCurrentCodeToUrl();
+        pushCurrentCode();
         showCodeEditor();
     });
     
