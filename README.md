@@ -1,6 +1,6 @@
 StartupOptionsBot
 ===============================================================================
-Tool to build and run Monte Carlo simulations in browser to get a distribution of outcomes for statup options
+Tool to build and run Monte Carlo simulations in browser to get a distribution of outcomes for statup options.
 
 <br>
 
@@ -12,7 +12,7 @@ When joining a start up, often folks will get options: stocks they can purchase 
 
 Discalimers
 ===============================================================================
-By using this you agree to our [disclaimers](https://startupoptionsbot.com/disclaimer.html) and [license](https://startupoptionsbot.com/LICENSE.txt).
+By using this you agree to our [disclaimers](https://startupoptionsbot.com/disclaimer.html) and [license](https://startupoptionsbot.com/license.txt).
 
 <br>
 
