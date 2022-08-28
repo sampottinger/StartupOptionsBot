@@ -72,7 +72,8 @@
                             <div>(<span id="numRunDisplay">0</span> simulations complete)</div>
                         </div>
                         <div class="output-panel" id="simOutputDisplay">
-                            <h3>Post-tax outcomes</h3>
+                            <h3>What's the takeaway?</h3>
+                            <div class="subtitle">Six numbers to remember: post-tax simulation outcomes summarized at a high level.</div>
                             <div id="outputTableContainer" class="subpanel">
                                 <table class="table">
                                     <thead>
@@ -109,8 +110,16 @@
                                     </tbody>
                                 </table>
                             </div>
-                            <div id="outputSummaryContainer" class="subpanel"></div>
-                            <div id="outputDetailsContainer" class="subpanel"></div>
+                            <div class="subpanel">
+                                <h3>How often were different profits seen?</h3>
+                                <div class="subtitle">Histogram looking at how often different profits were seen in simulations.</div>
+                                <div id="outputSummaryContainer"></div>
+                            </div>
+                            <div class="subpanel">
+                                <h3>What were the individual simulation results?</h3>
+                                <div class="subtitle">Time and proft for individual simulations. Click on a dot to see an individual simulation.</div>
+                                <div id="outputDetailsContainer"></div>
+                            </div>
                         </div>
                     </div>
                 </div>
