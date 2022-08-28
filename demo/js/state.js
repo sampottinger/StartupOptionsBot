@@ -1,5 +1,28 @@
+/**
+ * Record which tracks and describes what happened in a simulation.
+ *
+ * Record serving as the global memory or global state which tracks and describes what happened in
+ * a simulation.
+ *
+ * @license MIT
+ */
+ 
+// TODO: Use of term "state" here is confusing with MCMC state terminology. Rename to
+// SimulationMemory.
+
+
+/**
+ * Record describing the outcome of a single simulation.
+ */
 class SimulationResult {
 
+    /**
+     * Create a new immutable record of a simulation outcome.
+     *
+     * @param months The number of months that the simulation ran until.
+     * @param profit The overall profit or loss for the simulation.
+     * @arapm events Log of events encountered in the simulation.
+     */
     constructor(months, profit, events) {
         const self = this;
         self._months = months;
@@ -7,16 +30,31 @@ class SimulationResult {
         self._events = events;
     }
 
+    /**
+     * Get the duration of the simulation.
+     *
+     * @returns The number of months for which the simulation ran.
+     */
     getMonths() {
         const self = this;
         return self._months;
     }
 
+    /**
+     * Get the financial outcome of the simulation.
+     *
+     * @returns The profit or loss from the simulation.
+     */
     getProfit() {
         const self = this;
         return self._profit;
     }
     
+    /**
+     * Get the events that happened in the simluation.
+     *
+     * @returns Array of objects containing an event property (string) and months (float).
+     */
     getEvents() {
         const self = this;
         return self._events;
@@ -25,8 +63,14 @@ class SimulationResult {
 }
 
 
+/**
+ * Global simulation memory keeping track of events that happened in a simulation.
+ */
 class SimulationState {
 
+    /**
+     * Create an empty simulation global state.
+     */
     constructor() {
         const self = this;
 
@@ -53,6 +97,9 @@ class SimulationState {
         self._setUp = false;
     }
 
+    /**
+     * Check that all required variables are present and finish the initalization of global state.
+     */
     finishSetup() {
         const self = this;
 
@@ -109,6 +156,9 @@ class SimulationState {
         self.delay(delay);
     }
     
+    /**
+     * Indicate that the employee left the company.
+     */
     quit() {
         const self = this;
         if (self._quit) {
@@ -120,6 +170,11 @@ class SimulationState {
         self.addEvent("Left job.");
     }
 
+    /**
+     * Add a month-stamped record of an event to the simulation event log.
+     *
+     * @param description Description of the event log.
+     */
     addEvent(description) {
         const self = this;
         self._events.push({
@@ -128,21 +183,43 @@ class SimulationState {
         });
     }
 
+    /**
+     * Get the log of month-stamped events that happened in the simulation.
+     *
+     * @returns Array of objects containing an event property (string) and months (float).
+     */
     getEvents() {
         const self = this;
         return self._events;
     }
 
+    /**
+     * Update the value of a global state variable in the simulation.
+     *
+     * @param variable The variable name to be set.
+     * @param newValue The variable value.
+     */
     setValue(variable, newValue) {
         const self = this;
         self._variables.set(variable, newValue);
     }
 
+    /**
+     * Get the value of a global state variable in the simulation.
+     *
+     * @param variable The name of the variable.
+     * @returns The value of the variable.
+     */
     getValue(variable) {
         const self = this;
         return self._variables.get(variable);
     }
 
+    /**
+     * Set the exit overall value of the company.
+     *
+     * @param newValue Overall company value to be converted to 
+     */
     setExitValue(newValue) {
         const self = this;
         newValue = self._ensurePositive(newValue);
@@ -150,6 +227,11 @@ class SimulationState {
         self.setExitShare(percentPerShare * newValue);
     }
 
+    /**
+     * Set the exit per share value.
+     *
+     * @param newValue The per share price for an exit.
+     */
     setExitShare(newValue) {
         const self = this;
         newValue = self._ensurePositive(newValue);
@@ -157,24 +239,44 @@ class SimulationState {
         self.setFairMarketValue(newValue);
     }
 
+    /**
+     * Set the FMV used for potential spread taxes.
+     *
+     * @param newValue The new FMV.
+     */
     setFairMarketValue(newValue) {
         const self = this;
         newValue = self._ensurePositive(newValue);
         self._fairMarketValue = newValue;
     }
 
+    /**
+     * Report that options were diluted.
+     *
+     * @param dilution The amount of dilution where 0.1 is interpreted as a 10% diultion.
+     */
     diluteOptions(dilution) {
         const self = this;
         dilution = self._ensurePositive(dilution);
         self._numTotalShares = self._numTotalShares * (1 + dilution);
     }
 
+    /**
+     * Report that there is a delay before the next event in the simulation.
+     *
+     * @param months The duration of the delay.
+     */
     delay(months) {
         const self = this;
         months = self._ensurePositive(months);
         self._currentMonth += months;
     }
 
+    /**
+     * Get the number of options currently available for exercise.
+     *
+     * @returns Number of vested options not yet exercised.
+     */
     getOptionsAvailable() {
         const self = this;
         
@@ -193,6 +295,13 @@ class SimulationState {
         return totalVestedCap - self._numOptionsPurchased;
     }
 
+    /**
+     * Indicate the employee bought options.
+     *
+     * @param numOptionsRequested The number of options the employee wants to exercise. If the
+     *      employee attempts to exercise more options than are available, all options available
+     *      are exericsed.
+     */
     buyOptions(numOptionsRequested) {
         const self = this;
 
@@ -224,11 +333,20 @@ class SimulationState {
         }
     }
 
+    /**
+     * Indicate that no options are or will be available.
+     * 
+     * Indicate that no additional options should vest and that remaining vested options are no
+     * longer available for exercise.
+     */
     clearRemainingOptions() {
         const self = this;
         self._noOptionsAvailable = true;
     }
 
+    /**
+     * Calculate the outcome of the simulation.
+     */
     finalize() {
         const self = this;
 
@@ -304,6 +422,11 @@ class SimulationState {
         self._profit = totalSale - totalTaxes - strikePaid;
     }
 
+    /**
+     * Get the outcome profit of this finished simulation.
+     *
+     * @returns Floating point profit or loss.
+     */
     getProfit() {
         const self = this;
 
@@ -314,6 +437,11 @@ class SimulationState {
         return self._profit;
     }
 
+    /**
+     * Get the duration of this finalized simulation.
+     *
+     * @returns Number of months for which this simulation ran.
+     */
     getDuration() {
         const self = this;
 
@@ -324,6 +452,11 @@ class SimulationState {
         return self._currentMonth;
     }
 
+    /**
+     * Get a SimulationResult indicating the outcome of this simulation.
+     *
+     * @returns New result object.
+     */
     getResult() {
         const self = this;
 
@@ -333,6 +466,13 @@ class SimulationState {
         return new SimulationResult(months, profit, self._events);
     }
 
+    /**
+     * Determine how much money was made on a stock at its sale prior to taxes.
+     *
+     * @param options Array of objects describing the stocks to be sold.
+     * @returns Amount of profit after paying tax on spread but before paying tax on sale. If a
+     *      loss, will report zero.
+     */
     _getProceedsPreTax(options) {
         const self = this;
 
@@ -348,6 +488,11 @@ class SimulationState {
         return totalProfit < 0 ? 0 : totalProfit;
     }
 
+    /**
+     * Assure that a variable is present in the global simulation state.
+     *
+     * @param name The name of the variable to ensure.
+     */
     _assureValuePresent(name) {
         const self = this;
 
@@ -356,6 +501,12 @@ class SimulationState {
         }
     }
 
+    /**
+     * Check if a value is positive.
+     *
+     * @param target The value to check.
+     * @returns True if positive and false otherwise.
+     */
     _ensurePositive(target) {
         const self = this;
         return target < 0 ? 0 : target;
