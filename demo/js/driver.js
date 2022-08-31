@@ -303,7 +303,7 @@ function runSimulations(numSimulations) {
             pushCurrentCode();
             let result = null;
             try {
-                let result = getCompiled(getCodeFromState());
+                result = getCompiled(getCodeFromState());
             } catch (e) {
                 result = {'errors': [e]};
             }  
