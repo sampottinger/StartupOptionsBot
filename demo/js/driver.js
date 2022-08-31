@@ -301,12 +301,17 @@ function runSimulations(numSimulations) {
     return new Promise((resolve, reject) => {
         setTimeout(() => {
             pushCurrentCode();
-            const result = getCompiled(getCodeFromState());
+            let result = null;
+            try {
+                let result = getCompiled(getCodeFromState());
+            } catch (e) {
+                result = {'errors': [e]};
+            }  
             if (result.errors.length > 0) {
-                vex.dialog.alert("Whoops! There's a coding error in your program: " + result.errors[0]);
+                vex.dialog.alert("Whoops! There's an error in your program: " + result.errors[0]);
                 cleanUpUi();
                 return;
-            }
+            } 
             const program = result["result"];
     
             const runProgram = () => {
