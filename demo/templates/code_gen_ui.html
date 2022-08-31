@@ -107,7 +107,7 @@
                 <div class="mb-3">
                     <label for="quitBuy" class="form-label">Percent to buy if quit</label>
                     <div class="input-group">
-                        <input type="text" class="form-control code-ui-input" id="quitBuy" aria-describedby="quitBuyHelp" value="{{ variables.sellBuy }}" pattern="(100|\d{1,2})" required>
+                        <input type="text" class="form-control code-ui-input" id="quitBuy" aria-describedby="quitBuyHelp" value="{{ variables.quitBuy }}" pattern="(100|\d{1,2})" required>
                         <span class="input-group-text">%</span>
                     </div>
                     <div id="quitBuyHelp" class="form-text">Percent of remaining shares to buy if you leave your job. Input value from 0 to 100. Note that this assumes no <a href="#acceleration" class="info-link-code-ui">acceleration</a> and <a href="#quitOptions" class="info-link-code-ui">no opportunity to purchase stocks not yet vested</a>.</div>
