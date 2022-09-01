@@ -179,6 +179,18 @@ header .subtitle {
     padding: 5px;
 }
 
+#newsletterPanel {
+    border-top: 1px solid #C0C0C0;
+    text-align: center;
+    margin-left: 20px;
+    margin-right: 20px;
+    margin-top: 50px;
+}
+
+#simOutputDisplay {
+    margin-top: 20px;
+}
+
 #skipLink {
     position: absolute;
     top: -100px;
