@@ -26,8 +26,9 @@ QUnit.module("CompileVisitor", function() {
     });
 
     QUnit.test("compilation with proba error", function(assert) {
-        const result = getCompiled(EXAMPLE_PROGRAM_COMPILE_OVER_1);;
-        assert.ok(result["errors"].length > 0);
+        assert.throws(() => {
+            getCompiled(EXAMPLE_PROGRAM_COMPILE_OVER_1);
+        });
     });
 
     QUnit.test("compilation without errors", function(assert) {
