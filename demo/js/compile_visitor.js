@@ -223,9 +223,10 @@ class CompileVisitor extends toolkit.StartUpOptionsBotLangVisitor {
         }
 
         const checkSumProbabilities = (target) => {
-            const totalProba = target.map((x) => x["proba"]).reduce((a, b) => a + b, 0);
-            if (totalProba > 1.01) {
-                throw "Probabilities add up to over 1.";
+            const probas = target.map((x) => x["proba"] * 100);
+            const totalProba = probas.reduce((a, b) => a + b, 0);
+            if (totalProba > 101) {
+                throw "Probabilities add up to over 100%: " + probas.join(", ");
             }
         };
 
