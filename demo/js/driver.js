@@ -27,7 +27,9 @@ function getCodeFromState() {
  * @param code - The latest code to reflect in the tool
  */
 function pushCodeToState(code) {
-    document.getElementById("codeShadow").value = "code=" + code;
+    const noNewlines = code.replaceAll("\n", " ");
+    const compact = noNewlines.replace(/\s+/g, " ");
+    document.getElementById("codeShadow").value = "code=" + compact;
 }
 
 
