@@ -72,6 +72,7 @@ Open Source
 ===============================================================================
 This project is available under the [MIT License](https://startupoptionsbot.com/LICENSE.txt). In addition to the technologies listed in the deployment section, this project also uses the following:
 
+ - [Ace Editor](https://ace.c9.io/) by AWS Cloud 9 and others under the [BSD License](https://github.com/ajaxorg/ace/blob/master/LICENSE).
  - [ANTLR](https://www.antlr.org) by The ANTLR Project under [BSD 3-Clause License](https://github.com/antlr/antlr4/blob/master/LICENSE.txt).
  - [Bootstrap v5](https://getbootstrap.com) by Twitter and The Bootstrap Authors under the [MIT License](https://github.com/twbs/bootstrap/blob/main/LICENSE).
  - [Bootstrap Icons](https://icons.getbootstrap.com) by The Bootstrap Authors under the [MIT License](https://github.com/twbs/icons/blob/main/LICENSE.md).
