@@ -54,7 +54,10 @@ function initEditor() {
         useSoftTabs: true
     });
 
-    editor.setTheme("ace/theme/monokai");
+    editor.renderer.setOptions({
+        maxLines: 45,
+        minLines: 35
+    })
 
     // Support keyboard escape for better accessibility
     const setTabsEnabled = (target) => {

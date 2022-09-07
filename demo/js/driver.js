@@ -89,7 +89,7 @@ function showCodeEditor() {
     
     isUsingCodeEditor = true;
     changeEditorVisibility(true, false, false);
-    document.getElementById("codeEditorInput").value = code;
+    getGlobalEditor().setValue(code);
 }
 
 
