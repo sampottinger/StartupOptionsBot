@@ -21,7 +21,7 @@ QUnit.module("Driver", function() {
         document.getElementById("codeEditorInput").value = "";
         pushCodeToState("test");
         showCodeEditor();
-        assert.deepEqual(document.getElementById("codeEditorInput").value, "test");
+        assert.deepEqual(getGlobalEditor().getValue(), "test");
     });
 
     QUnit.test("default supported", function(assert) {
