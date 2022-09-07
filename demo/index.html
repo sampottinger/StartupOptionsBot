@@ -58,7 +58,7 @@
                         </div>
                         <div id="codeEditor">
                             <div class="editor-intro">In addition to the <a href="#uiEditor" id="inlineUiEditLink">UI editor</a>, you can also program the simulation through a small <a href="https://github.com/sampottinger/StartupOptionsBot/blob/main/language.md" id="dslLink" target="_blank">domain specific language</a> with which you can define more complex simulations.</div>
-                            <textarea id="codeEditorInput" class="form-control"></textarea>
+                            <div id="codeEditorInput"></div>
                         </div>
                         <div id="uiNotSupported">Whoops! It looks like there's either a code error or you are using a lanugage feature not supported in the UI editor. Please use the code editor instead.</div>
                     </div>
@@ -223,6 +223,7 @@
     
     <input id="codeShadow" type="hidden">
 
+    <script src="/third_party/ace.min.js"></script>
     <script src="/third_party/d3.min.js"></script>
     <script src="/third_party/handlebars.min.js"></script>
     <script src="/third_party/chart.min.js"></script>
@@ -240,7 +241,8 @@
     <script src="/js/deserialization_util.js?version=20220830"></script>
     <script src="/js/code_gen_ui.js?version=20220830"></script>
     <script src="/js/viz.js?version=20220830"></script>
-    <script src="/js/driver.js?version=202209072"></script>
+    <script src="/js/ditor.js?version=20220907"></script>
+    <script src="/js/driver.js?version=202209073"></script>
 
     <script>init();</script>
 

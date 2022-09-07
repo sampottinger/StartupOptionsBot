@@ -264,7 +264,7 @@ function getEditorCode() {
     };
 
     const getFromCodeEditor = () => {
-        const code = document.getElementById("codeEditorInput").value;
+        const code = getGlobalEditor().getValue();
         return code;
     };
 
@@ -417,6 +417,8 @@ function loadCodeFromFragment() {
  * Initialize the tool with basic event listeners.
  */
 function init() {
+    initEditor();
+
     const disclaimerAgree = document.getElementById("disclaimerAgree");
     disclaimerAgree.addEventListener("click", () => {
         document.getElementById("disclaimerPanel").style.display = "none";
