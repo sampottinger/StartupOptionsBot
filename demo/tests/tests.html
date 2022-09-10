@@ -11,7 +11,7 @@
   <div id="summaryContainer"></div>
   <div id="detailsContainer"></div>
 
-  <div id="codeEditor"><input type="text" id="codeEditorInput"></div>
+  <div id="codeEditor"><div id="codeEditorInput"></div></div>
   <div id="uiEditor"><div id="codeUiBody"></div></div>
   <div id="uiNotSupported"></div>
   <div id="outputSummaryContainer"></div>
@@ -67,6 +67,7 @@
 
   <script src="./qunit-2.19.0.js"></script>
 
+  <script src="../third_party/ace.min.js"></script>
   <script src="../third_party/d3.min.js"></script>
   <script src="../third_party/handlebars.min.js"></script>
   <script src="../third_party/chart.min.js"></script>
@@ -82,7 +83,13 @@
   <script src="../js/deserialization_util.js"></script>
   <script src="../js/code_gen_ui.js"></script>
   <script src="../js/viz.js"></script>
+  <script src="../js/editor.js"></script>
   <script src="../js/driver.js"></script>
+
+  <script>
+    setInTest(true);
+    initEditor();
+  </script>
 
   <script src="./rand_util_tests.js"></script>
   <script src="./compile_visitor_tests.js"></script>

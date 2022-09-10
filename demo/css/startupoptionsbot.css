@@ -165,6 +165,10 @@ header .subtitle {
     padding-bottom: 5px;
 }
 
+#codeEditorInput {
+    border: 1px solid #C0C0C0;
+}
+
 #disclaimersBody .button-holder {
     text-align: center;
     border-top: 1px solid black;

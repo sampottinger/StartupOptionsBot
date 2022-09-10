@@ -233,7 +233,7 @@ class BeautifyVisitor extends toolkit.StartUpOptionsBotLangVisitor {
         const target = ctx.target.accept(self);
         const value = ctx.value.accept(self);
 
-        return target + "=" + value;
+        return target + " = " + value;
     }
 
     /**
@@ -253,7 +253,7 @@ class BeautifyVisitor extends toolkit.StartUpOptionsBotLangVisitor {
             assignments.push(newAssignment);
         }
 
-        return assignments.join(" ");
+        return assignments.map((x) => "  " + x).join("\n");
     }
 
     /**
@@ -268,7 +268,7 @@ class BeautifyVisitor extends toolkit.StartUpOptionsBotLangVisitor {
         const variables = ctx.header.accept(self);
         const states = ctx.body.accept(self);
 
-        return "[" + variables + "]\n{" + states(1) + "\n}";
+        return "[\n" + variables + "\n]\n{" + states(1) + "\n}";
     }
 
     /**

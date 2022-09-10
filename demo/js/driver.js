@@ -8,7 +8,19 @@ const DEFAULT_CODE = "[useLogNorm = 0 ipoBuy = 100 sellBuy = 90 quitBuy = 50 opt
 
 const NUM_SIMULATIONS = 10000;
 
+let IN_TEST = false;
+
 let isUsingCodeEditor = false;
+
+
+/**
+ * Set if the system is running in tests.
+ * 
+ * @param newInTest - Boolean value indicating if code is running in tests.
+ */
+function setInTest(newInTest) {
+    IN_TEST = newInTest;
+}
 
 
 /**
@@ -30,6 +42,10 @@ function pushCodeToState(code) {
     const noNewlines = code.replaceAll("\n", " ");
     const compact = noNewlines.replace(/\s+/g, " ");
     document.getElementById("codeShadow").value = "code=" + compact;
+    const saveUrl = getCodeUrl(false);
+    if (!IN_TEST) {
+        window.history.pushState({code: compact}, "StartupOptionsBot Autosave", saveUrl);
+    }
 }
 
 
@@ -73,7 +89,7 @@ function showCodeEditor() {
     
     isUsingCodeEditor = true;
     changeEditorVisibility(true, false, false);
-    document.getElementById("codeEditorInput").value = code;
+    getGlobalEditor().setValue(code);
 }
 
 
@@ -248,7 +264,7 @@ function getEditorCode() {
     };
 
     const getFromCodeEditor = () => {
-        const code = document.getElementById("codeEditorInput").value;
+        const code = getGlobalEditor().getValue();
         return code;
     };
 
@@ -286,6 +302,7 @@ function loadCodeToEditors(templateUrl) {
  *      will use a default.
  */
 function runSimulations(numSimulations) {
+    pushCurrentCode();
     document.getElementById("simButtonHolder").style.display = "none";
     document.getElementById("runningSimDisplay").style.display = "block";
     document.getElementById("simOutputDisplay").style.display = "none";
@@ -358,13 +375,41 @@ function runSimulations(numSimulations) {
 
 
 /**
+ * Get URL embedding the current code.
+ * 
+ * @returns URL for the currently entered code.
+ */
+function getCodeUrl(useDomain) {
+    const code = getCodeFromState();
+    const prefix = useDomain ? "https://startupoptionsbot.com" : "";
+    return prefix + "/#code=" + encodeURI(code);
+}
+
+
+/**
  * Copy a URL embedding the current tool code to the user clipboard.
  */
 function copyCodeToCb() {
-    const code = getCodeFromState();
-    const saveUrl = "https://startupoptionsbot.com/#code=" + escape(code);
+    const saveUrl = getCodeUrl(true);
     navigator.clipboard.writeText(saveUrl);
     vex.dialog.alert("Copied to clipboard.");
+}
+
+/**
+ * Load code from window location hash if available.
+ */
+function loadCodeFromFragment() {
+    const fragment = window.location.hash;
+    if (!fragment.startsWith("#code=")) {
+        return;
+    }
+
+    const newCode = decodeURI(fragment.replace("#code=", ""));
+    const currentCode = getCodeFromState();
+    if (newCode !== currentCode) {
+        pushCodeToState(newCode);
+        loadCodeToEditors();
+    }
 }
 
 
@@ -372,6 +417,8 @@ function copyCodeToCb() {
  * Initialize the tool with basic event listeners.
  */
 function init() {
+    initEditor();
+
     const disclaimerAgree = document.getElementById("disclaimerAgree");
     disclaimerAgree.addEventListener("click", () => {
         document.getElementById("disclaimerPanel").style.display = "none";
@@ -440,11 +487,14 @@ function init() {
     const fragment = window.location.hash;
     const exampleNote = document.getElementById("exampleNote");
     if (fragment.startsWith("#code=")) {
-        const code = unescape(fragment.replace("#code=", ""));
-        pushCodeToState(code);
+        loadCodeFromFragment();
         exampleNote.style.display = "none";
     } else {
         pushCodeToState(DEFAULT_CODE);
         exampleNote.style.display = "inline-block";
     }
+
+    window.addEventListener('hashchange', () => {
+        loadCodeFromFragment();
+    });
 }
