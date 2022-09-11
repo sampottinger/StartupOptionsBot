@@ -8,7 +8,7 @@
         <link rel="stylesheet" href="/third_party/bootstrap-icons-1.9.1/bootstrap-icons.css">
         <link rel="stylesheet" href="/third_party/vex.combined.min.css">
         <link rel="stylesheet" href="/third_party/vex-theme-os.min.css">
-        <link rel="stylesheet" href="/css/startupoptionsbot.css?version=20220907">
+        <link rel="stylesheet" href="/css/startupoptionsbot.css?version=20220910">
     </head>
 
     <body>
@@ -19,14 +19,20 @@
                 <h1><i class="bi bi-robot"></i> Startup Options Bot</h1>
                 <div class="subtitle">
                     <span class="prefix">Are start ups big money?</span>
-                    When joining a start up, often folks will get options: stocks they can purchase but often can't immediately sell.
-                    Some start ups will eventually offer employees an opportunity to sell options at profit while others may end up in a loss.
+                    When joining a start up, often folks will get options.
                     How can simulations can help paint a picture of potential options outcomes?
                 </div>
             </header>
 
             <article id="toolSection">
-                <div id="disclaimerPanel">
+                <div class="intro-panel" id="introPanel">
+                    <div>
+                        <p><span class="prefix"><i class="bi bi-coin"></i> Start ups may offer options as part of compensation.</span> These let employees purchase stock in their employers. However, unlike some other job opportunities at publicly traded companies, sometimes those shares cannot be sold right away. This means employees may invest their own money for either a loss or a profit realized after some delay.</p>
+                        <p><span class="prefix"><i class="bi bi-bar-chart-line-fill"></i> How might we understand options?</span> There's lots of uncertainty and what-ifs but modeling might be able to help. This tool explores Markov Chains and Monte Carlo methods to help simulate options, looking at distributions of outcomes given beliefs about what might happen to a start up. This demonstrates both data science and user experience concepts for modeling.</p>
+                        <div class="btn-holder"><a href="#disclaimerPanel" class="btn btn-primary" id="introNext"><i class="bi bi-arrow-right-circle-fill"></i> Next</a></div>
+                    </div>
+                </div>
+                <div class="intro-panel" id="disclaimerPanel">
                     <div>
                         <div><span class="prefix"><i class="bi bi-exclamation-circle-fill"></i> Woah buddy.</span> This is a free and open source community project available under <a target="_blank" href="/license.txt">the MIT license</a>. That said, we are talking money (<a id="usNoticeLink" href="#usNotice">for the USA</a>) and can't guarantee accuracy or results. Please agree to each of the following before continuing:</div>
                         <ul>
@@ -35,7 +41,7 @@
                             <li><a target="_blank" href="/disclaimer.html#links">External links disclaimer</a> in which, among other things, you agree we have no liability of any kind for any third party websites linked.</li>
                             <li><a target="_blank" href="/disclaimer.html#financial">Financial and professional disclaimer</a> in which, among other things, we are not responsible for any decision you may make regarding information presented. This is not financial advice.</li>
                         </ul>
-                        <div class="btn-holder"><a href="#postDisclaimerPanel" class="btn btn-primary" id="disclaimerAgree">I agree to all</a></div>
+                        <div class="btn-holder"><a href="#postDisclaimerPanel" class="btn btn-primary" id="disclaimerAgree"><i class="bi bi-card-checklist"></i> Agree to all</a></div>
                     </div>
                 </div>
                 <div id="postDisclaimerLoadingPanel">Please wait...</div>
@@ -128,7 +134,7 @@
                 </div>
             </article>
             <footer>
-                Made by <a target="_blank" href="https://gleap.org">A Samuel Pottinger</a> and possibly other open source. <a target="_blank" href="https://github.com/sampottinger/startupoptionsbot">Open source</a> using a number of <a target="_blank" href="https://github.com/sampottinger/startupoptionsbot/blob/main/README.md#open-source">open source tools</a>. By using this site, you agree the <a target="_blank" href="https://github.com/sampottinger/startupoptionsbot/blob/main/LICENSE">MIT license</a>. By using this page you agree to our <a target="_blank" href="/privacy.html">privacy policy</a>. Views and opinions my own.
+                Made by <a target="_blank" href="https://gleap.org">A Samuel Pottinger</a> and possibly other open source. <a target="_blank" href="https://github.com/sampottinger/startupoptionsbot">Open source</a> using a number of <a target="_blank" href="https://github.com/sampottinger/startupoptionsbot/blob/main/README.md#open-source">open source tools</a>. By using this site, you agree the <a target="_blank" href="https://github.com/sampottinger/startupoptionsbot/blob/main/LICENSE">MIT license</a>, <a target="_blank" href="/disclaimer.html">disclaimers</a>, and <a target="_blank" href="/privacy.html">privacy policy</a>. Views and opinions my own.
             </footer>
         </div>
     </body>
@@ -236,12 +242,12 @@
     <script src="/js/state.js?version=20220830"></script>
     <script src="/js/compile_visitor.js?version=20220901"></script>
     <script src="/js/serialization_visitor.js?version=20220830"></script>
-    <script src="/js/beautify_visitor.js?version=202209075"></script>
+    <script src="/js/beautify_visitor.js?version=20220910"></script>
     <script src="/js/deserialization_util.js?version=20220830"></script>
     <script src="/js/code_gen_ui.js?version=20220830"></script>
     <script src="/js/viz.js?version=20220830"></script>
-    <script src="/js/editor.js?version=2022090712"></script>
-    <script src="/js/driver.js?version=2022090712"></script>
+    <script src="/js/editor.js?version=20220910"></script>
+    <script src="/js/driver.js?version=20220910"></script>
 
     <script>init();</script>
 

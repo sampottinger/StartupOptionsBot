@@ -414,10 +414,25 @@ function loadCodeFromFragment() {
 
 
 /**
+ * Hide intro and show disclaimer panel.
+ */
+function advanceToDisclaimers() {
+    const introPanel = document.getElementById("introPanel");
+    const disclaimerPanel = document.getElementById("disclaimerPanel");
+
+    introPanel.style.display = "none";
+    disclaimerPanel.style.display = "block";
+}
+
+
+/**
  * Initialize the tool with basic event listeners.
  */
 function init() {
     initEditor();
+
+    const introNext = document.getElementById("introNext");
+    introNext.addEventListener("click", advanceToDisclaimers);
 
     const disclaimerAgree = document.getElementById("disclaimerAgree");
     disclaimerAgree.addEventListener("click", () => {
@@ -488,6 +503,7 @@ function init() {
     const exampleNote = document.getElementById("exampleNote");
     if (fragment.startsWith("#code=")) {
         loadCodeFromFragment();
+        advanceToDisclaimers();
         exampleNote.style.display = "none";
     } else {
         pushCodeToState(DEFAULT_CODE);
