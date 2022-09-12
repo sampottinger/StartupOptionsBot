@@ -11,6 +11,18 @@ article details summary {
     font-size: 21px;
 }
 
+article .intro-panel {
+    margin: 40px;
+    padding: 5px;
+    border: 1px dotted black;
+}
+
+article .intro-panel .btn-holder {
+    margin-top: 10px;
+    margin-bottom: 5px;
+    text-align: center;
+}
+
 article #codeEditorInput {
     height: 300px;
 }
@@ -50,15 +62,7 @@ article #codeGenUiInner .intro {
 }
 
 article #disclaimerPanel {
-    margin: 40px;
-    padding: 5px;
-    border: 1px dotted black;
-}
-
-article #disclaimerPanel .btn-holder {
-    margin-top: 10px;
-    margin-bottom: 5px;
-    text-align: center;
+    display: none;
 }
 
 article #disclaimerPanel ul {
